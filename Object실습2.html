@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script> //data에서 type이 sk인 사람의 name만 배열로 저장하기.
+        const data = [{
+            "id": 1,
+            "name": "Yong",
+            "phone": "010-0000-0000",
+            "type": "sk",
+            "childnode": [{
+                "id": 11,
+                "name": "echo",
+                "phone": "010-0000-1111",
+                "type": "kt",
+                "childnode": [{
+                        "id": 115,
+                        "name": "hary",
+                        "phone": "211-1111-0000",
+                        "type": "sk",
+                        "childnode": [{
+                            "id": 1159,
+                            "name": "pobi",
+                            "phone": "010-444-000",
+                            "type": "kt",
+                            "childnode": [{
+                                    "id": 11592,
+                                    "name": "cherry",
+                                    "phone": "111-222-0000",
+                                    "type": "lg",
+                                    "childnode": []
+                                },
+                                {
+                                    "id": 11595,
+                                    "name": "solvin",
+                                    "phone": "010-000-3333",
+                                    "type": "sk",
+                                    "childnode": []
+                                }
+                            ]
+                        }]
+                    },
+                    {
+                        "id": 116,
+                        "name": "kim",
+                        "phone": "444-111-0200",
+                        "type": "kt",
+                        "childnode": [{
+                            "id": 1168,
+                            "name": "hani",
+                            "phone": "010-222-0000",
+                            "type": "sk",
+                            "childnode": [{
+                                "id": 11689,
+                                "name": "ho",
+                                "phone": "010-000-0000",
+                                "type": "kt",
+                                "childnode": [{
+                                        "id": 116890,
+                                        "name": "wonsuk",
+                                        "phone": "010-000-0000",
+                                        "type": "kt",
+                                        "childnode": []
+                                    },
+                                    {
+                                        "id": 1168901,
+                                        "name": "chulsu",
+                                        "phone": "010-0000-0000",
+                                        "type": "sk",
+                                        "childnode": []
+                                    }
+                                ]
+                            }]
+                        }]
+                    },
+                    {
+                        "id": 117,
+                        "name": "hong",
+                        "phone": "010-0000-0000",
+                        "type": "lg",
+                        "childnode": []
+                    }
+                ]
+            }]
+        }]
+    
+    var arr = [];
+    var i = 0;
+    data.map(function(v,index){ //배열안의 모든 값들을 쭉 돌거야
+        for(key in v){ // 각 값들(v, 객체)을 forin문을 통해 key값 전부를 검색해서
+            //console.log(v[key]);
+            if(v[key] ==="sk"){ //value가 "sk" 인 아이가 있다면, 
+                //console.log(v["name"]);
+                arr[i]=v["name"]; // 미리 선언해둔 빈 배열에 0번째 index부터 key="name"에 해당되는 값을 넣어줄거야.
+                i++;
+            }
+            if(key === "childnode"){ // forin문을 돌다가 key값이 childnode인 아이가 있다면
+                v[key].map(function(v,index){ // 그 value도 배열이므로 그 value(배열)를 map으로 쭉 돌꺼야
+                    for(key2 in v){ //위의 과정을 반복한다.
+                        if(v[key2] === "sk"){
+                            arr[i]=v["name"];
+                            i++;
+                        }
+                        if(key2 === "childnode"){
+                            v[key2].map(function(v,index){
+                                for(key3 in v){
+                                    if(v[key3] === "sk"){
+                                        arr[i]=v["name"];
+                                        i++;
+                                    }
+                                    if(key3 ==="childnode"){
+                                        v[key3].map(function(v,index){
+                                            for(key4 in v){
+                                                if(v[key4] ==="sk"){
+                                                    arr[i]=v["name"];
+                                                    i++;
+                                                }
+                                                if(key4 === "childnode"){
+                                                    v[key4].map(function(v,index){
+                                                        for(key5 in v){
+                                                            if(v[key5] === "sk"){
+                                                                arr[i]=v["name"];
+                                                                i++;
+                                                            }
+                                                            if(key5 ==="childnode"){
+                                                                v[key5].map(function(v,index){
+                                                                    for(key6 in v){
+                                                                        if(v[key6] === "sk"){
+                                                                            arr[i]=v["name"];
+                                                                            i++;
+                                                                        }
+                                                                    }
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
+    })
+    
+    console.log(arr);
+    </script>
+</body>
+</html>

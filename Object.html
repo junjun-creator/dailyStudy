@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //key와 value로 이루어진 자료구조.
+        var obj = {name : "crong", age:20}; //이런 구조가 데이터를 저장하기 좋아서 서버와 클라이언트간의 데이터 전송에 JSON을 사용.
+
+        var myFriend = { key : "value", key2 : "value" , addition:[{name:'codesquad'},{age:2}]};
+        /*
+        console.log(myFriend.key); //key값을 통해 value를 불러올 수 있음.
+        console.log(myFriend["key"]); // 그냥 [key]로 해버리면 오류. key라는 값을 찾는것인데 해당 객체는 key는 키값이므로. 큰따옴표로 묶어주기.
+        console.log(myFriend.addition[0].name); // 객체에는 value값으로 또다른 객체 또는 배열도 들어올수 있고, 이런방식으로 탐색 가능
+
+        for(value in myFriend){ //forin 문은 객체를 탐색하기 위해 쓴다. 배열에도 쓸수는 있다.
+            console.log(value); // value에는 키값이 들어감. 즉 해당 키에 대한 value를 얻고 싶을땐 다음 줄 시행.
+            console.log(myFriend[value]);
+        }*/
+
+        console.log(Object.keys(myFriend)); // 키값들을 반환함.(배열로)
+
+        Object.keys(myFriend).forEach(function(v){ // 키값들을 배열의 형태로 반환하므로 이 배열을(key값을) forEach문으로 반복하여 
+            console.log(myFriend[v]); // 해당 키값들의 value를 이렇게도 출력할 수 있음.
+        })
+    </script>
+</body>
+</html>

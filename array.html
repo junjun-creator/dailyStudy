@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var a = [4];
+        a[1000] = 3; //원하는 위치에 값을 넣을 수 있음. 그만큼 길이도 늘어남.
+        console.log(a.length);
+        console.log(a[500]);
+
+        var origin = [1,2,3,4];
+
+        //var result = [...origin,2,3]; //...은 spread operator임. concat과 똑같이 동작.
+        var result = origin.concat(2,3); // origin에 2,3을 추가한다(합친다).
+        console.log(origin.indexOf(3)); // 배열에 값이 있는지를 찾아보고, 있다면 해당 위치 index를 return함. 없으면 -1 리턴.
+        console.log(result) // [1,2,3,4,2,3];
+
+        var o = [1,2,3,4];
+        var changed = o.concat();  //[1,2,3,4]
+        console.log(o === changed);  //[1, 2, 3, 4] [1, 2, 3, 4] false
+        // 두개의 내용은 같지만 두 개가 가리키는 메모리주소가 다름. 즉 reference가 달라서 false이다.
+
+        result.forEach(function(v,i,o){
+            console.log(v);
+        });
+        /*
+        var fun = function(v,i,o){
+            console.log(v);
+        }
+
+        result.forEach(fun);  // forEach는 함수를 인자로 받는다! 자바스크립트의 특별함... 함수를 인자로도 받는다!
+        */
+
+        var mapped = result.map(function(v){
+            return v*2;
+        });  // result의 원소를 돌면서, 값을 변경시킨 후에 새로운 배열로 만들어서 반환한다.(원래값은 그대로 유지)
+
+        console.log(mapped);
+
+        var newArr = ["apple","tomato"].map(function(value, index) {
+            return index + "번째 과일은 " + value + "입니다";
+        });
+        console.log(newArr); //해당 index의 내용을 바꾸고 새로운 배열을 만들어서 리턴.... 와우
+    </script>
+</body>
+</html>
