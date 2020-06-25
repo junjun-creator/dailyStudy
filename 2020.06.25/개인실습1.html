@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>selector test</h1> 
+    <!-- 노드를 추가해보자. -->
+    <ul>
+        <li class="red">apple</li>
+        <li class="red">orange</li>
+        <li>banana</li>
+        <li>grape</li>
+        <li>strawberry</li>
+    </ul>
+    <input type="button" id="addNode" value="addFruit">
+    <input type="button" id="deleteNode" value="deleteFruit">
+    <input type="button" id="insertbefore" value="insertbefore">
+    <input type="button" id="insertAdjacent" value="innsertAdjacentHTML">
+    <input type="button" id="moveNode" value="moveNode">
+    <input type="button" id="removeRed" value="removeRed">
+
+    <script>
+        var button = document.querySelector("#addNode");
+
+        button.addEventListener('click', function(event){
+            var parent = document.querySelector("ul");
+
+            var newNode = document.createElement("li");
+            var textNode = document.createTextNode("watermelon");
+            newNode.appendChild(textNode);
+
+            parent.appendChild(newNode);
+        });
+
+        var button2 = document.querySelector("#deleteNode");
+        button2.addEventListener('click', function(event){
+            var parent = document.querySelector("ul");
+            var lastChild = parent.lastElementChild;
+
+            parent.removeChild(lastChild);
+        });
+
+        var button3 = document.querySelector("#insertbefore");
+        button3.addEventListener('click', function(event){
+            var parent = document.querySelector("ul");
+            var banana = parent.childNodes[5];
+
+            var newNode = document.createElement("li");
+            var textNode = document.createTextNode("cherry");
+            newNode.appendChild(textNode);
+
+            parent.insertBefore(newNode, banana);
+        });
+
+        var button4 = document.querySelector("#insertAdjacent");
+        button4.addEventListener('click', function(e){
+            var base = document.querySelector("ul li:nth-child(3)"); // ul에서 li중에 3번째 li 선택
+            
+            base.insertAdjacentHTML('beforebegin','<li>cherry</li>');
+        });
+
+        var button5 = document.querySelector("#moveNode");
+        button5.addEventListener('click', function(e){
+            var li = document.querySelector("ul li:nth-child(1)");
+            var base = document.querySelector("ul li:nth-child(4)");
+            var parent = document.querySelector("ul");
+
+            parent.insertBefore(li, base);
+            
+        });
+
+        var button6 = document.querySelector("#removeRed");
+        button6.addEventListener('click', function(e){
+            var parent = document.querySelector("ul");
+            var remove = document.querySelectorAll(".red"); // .red 클래스인 노드를 배열의 형태로 리턴
+
+            remove.forEach(function(e) { // 배열의 모든 인덱스를 돌면서 
+                parent.removeChild(e); //각 인덱스의 값(e) 마다 삭제함.
+            });
+        });
+        
+    </script>
+</body>
+</html>

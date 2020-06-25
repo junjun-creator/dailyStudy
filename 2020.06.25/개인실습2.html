@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li{
+            list-style:none;
+            font-size:1.4em;
+            margin-bottom:10px;
+        }
+        .red{
+            color:#f00;
+        }
+
+        .blue{
+            color:#00f;
+        }
+
+        .green{
+            color:#0f0;
+        }
+    </style>
+</head>
+<body>
+    <body>
+        <h1>selector test</h1>
+        
+        <section>
+            <h2> red section </h2>
+            <ul>
+            <li class="red">apple</li>
+            <li class="red">orange</li>
+            <li>banana</li>
+            <li>grape</li>
+            <li>strawberry</li>
+            </ul>
+        </section>
+            
+            <Br>
+            
+        <section>
+            <h2> blue section </h2>
+            <ul>
+            <li class="blue">apple</li>
+            <li class="green">orange</li>
+            <li>banana</li>
+            <li>grape</li>
+            <li>strawberry</li>
+            </ul>
+        </section>
+        
+        <script>
+            var base = document.querySelectorAll("section"); //section 태그들을 모두 배열로 리턴
+            base.forEach(function(e){ // section 태그들을 돌면서
+                if(e.querySelector(".green")){ // 각 section 태그(e)에 green이라는 클래스를 가진 태그가 있다면
+                    var k = e.querySelector("h2"); // 해당 section의 h2 태그를
+                    e.removeChild(k); // 삭제한다.
+                }
+            });
+        </script>
+    </body>
+</body>
+</html>

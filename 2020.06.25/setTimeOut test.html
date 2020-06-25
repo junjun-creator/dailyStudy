@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var count =0;
+        function animation(){ //animation 함수에 settimeout을 설정하고 그 안에서 animation을 또다시 호출하여 반복되게끔
+            setTimeout(function(){
+            if(count >= 20) return;
+            console.log('현재시각은', new Date());
+            count++;
+            animation();
+            },500)
+        }
+
+        animation(); // setTimeout을 재귀로 반복하는것은 setInterval을 보완한다.
+
+        //하지만 setTimeout도 유기적인 애니메이션을 위해서는 약간 부족한데 그걸 보완하는게 requestAnimationFrame 이다.
+    </script>
+</body>
+</html>

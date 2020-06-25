@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <ul>
+        <li id="list1">1. 웹 프로그래밍 기초</li>
+        <li id="list2">2. DB연결 웹 애플리케이션</li>
+        <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+      </ul>
+    </div>
+    <button id="copyListButton">첫번째 리스트만 남기고 제거</button>
+
+    <script>
+        var copyListButton = document.getElementById("copyListButton");
+
+        copyListButton.addEventListener("click", function() { // 버튼을 클릭하면 
+            var ul = document.querySelector("ul"); // ul노드를 선택하고
+            var list1Html = document.getElementById("list1").innerHTML; // li1에 있는 html을 저장하고
+            
+            ul.innerHTML = list1Html; // ul의 html 내용을 li1의 내용으로 변경하겠다.
+        });
+    </script>
+</body>
+</html>

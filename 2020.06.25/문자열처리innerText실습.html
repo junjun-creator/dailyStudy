@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <ul>
+        <li id="list1">1. 웹 프로그래밍 기초</li>
+        <li id="list2">2. DB연결 웹 애플리케이션</li>
+        <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+      </ul>
+    </div>
+    <button id="copyTextButton">두번째 리스트 내용을 첫번째 리스트 내용으로 변경</button>
+
+    <script>
+        var copyTextButton = document.getElementById("copyTextButton"); 
+
+        copyTextButton.addEventListener("click", function() {//버튼을 클릭하면 해당 li의 텍스트 노드 내용을 저장하고
+            var list1Text = document.getElementById("list1").innerText;
+            
+            document.getElementById("list2").innerText = list1Text; // 2번째 li의 텍스트노드를 변경할거다.
+        });
+    </script>
+</body>
+</html>

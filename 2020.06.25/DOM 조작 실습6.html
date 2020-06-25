@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <ul>
+        <li id="list1">1. 웹 프로그래밍 기초</li>
+        <li id="list2">2. DB연결 웹 애플리케이션</li>
+        <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+      </ul>
+    </div>
+
+    <script>
+        var firstLi = document.getElementById("list1"); // 노드 선택
+
+        console.log(firstLi.closest("div").nodeName); // 상위노드들을 검색하면서 가장 가까운 엘리먼트를 반환.이 경우 div를 검색했음
+    </script>
+</body>
+</html>

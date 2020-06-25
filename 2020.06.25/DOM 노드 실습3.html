@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <ul>
+          <li>1. 웹 프로그래밍 기초</li>
+          <li>2. DB연결 웹 애플리케이션</li>
+          <li>3. 웹 애플리케이션 개발 1/4</li>
+        </ul>
+
+        <div>
+            <ul>
+              <li id="list1">1. 웹 프로그래밍 기초</li>
+              <li id="list2">2. DB연결 웹 애플리케이션</li>
+              <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        var div = document.querySelector("div");
+        var divParentElement = div.parentElement;
+        //body 태그 선택
+        console.log(divParentElement.nodeName);
+
+        var list1 = document.getElementById("list1"); 
+        var nextSiblingNode = list1.nextElementSibling;
+
+        // 2번째 li 선택(다음 엘리먼트 노드를 선택)
+        console.log(nextSiblingNode.nodeName);
+    </script>
+</body>
+</html>

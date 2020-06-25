@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .outside{
+            position: relative;
+            background-color: chartreuse;
+            /* left:0px; */
+            width:100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outside">옆으로 이동시킬겁니다.</div>
+    <script>
+        var count =0;
+        var el = document.querySelector(".outside"); // 해당 엘리먼트 선택
+        el.style.left = "0px"; // el의 위치를 0px 로 설정해주고
+        function run(){
+            if(count > 50)return; //count가 50보다 크면 함수 종료.
+            count++;
+            el.style.left = parseInt(el.style.left) + count +"px"; // el의 위치를 현재위치에서 count만큼 증가한 위치로 이동. 
+            //css 설정법. 엘리먼트el.style.속성left = "~~" 문자열. 문자열이므로 값을 받아올때는 parseInt로 숫자로 바꿔주고 count랑 합해야함
+            requestAnimationFrame(run); // 재귀함수로 반복 시행
+        }
+        requestAnimationFrame(run);
+    </script>
+</body>
+</html>

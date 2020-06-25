@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <body>
+        <div>
+          <ul>
+            <li id="list1">1. 웹 프로그래밍 기초</li>
+            <li id="list2">2. DB연결 웹 애플리케이션</li>
+            <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+          </ul>
+        </div>
+        <button id="insertBeforeButton">ul 자식 노드 추가</button>
+    </body>
+
+    <script>
+        var insertBeforeButton = document.getElementById("insertBeforeButton");
+
+        insertBeforeButton.addEventListener("click", function(){ // 버튼을 누르면 ul의 첫번째 자식 엘리먼트노드를 클론(복제)해서
+            var ul = document.querySelector("ul");
+
+            ul.appendChild(ul.firstElementChild.cloneNode(true)); // 마지막에 추가를 해줄거다.
+        });
+    </script>
+</body>
+</html>

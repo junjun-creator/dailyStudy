@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <ul>
+        <li id="list1">1. 웹 프로그래밍 기초</li>
+        <li id="list2">2. DB연결 웹 애플리케이션</li>
+        <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+      </ul>
+    </div>
+    <button id="replaceTextNodeButton">textNode 변경</button>
+
+    <script>
+        var replaceTextNodeButton = document.getElementById("replaceTextNodeButton");
+
+        replaceTextNodeButton.addEventListener("click", function(){ // 버튼을 클릭하면 ul의 첫번째 엘리먼트 자식노드의 
+            var ul = document.querySelector("ul"); //firstChild(textNode) 를 새로 생성한 텍스트 노드로 변경할거다.
+            var firstLi = ul.firstElementChild;
+            
+            var textNode = document.createTextNode("텍스트 노드 변경");
+
+            firstLi.replaceChild(textNode, firstLi.firstChild);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <ul>
+            <li id="list1">1. 웹 프로그래밍 기초</li>
+            <li id="list2">2. DB연결 웹 애플리케이션</li>
+            <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+        </ul>
+    </div>
+    <button id="appendChildButton">ul 자식 노드 추가</button>
+
+    <script>
+        var appendChildButton = document.getElementById("appendChildButton");
+
+        appendChildButton.addEventListener("click", function(){ // 버튼을 누르면 4번이 추가 삽입 된다.
+            var ul = document.querySelector("ul");
+            
+            var liNode = document.createElement("LI"); // 삽입할 노드(엘리먼트) 생성
+            var textNode = document.createTextNode("4. 웹 애플리케이션 개발 1/4"); // 노드에 들어갈 텍스트노드 생성
+            
+            liNode.appendChild(textNode); // 텍스트노드를 삽입할 노드 안에 넣고
+            
+            ul.appendChild(liNode); // 텍스트노드를 포함한 삽입 노드를 부모에게 넣어줌(append는 맨 마지막에 삽입)
+        });
+    </script>
+</body>
+</html>

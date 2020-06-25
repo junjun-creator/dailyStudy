@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="outside">outside element</div>
+    <script>
+        
+        var oReq = new XMLHttpRequest();
+            
+        oReq.addEventListener("load", function() {
+            console.log(this.responseText); // text로 json파일을 읽어들임
+            var jsonobj = JSON.parse(this.responseText); // text를 json object 객체로 변환
+            console.log(typeof jsonobj); // object 타입
+        });
+            
+        oReq.open("GET", "/json.txt");
+        oReq.send();
+        
+    </script>
+</body>
+</html>

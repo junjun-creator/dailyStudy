@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <ul>
+        <li id="list1">1. 웹 프로그래밍 기초</li>
+        <li id="list2">2. DB연결 웹 애플리케이션</li>
+        <li id="list3">3. 웹 애플리케이션 개발 1/4</li>
+      </ul>
+    </div>
+    <button id="removeChildButton">div 자식 노드 제거</button>
+
+    <script>
+        var removeChildButton = document.getElementById("removeChildButton");
+
+        removeChildButton.addEventListener("click", function(){ // 버튼 클릭시 ul태그의 첫번째 엘리먼트 자식을 삭제하고자 한다.
+            var ul = document.querySelector("ul");
+            
+            ul.removeChild(ul.firstElementChild); // 1.웹프로그래밍 기초 삭제.
+        });
+    </script>
+</body>
+</html>

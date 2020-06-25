@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>DOM 노드 실습1</title>
+</head>
+<body>
+  <div>
+    <ul>
+      <li>1. 웹 프로그래밍 기초</li>
+      <li>2. DB연결 웹 애플리케이션</li>
+      <li>3. 웹 애플리케이션 개발 1/4</li>
+    </ul>
+  </div>
+
+  <script>
+    var ul = document.querySelector("ul");
+    var ulChildNodes = ul.childNodes;
+
+
+    for (var index = 0; index < ulChildNodes.length; index++) {
+        // 개행이 포함되어 textNode 포함
+        console.log(ulChildNodes[index].nodeName);
+    }
+  </script>
+</body>
+</html>
