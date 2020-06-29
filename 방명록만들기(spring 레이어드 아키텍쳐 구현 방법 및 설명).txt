@@ -1,0 +1,64 @@
+1. DispatcherServlet 설정하기(url요청을 받고, view를 보여주는 역할)
+	WebMvcContextConfiguration 클래스 만들고
+	@Configuration : 설정파일임을 알림
+	@EnableWebMvc : 웹 mvc에 관한것을 자동으로 사용할 수 있게끔 설정
+	@ComponenetScan : 해당 패키지에서 참조해서 view할것임.
+
+2. 비지니스 로직을 수행하기 위한 Listener 부분 만들기
+	ApplicationConfig, DBConfig 만들기.
+	1)DBConfig : DB연결에 관한 설정을 함.
+		@Configuration : 설정파일임을 알림.
+		@EnableTransactionManagement : 하나의 비지니스로직은 하나의 트랜잭션으로 이루어짐. 트랜잭션 관리를 위한 모든것을 자동으로 사용할 수 있게 설정
+		> DB연결에 필요한 driverClassName, url, username, password 선언하고
+		> DataSource에 그 값들을 set함.
+		> 그리고 사용자 간의 트랜잭션 처리를 위해서 인터페이스를 구현해야함
+	2)ApplicationConfig : 비지니스 로직들을 스캔하여 로직실행이 가능하게끔함
+		@Configuration : 설정파일임을 알림.
+		@ComponentScan : 비지니스 로직들이 담긴 패키지들을 스캔
+		@Import({DBConfig.class}) : DBConfig.class를 참조하여 비지니스 로직을 수행할때 DB연결을 할 것임.
+
+3. DTO 클래스 생성하기
+	Guestbook, Log 클래스 만들기(dto 패키지 따로 만들어서 수행
+
+4. DAO 클래스 생성하기(Repository Layer)
+	LogDao, GuestbookDaoSqls, GuestbookDao 작성하기.
+	1)LogDao
+		@Repository : 저장소의 의미. 수행할 로직들을 저장해둠. ApplicationConfig에서 ComponentScan을 통해 참조하여 로직을 수행함.
+		insert만 수행할 것이므로 해당 로직만 작성하면 됨.(특별히 쿼리문을 다룰 클래스 필요하지 않음.)
+	2)GuestbookDao
+		@Repository
+		insert를 포함하여 여러 로직을 구현할 것이므로 각 로직에 필요한 쿼리문을 작성해야함.
+			>GuestbookDaoSqls 구현
+		해당 로직 구현
+	>>구현 뒤에 test 한번 해보기.
+
+5. Service Layer 구현하기(service, service.impl package)   ***아주중요..
+	1)구현해야하는 인터페이스들을 정의함.
+	2)인터페이스를 모두 구현(impl)
+		> GuestbookDao, LogDao 처럼 이미 repository layer에서 구현해둔 bean들은 선언 없이 자동으로 등록해서 사용할 수 있다.
+			이때 필요한게 @Autowired 이다!!
+		> GuestbookService 인터페이스에서 요구하는 메소드들을 모두 구현해보자.
+		> 전체 리스트를 출력하는 메소드의 경우 그냥 데이터베이스를 읽어오는것이므로 readOnly로 작업한다.
+			@Transactional
+			또한, 리스트를 한페이지에 몇개씩 보여줄지 정하는 boundary는 start와 limit로 설정한다.
+		> 방명록을 추가하거나 삭제하는 메소드는 추가 삭제후에 log를 작성하는 비지니스 로직이 수행되므로
+			@Transactional(readOnly=false) 읽기전용을 false로 선언해두면 트랜잭션이 잘 수행된다.
+
+6. Controller, jsp 구현하기.
+	@Controller 설정하기.
+	@Autowired로 GuestbookService 사용할 수 있게 설정.
+	컨트롤러 작성(get, post)
+	1) list 정보 가져와서 출력하기 위한 GetMapping 작성
+		start값 설정해주고 리스트 가져옴(default값은 0)
+		전체 방명록 숫자를 guestbookService의 getCount()로 가져옴
+		한페이지에 5개씩이므로 pageCount = count/GuestbookService.LIMIT
+		만약에 전체 방명록 숫자를 limit으로 나눈 나머지가 0이 아닐경우엔 추가로 페이지를 하나 더 생성해야함.
+		페이지 갯수가 정해졌으면 각 페이지마다 list의 시작지점을 설정해야함.
+			> 각 시작지점을 list 에 저장한다.(0,5,10 ... 이렇게)
+		이렇게 저장된 list와 count, pageStartList 를 model에 저장한다.
+		return "list"; 로 list.jsp를 호출한다
+	2) 이름과 텍스트 내용을 방명록 리스트에 추가하기 위한 PostMapping 작성
+		작성제출된 이름과 텍스트내용을 매핑해서 저장한 @ModelAttribute Guestbook guestbook 객체와, 수행한 request의 ip정보가 필요하므로 request를 파라메타로 사용
+		> request로부터 getRemoteAddr();메소드를 통해 클라이언트 ip 저장
+		> guestbookService.addGuestbook(guestbook,ip) : post방식으로 넘어온 데이터인 guestbook과 request에서 가져온 ip를 인자로 서비스의 add메소드 실행
+		> return "redirect:list"; list.jsp 페이지로 리다이렉트
