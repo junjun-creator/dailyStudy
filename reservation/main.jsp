@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.*" %>
+<%@ page import="kr.or.connect.reservation.dto.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -216,10 +218,30 @@
 			
 		});
 		
-		var html = document.querySelector("#itemList").innerHTML;
+		
+    </script>
+    <script>
+	    var html = document.querySelector("#itemList").innerHTML;
 		var ul = document.querySelectorAll(".lst_event_box");
 		alert(html);
+		/*
+		var list_description = new Array();
+		<c:forEach items="${productInfo}" var = "product">
+			list_description.push("${product.description}");
+		</c:forEach>
 		
+		for (var i = 0; i < list_description.length; i++) {
+		    alert(list_description[i]);
+		}
+		
+		var list = '<c:out value="${productInfo}"/>';
+		alert(list);*/
+		
+		<%
+			List<Product> productInfo = (List<Product>)request.getAttribute("productInfo");
+		%>
+		
+		alert(<%=productInfo%>); //모두 같은 결과만을 출력하고 있다... 왜 출력이 안되는걸까 어렵구나...
     </script>
 </body>
 </html>
