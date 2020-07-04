@@ -154,7 +154,6 @@
         </div>
     </footer>
 
-
     <script type="rv-template" id="promotionItem">
     <li class="item" style="background-image: url(http://211.249.62.123/productImages/${productId}/${productImageId});">
         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
@@ -226,22 +225,28 @@
 		alert(html);
 		/*
 		var list_description = new Array();
+		
 		<c:forEach items="${productInfo}" var = "product">
-			list_description.push("${product.description}");
+		list_description.push({id:"${product.id}",
+							description:"${product.description}"});
 		</c:forEach>
 		
 		for (var i = 0; i < list_description.length; i++) {
-		    alert(list_description[i]);
-		}
+		    alert(list_description[i].description);
+		}*/
 		
+		/*
 		var list = '<c:out value="${productInfo}"/>';
 		alert(list);*/
 		
-		<%
+		<%-- <%
 			List<Product> productInfo = (List<Product>)request.getAttribute("productInfo");
+			for(Product product : productInfo){
 		%>
-		
-		alert(<%=productInfo%>); //모두 같은 결과만을 출력하고 있다... 왜 출력이 안되는걸까 어렵구나...
+			alert(<%=product%>);
+		<%
+			}
+		%> --%>
     </script>
 </body>
 </html>
