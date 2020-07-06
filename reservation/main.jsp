@@ -223,14 +223,15 @@
 	    var html = document.querySelector("#itemList").innerHTML;
 		var ul = document.querySelectorAll(".lst_event_box");
 		alert(html);
-		/*
+		
 		var list_description = new Array();
 		
 		<c:forEach items="${productInfo}" var = "product">
-		list_description.push({id:"${product.id}",
-							description:"${product.description}"});
+			list_description.push("<c:out value='${product.description}'/>");
 		</c:forEach>
 		
+		alert(list_description);
+		/*
 		for (var i = 0; i < list_description.length; i++) {
 		    alert(list_description[i].description);
 		}*/
