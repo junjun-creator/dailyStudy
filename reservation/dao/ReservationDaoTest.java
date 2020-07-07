@@ -9,6 +9,7 @@ import kr.or.connect.reservation.config.ApplicationConfig;
 import kr.or.connect.reservation.dao.ReservationDao;
 import kr.or.connect.reservation.dto.Category;
 import kr.or.connect.reservation.dto.FileInfo;
+import kr.or.connect.reservation.dto.Product;
 import kr.or.connect.reservation.dto.ProductImage;
 import kr.or.connect.reservation.dto.Promotion;
 
@@ -17,7 +18,7 @@ public class ReservationDaoTest {
 	public static void main(String[] args) {
 		ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 		ReservationDao reservationDao = ac.getBean(ReservationDao.class);
-		
+		/*
 		List<Category> list= reservationDao.selectAllCategory();
 		
 		for(Category category : list) {
@@ -32,6 +33,13 @@ public class ReservationDaoTest {
 		List<FileInfo> list_promotionImage = reservationDao.selectAllPromotionFileName();
 		for(FileInfo promotionImage : list_promotionImage) {
 			System.out.println(promotionImage.getFileName()); // 프로모션에 애니메이션 걸어둘 이미지 파일들 이름 가져오기 성공
+		}
+		*/
+		List<Product> list_productInfo = reservationDao.selectAllProductInfo();
+		for(Product productInfo : list_productInfo) {
+			System.out.println(productInfo.getContent());
+			System.out.println(productInfo.getCategoryId());
+			System.out.println(productInfo.getDescription());
 		}
 	}
 

@@ -6,7 +6,7 @@ public class Product {
 	private int id;
 	private int categoryId;
 	private String description;
-	private String text;
+	private String content;
 	private String event;
 	private Date createDate;
 	private Date modifyDate;
@@ -35,12 +35,12 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getText() {
-		return text;
+	public String getContent() {
+		return content;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getEvent() {
@@ -69,7 +69,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", category_id=" + categoryId + ", description=" + description + ", text=" + text
+		return "Product [id=" + id + ", category_id=" + categoryId + ", description=" + description + ", content=" + content
 				+ ", event=" + event + ", create_date=" + createDate + ", modify_date=" + modifyDate + "]";
 	}
 	

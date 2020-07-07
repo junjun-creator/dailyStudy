@@ -21,6 +21,9 @@ public class ReservationDao {
     private RowMapper<Category> rowMapper_category = BeanPropertyRowMapper.newInstance(Category.class);
     private RowMapper<Promotion> rowMapper_promotion = BeanPropertyRowMapper.newInstance(Promotion.class);
     private RowMapper<FileInfo> rowMapper_promotionImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
+    private RowMapper<Product> rowMapper_productInfo = BeanPropertyRowMapper.newInstance(Product.class);
+    private RowMapper<DisplayInfo> rowMapper_placeName = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
+    private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
@@ -37,5 +40,14 @@ public class ReservationDao {
     }
     public List<FileInfo> selectAllPromotionFileName(){
     	return jdbc.query(SELECT_PROMOTION_IMAGE, Collections.emptyMap(), rowMapper_promotionImage);
+    }
+    public List<Product> selectAllProductInfo(){
+    	return jdbc.query(SELECT_ALL_PRODUCT, Collections.emptyMap(), rowMapper_productInfo);
+    }
+    public List<DisplayInfo> selectAllPlaceName(){
+    	return jdbc.query(SELECT_ALL_PLACENAME, Collections.emptyMap(), rowMapper_placeName);
+    }
+    public List<FileInfo> selectAllProductImage(){
+    	return jdbc.query(SELECT_ALL_PRODUCTIMG, Collections.emptyMap(), rowMapper_productImage);
     }
 }
