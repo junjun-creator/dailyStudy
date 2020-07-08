@@ -220,11 +220,41 @@
 		
     </script>
     <script>
-	    var html = document.querySelector("#itemList").innerHTML;
+	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
 		var ul = document.querySelectorAll(".lst_event_box");
 		alert(html);
+		var footer = document.querySelector(".dsc_footer");
+		var whole_service = new Array();
+		<c:forEach items="${productInfo}" var = "product">
+			<c:forEach items="${placeName}" var = "name">
+				if("${name.productId}" == "${product.id}"){
+					var json = new Object();
+					json.id = "${product.id}";
+					json.description = "${product.description}";
+					json.placeName = "${name.placeName}";
+					json.content = "${product.content}";
+					whole_service.push(json);
+				}
+			</c:forEach>
+		</c:forEach>
+		alert("productInfo = " + JSON.stringify(whole_service[29]));
+		// 객체 배열의 각 인덱스(각 객체)를 돌면서 해당 id와 같은 id값을 갖고 있는 아이를 그 객체의 정보로 추가하는 작업 필요.
 		
-		alert("${productInfo}");
+		// img는 따로 50개 배열로 이름 저장 후에 각 index값과 whole_service의 id 값들을 비교해서 넣어주면 되지 않을까 싶음. 오늘은 여기까지.
+		
+		/*
+		<c:forEach items="${placeName}" var = "name">
+			for(var i=0;i<whole_service.length;i++){
+				if(JSON.stringify(whole_service[i].id) == "${name.productId}"){
+					footer.innerHTML += JSON.stringify(whole_service[i].id);
+				}
+			}
+		</c:forEach>
+		*/
+		/*
+		for(var i=0;i<whole_service.length;i++){
+			
+		}*/
 		/*
 		$(function() {
 			var list_description = new Array();
