@@ -10,7 +10,7 @@
 <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이버 예약</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
 </head>
 <body>
     <div id="container">
@@ -88,7 +88,7 @@
                 <div class="wrap_event_box">
                     <!-- [D] lst_event_box 가 2컬럼으로 좌우로 나뉨, 더보기를 클릭할때마다 좌우 ul에 li가 추가됨 -->
                     <ul class="lst_event_box">
-                        <li class="item">
+                        <!-- <li class="item">
                             <a href="detail.html" class="item_book">
                                 <div class="item_preview"> <img alt="뮤지컬 드림걸즈(DREAMGIRLS) 최초 내한" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170303_271/1488514705030TuUK4_JPEG/17%B5%E5%B8%B2%B0%C9%C1%EE_%B8%DE%C0%CE%C6%F7%BD%BA%C5%CD_%C3%D6%C1%BE.jpg?type=l591_945">                                    <span class="img_border"></span> </div>
                                 <div class="event_txt">
@@ -113,10 +113,10 @@
                                         그레이&gt; 등 2016년 한 해 동안 세 편의 창작 뮤지컬을 무대에 올린 이지나 연출 미국에서 다방면으로 활동하며 주목받은 음악가 Woody Pak 톡톡 튀는 감각으로 다수의 뮤지컬에 참여해 온 이지혜 작곡가 등 국내외 실력파 크리에이터들이 다시 의기투합하여 한층 완성도 높아진 공연을 선보인다!</p>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     <ul class="lst_event_box">
-                        <li class="item">
+                        <!-- <li class="item">
                             <a href="detail.html" class="item_book">
                                 <div class="item_preview"> <img alt="뮤지컬 로미오와 줄리엣" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170119_135/1484789767866RPO6o_JPEG/%B7%CE%B9%CC%BF%C0%C1%D9%B8%AE%BF%A7_1242.jpg?type=l591_945"> <span class="img_border"></span> </div>
                                 <div class="event_txt">
@@ -134,7 +134,7 @@
                                         불리는 맨해튼 북서부의 워싱턴 하이츠. 그곳에서 서로 인연을 맺은 이주민들의 애환이 담긴 삶과 꿈, 그리고 희망을 긍정적인 유머로 승화하여 진한 위로와 공감대를 전하는 브로드웨이 작품이다.</p>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     <!-- 더보기 -->
                     <div class="more">
@@ -174,7 +174,7 @@
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">
-                    <h4 class="event_txt_tit"> <span>{description}</span> <small class="sm">{placeName}</small> </h4>
+                    <h4 class="event_txt_tit"> <span>{description2}</span> <small class="sm">{placeName}</small> </h4>
                     <p class="event_txt_dsc">{content}</p>
                 </div>
             </a>
@@ -237,10 +237,81 @@
 				}
 			</c:forEach>
 		</c:forEach>
-		alert("productInfo = " + JSON.stringify(whole_service[29]));
+		var productImage = new Array();
+		<c:forEach items="${productImg}" var = "image">
+			var json2 = new Object();
+			json.fileName = "${image.fileName}";
+			productImage.push(json);
+		</c:forEach>
 		// 객체 배열의 각 인덱스(각 객체)를 돌면서 해당 id와 같은 id값을 갖고 있는 아이를 그 객체의 정보로 추가하는 작업 필요.
-		
+		alert(productImage.length);
 		// img는 따로 50개 배열로 이름 저장 후에 각 index값과 whole_service의 id 값들을 비교해서 넣어주면 되지 않을까 싶음. 오늘은 여기까지.
+		var resultHTML="";
+		var count=0;
+		<c:set var="doneLoop" value="false"/>
+		<c:forEach items="${productInfo}" var = "product" varStatus="status">
+			<c:if test="${not doneLoop}">
+				<c:forEach items="${placeName}" var = "name">
+					<c:forEach items="${productImg}" var = "image">
+						var com = "${product.id}"+"_th";
+						if("${name.productId}" == "${product.id}" && "${image.fileName}".startsWith(com) && (count%2) === 0){
+							resultHTML = html.replace("{description}", "${product.description}")
+											.replace("{placeName}", "${name.placeName}")
+											.replace("{content}", "${product.content}")
+											.replace("{fileName}","${image.fileName}")
+											.replace("{description2}", "${product.description}");
+							ul[(count%2)].innerHTML += resultHTML;
+						}
+						else if("${name.productId}" == "${product.id}" && "${image.fileName}".startsWith(com) && (count%2) === 1){
+							resultHTML = html.replace("{description}", "${product.description}")
+											.replace("{placeName}", "${name.placeName}")
+											.replace("{content}", "${product.content}")
+											.replace("{fileName}","${image.fileName}")
+											.replace("{description2}", "${product.description}");
+							ul[(count%2)].innerHTML += resultHTML;
+						}
+						count++;
+					</c:forEach>
+				</c:forEach>
+				<c:if test="${status.count == 4}"> 
+					<c:set var="doneLoop" value="true"/> 
+				</c:if>
+			</c:if>
+			
+		</c:forEach> //4개의 아이템만 출력하게끔 해야한다.
+		
+		
+		/* fileName이 들어가지 않는다...
+		for(var i=0;i<whole_service.length;i++){
+			for(var j=0;j<ul.length;j++){
+				if((i%2) !== 0){
+					var resultHTML = html.replace("description",JSON.stringify(whole_service[i].description))
+										.replace("placeName",JSON.stringify(whole_service[i].placeName))
+										.replace("content",JSON.stringify(whole_service[i].content));
+					for(var k=0;k<productImage.length;k++){
+						var compare = JSON.stringify(whole_service[i].id);
+						if(compare == (k+1)){
+							resultHTML = resultHTML.replace("fileName",JSON.stringify(productImage[i].fileName));
+							break;
+						}
+					}
+					break;
+				}
+				else if((i%2) === 0){
+					var resultHTML = html.replace("{description}",JSON.stringify(whole_service[i].description))
+										.replace("{placeName}",JSON.stringify(whole_service[i].placeName))
+										.replace("{content}",JSON.stringify(whole_service[i].content));
+					for(var k=0;k<productImage.length;k++){
+						var compare = JSON.stringify(whole_service[i].id);
+						if(compare == (k+1)){
+							resultHTML = resultHTML.replace("{fileName}",JSON.stringify(productImage[i].fileName));
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}*/
 		
 		/*
 		<c:forEach items="${placeName}" var = "name">
