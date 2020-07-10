@@ -223,31 +223,38 @@
 	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
 		var ul = document.querySelectorAll(".lst_event_box");
 		alert(html);
-		var footer = document.querySelector(".dsc_footer");
-		var whole_service = new Array();
-		<c:forEach items="${productInfo}" var = "product">
-			<c:forEach items="${placeName}" var = "name">
-				if("${name.productId}" == "${product.id}"){
-					var json = new Object();
-					json.id = "${product.id}";
-					json.description = "${product.description}";
-					json.placeName = "${name.placeName}";
-					json.content = "${product.content}";
-					whole_service.push(json);
-				}
-			</c:forEach>
-		</c:forEach>
-		var productImage = new Array();
-		<c:forEach items="${productImg}" var = "image">
-			var json2 = new Object();
-			json.fileName = "${image.fileName}";
-			productImage.push(json);
-		</c:forEach>
-		// 객체 배열의 각 인덱스(각 객체)를 돌면서 해당 id와 같은 id값을 갖고 있는 아이를 그 객체의 정보로 추가하는 작업 필요.
-		alert(productImage.length);
-		// img는 따로 50개 배열로 이름 저장 후에 각 index값과 whole_service의 id 값들을 비교해서 넣어주면 되지 않을까 싶음. 오늘은 여기까지.
+		
+		var tab_count = document.querySelector(".pink");
+		tab_count.innerHTML = "${count}"+"개";
+		
 		var resultHTML="";
 		var count=0;
+		<c:forEach items="${allItem}" var = "allItem" varStatus="status">
+			<c:forEach items="${productImg}" var = "image">
+				var com = "${allItem.id}"+"_th";
+				if("${image.fileName}".startsWith(com) && (count%2) === 0){
+					resultHTML = html.replace("{description}", "${allItem.description}")
+									.replace("{placeName}", "${allItem.placeName}")
+									.replace("{content}", "${allItem.content}")
+									.replace("{fileName}","${image.fileName}")
+									.replace("{description2}", "${allItem.description}");
+					ul[(count%2)].innerHTML += resultHTML;
+				}
+				else if("${image.fileName}".startsWith(com) && (count%2) === 1){
+					resultHTML = html.replace("{description}", "${allItem.description}")
+									.replace("{placeName}", "${allItem.placeName}")
+									.replace("{content}", "${allItem.content}")
+									.replace("{fileName}","${image.fileName}")
+									.replace("{description2}", "${allItem.description}");
+					ul[(count%2)].innerHTML += resultHTML;
+				}
+				count++;
+			</c:forEach>
+		</c:forEach> //오늘은 여기까지. 내일 ajax로 4개씩 가져오는거 구현하기.
+		//******** 더보기 클릭 이벤트 발생 > post 방식으로 start값 넣어서 요청 > controller에서 해당 요청이 들어왔을때 해당 start값을 가지고 DB에서 아이템들 가져오고 ajax로 main으로 전송 
+		//******** > main에서 ajax response 데이터로 template 이용하여 기존에 view에 나타난 데이터 뒤에 추가.(4개씩)
+		
+		/*
 		<c:set var="doneLoop" value="false"/>
 		<c:forEach items="${productInfo}" var = "product" varStatus="status">
 			<c:if test="${not doneLoop}">
@@ -278,7 +285,10 @@
 				</c:if>
 			</c:if>
 			
-		</c:forEach> //4개의 아이템만 출력하게끔 해야한다.
+		</c:forEach>*/ //4개의 아이템만 출력하게끔 해야한다.
+		
+		//limit을 service에서 static 값으로 4로 지정해두고. startlist를 넘긴 후에 ajax로 더보기를 클릭할때마다 기존의 아이템 목록 innerHTML에 startList부터 limit갯수까지의 아이템을
+		//템플릿에 적용시켜서 view에 전송하게끔하면 되지 않을까 싶다.
 		
 		
 		/* fileName이 들어가지 않는다...

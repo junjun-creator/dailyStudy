@@ -1,7 +1,9 @@
 package kr.or.connect.reservation.dao;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -12,6 +14,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import kr.or.connect.reservation.dto.*;
+
+import static kr.or.connect.reservation.dao.ReservationDaoSqls.SELECT_COUNT;
 import static kr.or.connect.reservation.dao.ReservationDaoSqls.*;
 
 @Repository
@@ -23,6 +27,8 @@ public class ReservationDao {
     private RowMapper<FileInfo> rowMapper_promotionImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     private RowMapper<Product> rowMapper_productInfo = BeanPropertyRowMapper.newInstance(Product.class);
     private RowMapper<DisplayInfo> rowMapper_placeName = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
+    private RowMapper<WholeServiceInfo> rowMapper_wholeServiceInfo = BeanPropertyRowMapper.newInstance(WholeServiceInfo.class);
+    
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
@@ -41,6 +47,17 @@ public class ReservationDao {
     public List<FileInfo> selectAllPromotionFileName(){
     	return jdbc.query(SELECT_PROMOTION_IMAGE, Collections.emptyMap(), rowMapper_promotionImage);
     }
+    
+    public List<WholeServiceInfo> selectAllWholeServiceInfo(Integer start, Integer limit){
+    	Map<String, Integer> params = new HashMap<>(); // 쿼리문에 바인딩을 위해 map을 씀
+		params.put("start", start);
+		params.put("limit", limit);
+    	return jdbc.query(SELECT_ALL_ITEMS,params,rowMapper_wholeServiceInfo);
+    }
+    public int selectCount() {
+		return jdbc.queryForObject(SELECT_COUNT, Collections.emptyMap(), Integer.class);
+	}
+    
     public List<Product> selectAllProductInfo(){
     	return jdbc.query(SELECT_ALL_PRODUCT, Collections.emptyMap(), rowMapper_productInfo);
     }

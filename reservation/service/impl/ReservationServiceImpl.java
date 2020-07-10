@@ -10,6 +10,7 @@ import kr.or.connect.reservation.dao.ReservationDao;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
+import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
 
 @Service
@@ -22,6 +23,17 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<FileInfo> getPromotionImage() {
 		List<FileInfo> list = reservationDao.selectAllPromotionFileName();
 		return list;
+	}
+	
+	@Override
+	@Transactional
+	public List<WholeServiceInfo> getAllItems(Integer start) {
+		List<WholeServiceInfo> list = reservationDao.selectAllWholeServiceInfo(start,ReservationService.LIMIT);
+		return list;
+	}
+	@Override
+	public int getCount() {
+		return reservationDao.selectCount();
 	}
 
 	@Override

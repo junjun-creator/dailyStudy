@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
+import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
 
 @Controller
@@ -22,17 +24,31 @@ public class ReservationController {
 	ReservationService reservationService;
 	
 	@GetMapping(path="/main")
-	public String list(Model model) {
+	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,
+			   ModelMap model) {
 		List<FileInfo> list = reservationService.getPromotionImage();
-		List<Product> productInfo = reservationService.getProductInfo();
-		List<DisplayInfo> placeName = reservationService.getPlaceName();
+		//List<Product> productInfo = reservationService.getProductInfo();
+		//List<DisplayInfo> placeName = reservationService.getPlaceName();
 		List<FileInfo> productImg = reservationService.getProductImage();
+		List<WholeServiceInfo> wholeServiceInfo = reservationService.getAllItems(start);
+		
+		int count = reservationService.getCount(); //requestparam 설정 하기.
+		int pageCount = count/ReservationService.LIMIT;
+		if(count % ReservationService.LIMIT > 0)
+			pageCount++;
+		
+		List<Integer> pageStartList = new ArrayList<>();
+		for(int i = 0; i < pageCount; i++) {
+			pageStartList.add(i * ReservationService.LIMIT);
+		}
 		
 		model.addAttribute("list",list);
-		model.addAttribute("productInfo",productInfo);
-		model.addAttribute("placeName",placeName);
+		//model.addAttribute("productInfo",productInfo);
+		//model.addAttribute("placeName",placeName);
 		model.addAttribute("productImg",productImg);
-		
+		model.addAttribute("allItem",wholeServiceInfo);
+		model.addAttribute("pageStartList",pageStartList);
+		model.addAttribute("count",count);
 		return "main";
 	}
 	
