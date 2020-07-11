@@ -138,7 +138,7 @@
                     </ul>
                     <!-- 더보기 -->
                     <div class="more">
-                        <button class="btn"><span>더보기</span></button>
+                        <button class="btn" id="btn_whole"><span>더보기</span></button>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
 	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
 		var ul = document.querySelectorAll(".lst_event_box");
 		alert(html);
-		
+		var cnt = 1;
 		var tab_count = document.querySelector(".pink");
 		tab_count.innerHTML = "${count}"+"개";
 		
@@ -254,121 +254,27 @@
 		//******** 더보기 클릭 이벤트 발생 > post 방식으로 start값 넣어서 요청 > controller에서 해당 요청이 들어왔을때 해당 start값을 가지고 DB에서 아이템들 가져오고 ajax로 main으로 전송 
 		//******** > main에서 ajax response 데이터로 template 이용하여 기존에 view에 나타난 데이터 뒤에 추가.(4개씩)
 		
-		/*
-		<c:set var="doneLoop" value="false"/>
-		<c:forEach items="${productInfo}" var = "product" varStatus="status">
-			<c:if test="${not doneLoop}">
-				<c:forEach items="${placeName}" var = "name">
-					<c:forEach items="${productImg}" var = "image">
-						var com = "${product.id}"+"_th";
-						if("${name.productId}" == "${product.id}" && "${image.fileName}".startsWith(com) && (count%2) === 0){
-							resultHTML = html.replace("{description}", "${product.description}")
-											.replace("{placeName}", "${name.placeName}")
-											.replace("{content}", "${product.content}")
-											.replace("{fileName}","${image.fileName}")
-											.replace("{description2}", "${product.description}");
-							ul[(count%2)].innerHTML += resultHTML;
-						}
-						else if("${name.productId}" == "${product.id}" && "${image.fileName}".startsWith(com) && (count%2) === 1){
-							resultHTML = html.replace("{description}", "${product.description}")
-											.replace("{placeName}", "${name.placeName}")
-											.replace("{content}", "${product.content}")
-											.replace("{fileName}","${image.fileName}")
-											.replace("{description2}", "${product.description}");
-							ul[(count%2)].innerHTML += resultHTML;
-						}
-						count++;
-					</c:forEach>
-				</c:forEach>
-				<c:if test="${status.count == 4}"> 
-					<c:set var="doneLoop" value="true"/> 
-				</c:if>
-			</c:if>
-			
-		</c:forEach>*/ //4개의 아이템만 출력하게끔 해야한다.
-		
-		//limit을 service에서 static 값으로 4로 지정해두고. startlist를 넘긴 후에 ajax로 더보기를 클릭할때마다 기존의 아이템 목록 innerHTML에 startList부터 limit갯수까지의 아이템을
-		//템플릿에 적용시켜서 view에 전송하게끔하면 되지 않을까 싶다.
-		
-		
-		/* fileName이 들어가지 않는다...
-		for(var i=0;i<whole_service.length;i++){
-			for(var j=0;j<ul.length;j++){
-				if((i%2) !== 0){
-					var resultHTML = html.replace("description",JSON.stringify(whole_service[i].description))
-										.replace("placeName",JSON.stringify(whole_service[i].placeName))
-										.replace("content",JSON.stringify(whole_service[i].content));
-					for(var k=0;k<productImage.length;k++){
-						var compare = JSON.stringify(whole_service[i].id);
-						if(compare == (k+1)){
-							resultHTML = resultHTML.replace("fileName",JSON.stringify(productImage[i].fileName));
-							break;
-						}
-					}
-					break;
-				}
-				else if((i%2) === 0){
-					var resultHTML = html.replace("{description}",JSON.stringify(whole_service[i].description))
-										.replace("{placeName}",JSON.stringify(whole_service[i].placeName))
-										.replace("{content}",JSON.stringify(whole_service[i].content));
-					for(var k=0;k<productImage.length;k++){
-						var compare = JSON.stringify(whole_service[i].id);
-						if(compare == (k+1)){
-							resultHTML = resultHTML.replace("{fileName}",JSON.stringify(productImage[i].fileName));
-							break;
-						}
-					}
-					break;
+		var btn = document.querySelector("#btn_whole");
+		btn.addEventListener('click',function(){
+			var xhr = new XMLHttpRequest();
+			xhr.open('post','./main');
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					var count=0;
+					var addItems = xhr.response;
+					alert(addItems);
+					alert(JSON.stringify(JSON.parse(addItems)[0].content)); // 데이터 가져오기 성공. 템플릿 적용하기.
 				}
 			}
-		}*/
-		
-		/*
-		<c:forEach items="${placeName}" var = "name">
-			for(var i=0;i<whole_service.length;i++){
-				if(JSON.stringify(whole_service[i].id) == "${name.productId}"){
-					footer.innerHTML += JSON.stringify(whole_service[i].id);
-				}
-			}
-		</c:forEach>
-		*/
-		/*
-		for(var i=0;i<whole_service.length;i++){
-			
-		}*/
-		/*
-		$(function() {
-			var list_description = new Array();
-			<c:forEach items="${productInfo}" var = "product">
-				var json = new Object();
-				json.id = "${product.id}";
-				json.description = "${product.description}";
-				list_description.push(json);
-			</c:forEach>
-			
-			alert("productInfo = " + JSON.stringify(list_description));
-		})*/
-		/*
-		<c:forEach items="${productInfo}" var = "product">
-			list_description.push("<c:out value='${product.description}'/>");
-		</c:forEach>
-		
-		for (var i = 0; i < list_description.length; i++) {
-		    alert(list_description[i].description);
-		}*/
-		
-		/*
-		var list = '<c:out value="${productInfo}"/>';
-		alert(list);*/
-		
-		<%-- <%
-			List<Product> productInfo = (List<Product>)request.getAttribute("productInfo");
-			for(Product product : productInfo){
-		%>
-			alert(<%=product%>);
-		<%
-			}
-		%> --%>
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			var data='';
+			var start = "${pageStartList}";
+			var startList = JSON.parse(start);
+			data += 'start='+startList[cnt];
+			alert(startList);
+			cnt++;
+			xhr.send(data);
+		});
     </script>
 </body>
 </html>
