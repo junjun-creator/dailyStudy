@@ -222,7 +222,7 @@
     <script>
 	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
 		var ul = document.querySelectorAll(".lst_event_box");
-		alert(html);
+		//alert(html);
 		var cnt = 1;
 		var tab_count = document.querySelector(".pink");
 		tab_count.innerHTML = "${count}"+"개";
@@ -250,20 +250,46 @@
 				}
 				count++;
 			</c:forEach>
-		</c:forEach> //오늘은 여기까지. 내일 ajax로 4개씩 가져오는거 구현하기.
+		</c:forEach>
 		//******** 더보기 클릭 이벤트 발생 > post 방식으로 start값 넣어서 요청 > controller에서 해당 요청이 들어왔을때 해당 start값을 가지고 DB에서 아이템들 가져오고 ajax로 main으로 전송 
 		//******** > main에서 ajax response 데이터로 template 이용하여 기존에 view에 나타난 데이터 뒤에 추가.(4개씩)
 		
+		// ajax 구현 성공. 오늘은 여기까지. 내일은 마지막 데이터 가져오면 더보기 사라지게 하기. 다른 탭 구현하기
 		var btn = document.querySelector("#btn_whole");
 		btn.addEventListener('click',function(){
 			var xhr = new XMLHttpRequest();
 			xhr.open('post','./main');
 			xhr.onreadystatechange=function(){
 				if(xhr.readyState === 4 && xhr.status === 200){
-					var count=0;
+					var count2=0;
 					var addItems = xhr.response;
-					alert(addItems);
-					alert(JSON.stringify(JSON.parse(addItems)[0].content)); // 데이터 가져오기 성공. 템플릿 적용하기.
+					//alert(addItems);
+					//alert(JSON.stringify(JSON.parse(addItems)[0].content)); // 데이터 가져오기 성공. 템플릿 적용하기.
+					var addImg = "${productImg}";
+					//alert(JSON.parse(addItems).length);
+					for(var i=0;i<JSON.parse(addItems).length;i++){
+						<c:forEach items="${productImg}" var = "image">
+							var com = JSON.stringify(JSON.parse(addItems)[i].id)+"_th";
+							if("${image.fileName}".startsWith(com) && (count2%2) === 0){
+								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
+												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
+												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{fileName}","${image.fileName}")
+												.replace("{description2}", JSON.parse(addItems)[i].description);
+								ul[(count2%2)].innerHTML += resultHTML;
+								count2++;
+							}
+							else if("${image.fileName}".startsWith(com) && (count2%2) === 1){
+								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
+												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
+												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{fileName}","${image.fileName}")
+												.replace("{description2}", JSON.parse(addItems)[i].description);
+								ul[(count2%2)].innerHTML += resultHTML;
+								count2++;
+							}
+						</c:forEach>
+					}
 				}
 			}
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -271,7 +297,7 @@
 			var start = "${pageStartList}";
 			var startList = JSON.parse(start);
 			data += 'start='+startList[cnt];
-			alert(startList);
+			//alert(startList);
 			cnt++;
 			xhr.send(data);
 		});
