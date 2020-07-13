@@ -25,8 +25,6 @@ public class ReservationDao {
     private RowMapper<Category> rowMapper_category = BeanPropertyRowMapper.newInstance(Category.class);
     private RowMapper<Promotion> rowMapper_promotion = BeanPropertyRowMapper.newInstance(Promotion.class);
     private RowMapper<FileInfo> rowMapper_promotionImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
-    private RowMapper<Product> rowMapper_productInfo = BeanPropertyRowMapper.newInstance(Product.class);
-    private RowMapper<DisplayInfo> rowMapper_placeName = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
     private RowMapper<WholeServiceInfo> rowMapper_wholeServiceInfo = BeanPropertyRowMapper.newInstance(WholeServiceInfo.class);
     
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
@@ -54,16 +52,22 @@ public class ReservationDao {
 		params.put("limit", limit);
     	return jdbc.query(SELECT_ALL_ITEMS,params,rowMapper_wholeServiceInfo);
     }
+    
+    public List<WholeServiceInfo> selectItemsCategory(Integer categoryId, Integer start, Integer limit){
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("categoryId", categoryId);
+    	params.put("start", start);
+    	params.put("limit", limit);
+    	return jdbc.query(SELECT_ITEMS_CATEGORY, params,rowMapper_wholeServiceInfo);
+    }
     public int selectCount() {
 		return jdbc.queryForObject(SELECT_COUNT, Collections.emptyMap(), Integer.class);
 	}
-    
-    public List<Product> selectAllProductInfo(){
-    	return jdbc.query(SELECT_ALL_PRODUCT, Collections.emptyMap(), rowMapper_productInfo);
-    }
-    public List<DisplayInfo> selectAllPlaceName(){
-    	return jdbc.query(SELECT_ALL_PLACENAME, Collections.emptyMap(), rowMapper_placeName);
-    }
+    public int selectCountCategory(Integer categoryId) {
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("categoryId", categoryId);
+		return jdbc.queryForObject(SELECT_COUNT_CATEGORY, params, Integer.class);
+	}
     public List<FileInfo> selectAllProductImage(){
     	return jdbc.query(SELECT_ALL_PRODUCTIMG, Collections.emptyMap(), rowMapper_productImage);
     }

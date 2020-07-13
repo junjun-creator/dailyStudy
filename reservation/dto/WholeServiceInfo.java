@@ -5,9 +5,16 @@ public class WholeServiceInfo {
 	private String description;
 	private String content;
 	private String placeName;
+	private int wholeId;
 	
 	public int getId() {
 		return id;
+	}
+	public int getWholeId() {
+		return wholeId;
+	}
+	public void setWholeId(int wholeId) {
+		this.wholeId = wholeId;
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -33,6 +40,7 @@ public class WholeServiceInfo {
 	@Override
 	public String toString() {
 		return "WholeServiceInfo [id=" + id + ", description=" + description + ", content=" + content + ", placeName="
-				+ placeName + "]";
+				+ placeName + ", wholeId=" + wholeId + "]";
 	}
+	
 }

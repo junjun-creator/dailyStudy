@@ -211,22 +211,14 @@
     		}, 2000);
     	}
     	move();
-    	var category = document.querySelector(".section_event_tab");
-		category.addEventListener('click', function(evt){
-			alert(evt.target.innerText);
-			
-		});
-		
-		
     </script>
     <script>
 	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
 		var ul = document.querySelectorAll(".lst_event_box");
 		//alert(html);
-		var cnt = 1;
+		var cnt = 1;//더보기 startList index
 		var tab_count = document.querySelector(".pink");
 		tab_count.innerHTML = "${count}"+"개";
-		
 		var resultHTML="";
 		var count=0;
 		<c:forEach items="${allItem}" var = "allItem" varStatus="status">
@@ -251,17 +243,98 @@
 				count++;
 			</c:forEach>
 		</c:forEach>
+		
 		//******** 더보기 클릭 이벤트 발생 > post 방식으로 start값 넣어서 요청 > controller에서 해당 요청이 들어왔을때 해당 start값을 가지고 DB에서 아이템들 가져오고 ajax로 main으로 전송 
 		//******** > main에서 ajax response 데이터로 template 이용하여 기존에 view에 나타난 데이터 뒤에 추가.(4개씩)
 		
-		// ajax 구현 성공. 오늘은 여기까지. 내일은 마지막 데이터 가져오면 더보기 사라지게 하기. 다른 탭 구현하기
-		var btn = document.querySelector("#btn_whole");
+		// 다른 탭 구현하면 끝~~~
+		
+    </script>
+    
+    <script>
+   		var category = document.querySelector(".section_event_tab");
+   		var cnt2 = 0;
+   		var categoryNum=0;
+	    category.addEventListener('click', function(evt){
+	    	if(evt.target.tagName=='SPAN'){
+	    		categoryNum = evt.target.parentNode.parentNode.dataset.category;
+	    	}
+	    	else if(evt.target.tagName == 'A'){
+	    		categoryNum = evt.target.parentNode.dataset.category;
+	    	}
+	    	if(evt.target.tagName == 'SPAN'){
+	    		//alert(evt.target.innerText);
+				var toNoneActive = document.querySelector(".anchor.active");
+				toNoneActive.setAttribute('class','anchor');
+				var toActive = evt.target.parentNode;
+				toActive.setAttribute('class','anchor active'); // focusing 변경. 기존에 focus 삭제하고 새로 클릭된 곳에 focus를 두기 위함
+				//alert(categoryNum);
+	    	}
+	    	else if(evt.target.tagName == 'A'){
+	    		//alert(evt.target.className);
+	    		var toNoneActive = document.querySelector(".anchor.active");
+				toNoneActive.setAttribute('class','anchor');
+				evt.target.setAttribute('class','anchor active');
+				//alert(categoryNum);
+	    	}
+			
+	    	
+	    	var xhr = new XMLHttpRequest();
+			xhr.open('post','./main');
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					var count2=0;
+					var addItems = xhr.response;
+					var addImg = "${productImg}";
+					ul[0].innerHTML ='';
+					ul[1].innerHTML ='';
+					//alert(JSON.parse(addItems).length);
+					for(var i=0;i<JSON.parse(addItems).length;i++){
+						<c:forEach items="${productImg}" var = "image">
+							var com = JSON.stringify(JSON.parse(addItems)[i].id)+"_th";
+							if("${image.fileName}".startsWith(com) && (count2%2) === 0){
+								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
+												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
+												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{fileName}","${image.fileName}")
+												.replace("{description2}", JSON.parse(addItems)[i].description);
+								ul[(count2%2)].innerHTML += resultHTML;
+								count2++;
+							}
+							else if("${image.fileName}".startsWith(com) && (count2%2) === 1){
+								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
+												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
+												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{fileName}","${image.fileName}")
+												.replace("{description2}", JSON.parse(addItems)[i].description);
+								ul[(count2%2)].innerHTML += resultHTML;
+								count2++;
+							}
+						</c:forEach>
+						if(JSON.stringify(JSON.parse(addItems)[i].wholeId) == "${count}"){
+							btn.style.display = "none";
+						}
+					}btn.style.display = "block";
+				}
+			}
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			var data='';
+			var start = "${pageStartList}";
+			var startList = JSON.parse(start);
+			data += 'start='+startList[cnt2];
+			data += '&categoryId='+categoryNum;
+			//alert(startList);
+			xhr.send(data); // 탭 쿨릭할때마다 해당 카테고리 아이템들 4개씩 출력하는것 완료. 향후 카테고리별 아이템 갯수 출력하는것과 더보기 기능 추가하기.
+		});
+	    
+	    var btn = document.querySelector("#btn_whole");
+	    var count2=0;
 		btn.addEventListener('click',function(){
 			var xhr = new XMLHttpRequest();
 			xhr.open('post','./main');
 			xhr.onreadystatechange=function(){
 				if(xhr.readyState === 4 && xhr.status === 200){
-					var count2=0;
+					
 					var addItems = xhr.response;
 					//alert(addItems);
 					//alert(JSON.stringify(JSON.parse(addItems)[0].content)); // 데이터 가져오기 성공. 템플릿 적용하기.
@@ -289,6 +362,54 @@
 								count2++;
 							}
 						</c:forEach>
+						//alert(JSON.parse(addItems)[i].wholeId);
+						if(categoryNum == 0){
+							if((count2+4) == "${count}"){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
+							}
+						}
+						else{//현재 전체서비스에서 더보기 사라지는 기능은 완료. 카테고리별 4개 초기화면 출력도 완료. 카테고리별 아이템 추가 출력하는 부분, 카테고리별 갯수 출력하는부분 수정해야함
+							var countCategory = JSON.parse("${countCategory}");
+							switch(categoryNum){
+							case 1:
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+								break;
+							case 2:
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+								break;
+							case 3:
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+								break;
+							case 4:
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+								break;
+							case 5:
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -297,6 +418,12 @@
 			var start = "${pageStartList}";
 			var startList = JSON.parse(start);
 			data += 'start='+startList[cnt];
+			if(categoryNum == 0){
+				data += '&categoryId='+0;
+			}
+			else{
+				data += '&categoryId='+categoryNum;
+			}
 			//alert(startList);
 			cnt++;
 			xhr.send(data);

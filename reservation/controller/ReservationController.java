@@ -38,6 +38,10 @@ public class ReservationController {
 		List<WholeServiceInfo> wholeServiceInfo = reservationService.getAllItems(start);
 		
 		int count = reservationService.getCount(); //requestparam 설정 하기.
+		List<Integer> countCategory = new ArrayList<>();
+		for(int categoryId=1;categoryId<=5;categoryId++) {
+			countCategory.add(reservationService.getCountCategory(categoryId));
+		}
 		int pageCount = count/ReservationService.LIMIT;
 		if(count % ReservationService.LIMIT > 0)
 			pageCount++;
@@ -54,18 +58,32 @@ public class ReservationController {
 		model.addAttribute("allItem",wholeServiceInfo);
 		model.addAttribute("pageStartList",pageStartList);
 		model.addAttribute("count",count);
+		model.addAttribute("countCategory",countCategory);
 		return "main";
 	}
 	
 	@PostMapping(path="/main")//ajax 통신 할것임
-	public @ResponseBody List<WholeServiceInfo> moreItems(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
-		int start = Integer.parseInt(request.getParameter("start"));
-		List<WholeServiceInfo> moreServiceInfo = reservationService.getAllItems(start);
+	public @ResponseBody List moreItems(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+		int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 		
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("application/json");
-		
-		return moreServiceInfo;
+		if(categoryId != 0) {
+			int start = Integer.parseInt(request.getParameter("start"));
+			List<WholeServiceInfo> moreItemsCategory = reservationService.getItemsCategory(categoryId, start);
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
+			
+			return moreItemsCategory;
+		}
+		else {
+			int start = Integer.parseInt(request.getParameter("start"));
+			List<WholeServiceInfo> moreServiceInfo = reservationService.getAllItems(start);
+			
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
+			
+			return moreServiceInfo;
+		}
+		//if 조건문으로 어떤 list를 전송해 줄것인지 선택하는 로직 작성
 	}
 	
 }

@@ -35,12 +35,7 @@ public class ReservationDaoTest {
 			System.out.println(promotionImage.getFileName()); // 프로모션에 애니메이션 걸어둘 이미지 파일들 이름 가져오기 성공
 		}
 		*/
-		List<Product> list_productInfo = reservationDao.selectAllProductInfo();
-		for(Product productInfo : list_productInfo) {
-			System.out.println(productInfo.getContent());
-			System.out.println(productInfo.getCategoryId());
-			System.out.println(productInfo.getDescription());
-		}
+		
 	}
 
 }

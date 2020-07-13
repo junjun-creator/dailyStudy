@@ -35,18 +35,14 @@ public class ReservationServiceImpl implements ReservationService {
 	public int getCount() {
 		return reservationDao.selectCount();
 	}
-
 	@Override
-	@Transactional
-	public List<Product> getProductInfo() {
-		List<Product> list = reservationDao.selectAllProductInfo();
-		return list;
+	public int getCountCategory(Integer categoryId) {
+		return reservationDao.selectCountCategory(categoryId);
 	}
-
 	@Override
 	@Transactional
-	public List<DisplayInfo> getPlaceName() {
-		List<DisplayInfo> list = reservationDao.selectAllPlaceName();
+	public List<WholeServiceInfo> getItemsCategory(Integer categoryId, Integer start){
+		List<WholeServiceInfo> list = reservationDao.selectItemsCategory(categoryId, start, ReservationService.LIMIT);
 		return list;
 	}
 
