@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var healthObj = {
+            name : "달리기",
+            lastTime : "PM10:12",
+            showHealth : function() {
+                setTimeout(function() {
+                    console.log(this.name + "님, 오늘은 " + this.lastTime + "에 운동을 하셨네요");//undefine. window를 참조하고 있기 때문 
+                }, 1000)
+            }
+            }
+        healthObj.showHealth();
+        //이 경우에는 showHealth()메서드가 실행이 종료 된 이후에 setTime 콜백 함수가 실행되므로, this가 가리키는 객체가 healthObj가 아니라
+        //window를 가르키게 된다.
+
+        var healthObj = {
+            name : "달리기",
+            lastTime : "PM10:12",
+            showHealth : function() {
+                setTimeout(function() {
+                    console.log(this.name + "님, 오늘은 " + this.lastTime + "에 운동을 하셨네요");      
+                }.bind(this), 1000)//함수 뒤에 .을 붙이는 것 >> 함수도 객체이다!!
+                //여기서 bind는 healthObj를 가리키는 함수의 위치에 자리하기 때문에 this가 healthObj를 가리킴.
+            }
+            }
+        healthObj.showHealth();
+    </script>
+</body>
+</html>
