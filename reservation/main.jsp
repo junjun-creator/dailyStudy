@@ -255,12 +255,22 @@
    		var category = document.querySelector(".section_event_tab");
    		var cnt2 = 0;
    		var categoryNum=0;
+   		var count2=0;
+   		var countCategory = JSON.parse("${countCategory}");//카테고리별 아이템 갯수가져오기
 	    category.addEventListener('click', function(evt){
+	    	count2=0;//전체서비스에서 더보기를 끝까지 안가고 중간에 다른 카테고리로 이동했을때 새로 시작되게끔 세팅
+	    	cnt=1;
 	    	if(evt.target.tagName=='SPAN'){
 	    		categoryNum = evt.target.parentNode.parentNode.dataset.category;
 	    	}
 	    	else if(evt.target.tagName == 'A'){
 	    		categoryNum = evt.target.parentNode.dataset.category;
+	    	}
+	    	
+	    	if(categoryNum ==0){
+	    		tab_count.innerHTML = "${count}"+"개";
+	    	}else{
+	    		tab_count.innerHTML = countCategory[categoryNum-1]+"개";//카테고리별 아이템 갯수 출력
 	    	}
 	    	if(evt.target.tagName == 'SPAN'){
 	    		//alert(evt.target.innerText);
@@ -311,9 +321,6 @@
 								count2++;
 							}
 						</c:forEach>
-						if(JSON.stringify(JSON.parse(addItems)[i].wholeId) == "${count}"){
-							btn.style.display = "none";
-						}
 					}btn.style.display = "block";
 				}
 			}
@@ -328,7 +335,6 @@
 		});
 	    
 	    var btn = document.querySelector("#btn_whole");
-	    var count2=0;
 		btn.addEventListener('click',function(){
 			var xhr = new XMLHttpRequest();
 			xhr.open('post','./main');
@@ -363,6 +369,7 @@
 							}
 						</c:forEach>
 						//alert(JSON.parse(addItems)[i].wholeId);
+						//전체 기능 완료
 						if(categoryNum == 0){
 							if((count2+4) == "${count}"){
 								btn.style.display = "none";
@@ -370,44 +377,39 @@
 								count2=0;
 							}
 						}
-						else{//현재 전체서비스에서 더보기 사라지는 기능은 완료. 카테고리별 4개 초기화면 출력도 완료. 카테고리별 아이템 추가 출력하는 부분, 카테고리별 갯수 출력하는부분 수정해야함
-							var countCategory = JSON.parse("${countCategory}");
-							switch(categoryNum){
-							case 1:
-								if((count2+4) == countCategory[categoryNum-1]){
-									btn.style.display = "none";
-									cnt=1;
-									count2=0;
-								}
-								break;
-							case 2:
-								if((count2+4) == countCategory[categoryNum-1]){
-									btn.style.display = "none";
-									cnt=1;
-									count2=0;
-								}
-								break;
-							case 3:
-								if((count2+4) == countCategory[categoryNum-1]){
-									btn.style.display = "none";
-									cnt=1;
-									count2=0;
-								}
-								break;
-							case 4:
-								if((count2+4) == countCategory[categoryNum-1]){
-									btn.style.display = "none";
-									cnt=1;
-									count2=0;
-								}
-								break;
-							case 5:
-								if((count2+4) == countCategory[categoryNum-1]){
-									btn.style.display = "none";
-									cnt=1;
-									count2=0;
-								}
-								break;
+						else if(categoryNum == 1){
+							if((count2+4) == countCategory[categoryNum-1]){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
+							}
+						}
+						else if(categoryNum == 2){
+							if((count2+4) == countCategory[categoryNum-1]){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
+							}
+						}
+						else if(categoryNum == 3){
+							if((count2+4) == countCategory[categoryNum-1]){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
+							}
+						}
+						else if(categoryNum == 4){
+							if((count2+4) == countCategory[categoryNum-1]){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
+							}
+						}
+						else if(categoryNum == 5){
+							if((count2+4) == countCategory[categoryNum-1]){
+								btn.style.display = "none";
+								cnt=1;
+								count2=0;
 							}
 						}
 					}
