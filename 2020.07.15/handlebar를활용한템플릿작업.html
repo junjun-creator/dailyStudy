@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li{
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>template using handlebar</h1>
+
+    <section class="show">
+
+    </section>
+
+    <script type="myTemplate" id="listTemplate">
+        <li>
+            <div>게시자 : {{name}}</div>
+            <div class="content">{{content}}</div>
+            <div>좋아요 갯수 <span> {{like}} </span></div>
+            <div class="comment">
+            <div>{{comment}}</div>
+            </div>
+        </li>
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw==" crossorigin="anonymous"></script>
+                <!--handlebar 활용하기 위해 가져옴-->
+    <script>
+        var data = {
+            "id" : 88,
+            "name" : "crong",
+            "content" : "새로운글을 올렸어요",
+            "like" : 5, 
+            "comment" : "댓글이다"
+        };
+        var template = document.querySelector("#listTemplate").innerText;
+        //pre-compile 탬플릿을 임시로 보관하는 함수
+        var bindTemplate = Handlebars.compile(template);  //bindTemplate은 메서드입니다.
+        var resultHTML = bindTemplate(data);//템플릿에 데이터의 key값과 같은 이름이 {{}}로 둘러쌓여있으면 매핑해서 데이터의 정보를 자동으로 입력
+        console.log(resultHTML);
+        var show = document.querySelector('.show');
+        show.innerHTML = resultHTML;
+    </script>
+</body>
+</html>

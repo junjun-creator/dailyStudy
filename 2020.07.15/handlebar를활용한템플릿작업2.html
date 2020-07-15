@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li{
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>template using handlebar</h1>
+
+    <section class="show">
+
+    </section>
+
+    <script type="myTemplate" id="listTemplate">
+        <li>
+            <div>게시자 : {{name}}</div>
+            <div class="content">{{content}}</div>
+            <div>좋아요 갯수 <span> {{like}} </span></div>
+            <div class="comment">
+            <h3>댓글목록</h3>
+            {{#each comment}}
+                <h4>댓글</h4>
+                <div>{{@index}}번째 댓글 : {{this}}</div>
+            {{/each}}
+            </div>
+        </li>
+    </script>	
+<!--#each #하면 어떤 syntax가 실행되겟구나 알려주는것. each는 반복이 일어난다.-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw==" crossorigin="anonymous"></script>
+    
+    <script>
+        var data = {
+            "id" : 88,
+            "name" : "crong",
+            "content" : "새로운글을 올렸어요",
+            "like" : 5, 
+            "comment" : ["댓글이다","멋진글이네요", "잘봤습니다"]
+        };
+        var template = document.querySelector("#listTemplate").innerText;
+
+        var bindTemplate = Handlebars.compile(template);
+        var resultHTML = bindTemplate(data);
+        var show = document.querySelector('.show');
+        show.innerHTML = resultHTML;
+    </script>
+</body>
+</html>
