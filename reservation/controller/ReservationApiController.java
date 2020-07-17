@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.connect.reservation.dto.CategoryIdStartNum;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
@@ -62,17 +63,17 @@ public class ReservationApiController {
 	}
 	
 	@PostMapping//ajax 통신 할것임
-	public List<WholeServiceInfo> moreItems(@RequestBody int categoryId,@RequestBody int start) throws Exception {
-		int category = categoryId;
-		
-		if(categoryId != 0) {
-			int startNum = start;
+	public List<WholeServiceInfo> moreItems(@RequestBody CategoryIdStartNum categoryItem) throws Exception {
+		int category = categoryItem.getCategoryId();
+		int startNum = categoryItem.getStart();
+		if(category != 0) {
+			
 			List<WholeServiceInfo> moreItemsCategory = reservationService.getItemsCategory(category, startNum);
 			
 			return moreItemsCategory;
 		}
 		else {
-			int startNum = start;
+			
 			List<WholeServiceInfo> moreServiceInfo = reservationService.getAllItems(startNum);
 			
 			return moreServiceInfo;
