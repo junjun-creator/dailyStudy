@@ -36,7 +36,7 @@ public class ReservationApiController {
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> wholeServiceInfo = reservationService.getAllItems(start);
 		
-		int count = reservationService.getCount(); //requestparam 설정 하기.
+		int count = reservationService.getCount();
 		List<Integer> countCategory = new ArrayList<>();
 		for(int categoryId=1;categoryId<=5;categoryId++) {
 			countCategory.add(reservationService.getCountCategory(categoryId));
@@ -52,8 +52,6 @@ public class ReservationApiController {
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("list",list);
-		//model.addAttribute("productInfo",productInfo);
-		//model.addAttribute("placeName",placeName);
 		map.put("productImg",productImg);
 		map.put("allItem",wholeServiceInfo);
 		map.put("pageStartList",pageStartList);
@@ -61,7 +59,7 @@ public class ReservationApiController {
 		map.put("countCategory",countCategory);
 		return map;
 	}
-	
+	/*
 	@PostMapping//ajax 통신 할것임
 	public List<WholeServiceInfo> moreItems(@RequestBody CategoryIdStartNum categoryItem) throws Exception {
 		int category = categoryItem.getCategoryId();
@@ -79,5 +77,9 @@ public class ReservationApiController {
 			return moreServiceInfo;
 		}
 		//if 조건문으로 어떤 list를 전송해 줄것인지 선택하는 로직 작성
+	}*/
+	@PostMapping
+	public String moreItems() {
+		return "hello world";
 	}
 }
