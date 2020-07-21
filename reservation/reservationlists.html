@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
 <title>네이버 예약</title>
 <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
 </head>
@@ -163,7 +163,7 @@
         <li class="item">
             <a href="detail.html?id={id}" class="item_book">
                 <div class="item_preview">
-                    <img alt="{description}" class="img_thumb" src="${pageContext.request.contextPath}/img/{fileName}">
+                    <img alt="{description}" class="img_thumb" src="./img/{fileName}">
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">
@@ -176,27 +176,39 @@
     
     <script>
 		var slide_ul = document.querySelector(".visual_img");
-
-		$.ajax({ 
-			type: "GET", 
-			url: "./reservationlists", 
-			success: (data) => { 
-				for(var i=0;i<data.pageStartList.length;i++){
-					var promotion = document.createElement("img");
-					promotion.width = 207;
-					promotion.height = 200;
-					promotion.src = "./img/"+data.list[i].fileName;
-					slide_ul.appendChild(promotion);
+		var firstItemClone = null;
+		
+		function ajax(){
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					var data = xhr.response;
+					jsondata = JSON.parse(data);
+					for(var i=0;i<jsondata.list.length;i++){
+						var promotion = document.createElement("img");
+						promotion.width = 207;
+						promotion.height = 200;
+						promotion.src = "./img/"+jsondata.list[i].fileName;
+						slide_ul.appendChild(promotion);
+					}
+					firstItemClone = slide_ul.firstElementChild.cloneNode(true);
+			    	secondItemClone = slide_ul.firstElementChild.nextElementSibling.cloneNode(true);
+			    	slide_ul.appendChild(firstItemClone);
+			    	slide_ul.appendChild(secondItemClone);
+			    	listInit(jsondata.count,jsondata.allItem,jsondata.productImg);
+			    	categoryInit(jsondata.count,jsondata.countCategory,jsondata.pageStartList,jsondata.productImg);
+			    	moreItems(jsondata.count, jsondata.countCategory, jsondata.pageStartList, jsondata.productImg);
 				}
-			} 
-		});
+			};
+			xhr.open("GET","./reservationlists");
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	        xhr.send(null);
+		}
+		
+		ajax();
 	</script>
     
     <script>
-		//var firstItemClone = slide_ul.firstElementChild.cloneNode();
-		//var secondItemClone = slide_ul.firstElementChild.nextElementSibling.cloneNode(true);
-		//slide_ul.appendChild(firstItemClone);
-		//slide_ul.appendChild(secondItemClone);
 		var btn_pre_e = document.querySelector(".prev_inn");
 		
 		function move(){
@@ -219,6 +231,230 @@
 		}
 		move();
     </script>
+    
+    <script>
+	    var html = document.querySelector("#itemList").innerHTML; // 줄바꿈이 있으면 db 자체를 스크립트에서 읽어오는데 문제가 생김(테스트 완료)
+		var ul = document.querySelectorAll(".lst_event_box");
+		//alert(html);
+		var cnt = 1;//더보기 startList index
+		var tab_count = document.querySelector(".pink");
+		var resultHTML="";
+		
+		
+    	function listInit(count,allItem,productImg){//초기화면 구축. 전체 서비스에 4개 아이템 노출, 전체서비스 갯수 출력.
+    		tab_count.innerHTML = count +"개";
+    		var count=0;
+    		for(var i=0;i<allItem.length;i++){
+    			for(var j=0;j<productImg.length;j++){
+    				var com = allItem[i].id+"_th";
+    				if(productImg[j].fileName.startsWith(com) && (count%2) === 0){
+    					resultHTML = html.replace("{description}", allItem[i].description)
+    									.replace("{placeName}", allItem[i].placeName)
+    									.replace("{content}", allItem[i].content)
+    									.replace("{fileName}", productImg[j].fileName)
+    									.replace("{description2}", allItem[i].description);
+    					ul[(count%2)].innerHTML += resultHTML;
+    				}
+    				else if(productImg[j].fileName.startsWith(com) && (count%2) === 1){
+    					resultHTML = html.replace("{description}", allItem[i].description)
+    									.replace("{placeName}", allItem[i].placeName)
+    									.replace("{content}", allItem[i].content)
+    									.replace("{fileName}", productImg[j].fileName)
+    									.replace("{description2}", allItem[i].description);
+    					ul[(count%2)].innerHTML += resultHTML;
+    				}
+    				count++;
+    			}
+    		}
+    	}
+    </script>
 	
+	<script>
+		var category = document.querySelector(".section_event_tab");
+		var cnt2 = 0;
+		var categoryNum=0;
+		var count2 =0;
+		//카테고리별 아이템 갯수가져오기
+		function categoryInit(count,countCategory,pageStartList,productImg){
+			var countCategoryNum = countCategory;
+			var btn = document.querySelector("#btn_whole");
+			category.addEventListener('click', function(evt){
+		    	count2=0;//전체서비스에서 더보기를 끝까지 안가고 중간에 다른 카테고리로 이동했을때 새로 시작되게끔 세팅
+		    	cnt=1;
+		    	if(evt.target.tagName=='SPAN'){
+		    		categoryNum = evt.target.parentNode.parentNode.dataset.category;
+		    	}
+		    	else if(evt.target.tagName == 'A'){
+		    		categoryNum = evt.target.parentNode.dataset.category;
+		    	}
+		    	
+		    	if(categoryNum ==0){//카테고리별 아이템 갯수 표현
+		    		tab_count.innerHTML = count+"개";
+		    	}else{
+		    		tab_count.innerHTML = countCategoryNum[categoryNum-1]+"개";
+		    	}
+		    	
+		    	if(evt.target.tagName == 'SPAN'){
+		    		//alert(evt.target.innerText);
+					var toNoneActive = document.querySelector(".anchor.active");
+					toNoneActive.setAttribute('class','anchor');
+					var toActive = evt.target.parentNode;
+					toActive.setAttribute('class','anchor active'); // focusing 변경. 기존에 focus 삭제하고 새로 클릭된 곳에 focus를 두기 위함
+					//alert(categoryNum);
+		    	}
+		    	else if(evt.target.tagName == 'A'){
+		    		//alert(evt.target.className);
+		    		var toNoneActive = document.querySelector(".anchor.active");
+					toNoneActive.setAttribute('class','anchor');
+					evt.target.setAttribute('class','anchor active');
+					//alert(categoryNum);
+		    	}
+				
+		    	
+		    	var xhr = new XMLHttpRequest();
+				xhr.open("POST","./reservationlists");
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState === 4 && xhr.status === 200){
+						var count2=0;
+						var addItems = JSON.parse(xhr.response);
+						var addImg = productImg;
+						ul[0].innerHTML ='';
+						ul[1].innerHTML ='';
+						console.log(addItems[0].description);
+						for(var i=0;i<addItems.length;i++){
+							for(var j=0;j<productImg.length;j++){
+								var com = addItems[i].id+"_th";
+								if(productImg[j].fileName.startsWith(com) && (count2%2) === 0){
+			    					resultHTML = html.replace("{description}", addItems[i].description)
+			    									.replace("{placeName}", addItems[i].placeName)
+			    									.replace("{content}", addItems[i].content)
+			    									.replace("{fileName}", productImg[j].fileName)
+			    									.replace("{description2}", addItems[i].description);
+			    					ul[(count2%2)].innerHTML += resultHTML;
+			    					count2++;
+			    				}
+			    				else if(productImg[j].fileName.startsWith(com) && (count2%2) === 1){
+			    					resultHTML = html.replace("{description}", addItems[i].description)
+			    									.replace("{placeName}", addItems[i].placeName)
+			    									.replace("{content}", addItems[i].content)
+			    									.replace("{fileName}", productImg[j].fileName)
+			    									.replace("{description2}", addItems[i].description);
+			    					ul[(count2%2)].innerHTML += resultHTML;
+			    					count2++;
+			    				}
+							}
+						}btn.style.display = "block";
+					}
+				}
+				xhr.setRequestHeader("Content-Type", "application/json");
+				var data={
+						"start" : pageStartList[cnt2],
+						"categoryId" : categoryNum
+				};
+				//alert(startList);
+				xhr.send(JSON.stringify(data)); // 탭 쿨릭할때마다 해당 카테고리 아이템들 4개씩 출력하는것 완료. 향후 카테고리별 아이템 갯수 출력하는것과 더보기 기능 추가하기.
+			});
+		}
+	</script>
+	
+	<script>
+		function moreItems(count, countCategory, pageStartList, productImg){
+			var btn = document.querySelector("#btn_whole");
+			btn.addEventListener('click',function(){
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST","./reservationlists");
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState === 4 && xhr.status === 200){
+						var addItems = JSON.parse(xhr.response);
+						//alert(addItems);
+						//alert(JSON.stringify(JSON.parse(addItems)[0].content)); // 데이터 가져오기 성공. 템플릿 적용하기.
+						var addImg = productImg;
+						//alert(JSON.parse(addItems).length);
+						for(var i=0;i<addItems.length;i++){
+							for(var j=0;j<productImg.length;j++){
+								var com = addItems[i].id+"_th";
+								if(productImg[j].fileName.startsWith(com) && (count2%2) === 0){
+			    					resultHTML = html.replace("{description}", addItems[i].description)
+			    									.replace("{placeName}", addItems[i].placeName)
+			    									.replace("{content}", addItems[i].content)
+			    									.replace("{fileName}", productImg[j].fileName)
+			    									.replace("{description2}", addItems[i].description);
+			    					ul[(count2%2)].innerHTML += resultHTML;
+			    					count2++;
+			    				}
+			    				else if(productImg[j].fileName.startsWith(com) && (count2%2) === 1){
+			    					resultHTML = html.replace("{description}", addItems[i].description)
+			    									.replace("{placeName}", addItems[i].placeName)
+			    									.replace("{content}", addItems[i].content)
+			    									.replace("{fileName}", productImg[j].fileName)
+			    									.replace("{description2}", addItems[i].description);
+			    					ul[(count2%2)].innerHTML += resultHTML;
+			    					count2++;
+			    				}
+							}
+							//alert(JSON.parse(addItems)[i].wholeId);
+							//전체 기능 완료
+							if(categoryNum == 0){
+								if((count2+4) == count){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+							else if(categoryNum == 1){
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+							else if(categoryNum == 2){
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+							else if(categoryNum == 3){
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+							else if(categoryNum == 4){
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+							else if(categoryNum == 5){
+								if((count2+4) == countCategory[categoryNum-1]){
+									btn.style.display = "none";
+									cnt=1;
+									count2=0;
+								}
+							}
+						}
+					}
+				}
+				xhr.setRequestHeader("Content-Type", "application/json");
+				var data={
+						"start" : pageStartList[cnt]
+				};
+				if(categoryNum == 0){
+					data.categoryId = 0;
+				}
+				else{
+					data.categoryId = categoryNum;
+				}
+				console.log(data);
+				cnt++;
+				xhr.send(JSON.stringify(data));
+				//3번 프로젝트 완료
+			});
+		}
+	</script>
 </body>
 </html>
