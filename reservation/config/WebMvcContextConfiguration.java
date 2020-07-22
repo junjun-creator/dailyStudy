@@ -31,14 +31,14 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		System.out.println("addViewControllers가 호출됩니다. ");
-        registry.addViewController("/").setViewName("reservationlists");
+        registry.addViewController("/").setViewName("index");
 	}
 	
 	@Bean
     public InternalResourceViewResolver getInternalResourceViewResolver() { // view의 이름을 가지고 특정 view를 찾아내게 해줌.
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/views/"); // 경로와 확장자를 설정
-        resolver.setSuffix(".html");
+        resolver.setSuffix(".jsp");
         return resolver;
     }
 }

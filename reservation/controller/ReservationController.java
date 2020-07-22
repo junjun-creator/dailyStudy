@@ -26,12 +26,11 @@ import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
 
 @Controller
-@RequestMapping(path="/main")
 public class ReservationController {
 	@Autowired
 	ReservationService reservationService;
 	
-	@GetMapping
+	@GetMapping("/main")
 	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,
 			   ModelMap model) {
 		List<FileInfo> list = reservationService.getPromotionImage();
@@ -65,7 +64,7 @@ public class ReservationController {
 		return "main";
 	}
 	
-	@PostMapping//ajax 통신 할것임
+	@PostMapping("/main")//ajax 통신 할것임
 	public @ResponseBody List moreItems(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 		int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 		
@@ -87,6 +86,16 @@ public class ReservationController {
 			return moreServiceInfo;
 		}
 		//if 조건문으로 어떤 list를 전송해 줄것인지 선택하는 로직 작성
+	}
+	
+	@GetMapping("/detail")
+	public String details(HttpServletRequest request, Model model) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		List<FileInfo> productImg = reservationService.getProductImage();
+		System.out.println(id);
+		model.addAttribute("id",id);
+		model.addAttribute("productImg",productImg);
+		return "detail";
 	}
 	
 }
