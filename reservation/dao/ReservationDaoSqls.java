@@ -6,7 +6,7 @@ public class ReservationDaoSqls {
 	public static final String SELECT_PROMOTION_IMAGE = "SELECT file_name FROM file_info WHERE id IN (SELECT file_id FROM product_image WHERE type = 'th' AND product_id IN (SELECT product_id FROM promotion))";
 	//전체리스트 정보 및 사진이름 쿼리
 	public static final String SELECT_ALL_ITEMS = "SELECT product.id, product.description, product.content, display_info.id AS whole_id, display_info.place_name FROM product JOIN display_info ON product.id=display_info.product_id limit :start, :limit";
-	public static final String SELECT_ALL_PRODUCTIMG = "SELECT file_name FROM file_info WHERE id IN (SELECT file_id FROM product_image WHERE type = 'th')";
+	public static final String SELECT_ALL_PRODUCTIMG = "SELECT file_name FROM file_info WHERE id IN (SELECT file_id FROM product_image)";
 
 	//카테고리 별 정보 및 사진이름 쿼리
 	public static final String SELECT_ITEMS_CATEGORY = "SELECT product.id, product.description, product.content, display_info.id AS whole_id, display_info.place_name FROM product JOIN display_info ON product.id=display_info.product_id WHERE product.category_id=:categoryId limit :start, :limit";

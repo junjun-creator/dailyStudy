@@ -24,8 +24,8 @@
         <div class="header fade">
             <header class="header_tit">
                 <h1 class="logo">
-                    <a href="./mainpage.html" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-                    <a href="./mainpage.html" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+                    <a href="www.naver.com" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
+                    <a href="./main" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                 </h1>
                 <a href="#" class="btn_my"> <span title="예약확인">예약확인</span> </a>
             </header>
@@ -35,8 +35,8 @@
                 <div class="section_visual">
                     <header>
                         <h1 class="logo">
-                            <a href="./mainpage.html" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-                            <a href="./mainpage.html" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+                            <a href="www.naver.com" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
+                            <a href="./main" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                         </h1>
                         <a href="./myreservation.html" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span> </a>
                     </header>
@@ -51,43 +51,12 @@
                         <div>
                             <div class="container_visual" style="width: 414px;">
                                 <ul class="visual_img detail_swipe">
-                                    <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
-                                        <div class="visual_txt">
-                                            <div class="visual_txt_inn">
-                                                <h2 class="visual_txt_tit"> <span></span> </h2>
-                                                <p class="visual_txt_dsc"></p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
-                                        <div class="visual_txt">
-                                            <div class="visual_txt_inn">
-                                                <h2 class="visual_txt_tit"> <span></span> </h2>
-                                                <p class="visual_txt_dsc"></p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
-                                        <div class="visual_txt">
-                                            <div class="visual_txt_inn">
-                                                <h2 class="visual_txt_tit"> <span></span> </h2>
-                                                <p class="visual_txt_dsc"></p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
-                                        <div class="visual_txt">
-                                            <div class="visual_txt_inn">
-                                                <h2 class="visual_txt_tit"> <span></span> </h2>
-                                                <p class="visual_txt_dsc"></p>
-                                            </div>
-                                        </div>
-                                    </li>
+                                <!-- 템플릿으로 태그 추가 -->
                                 </ul>
                             </div>
                             <div class="prev">
                                 <div class="prev_inn">
-                                    <a href="#" class="btn_prev" title="이전">
+                                    <a class="btn_prev" title="이전">
                                         <!-- [D] 첫 이미지 이면 off 클래스 추가 -->
                                         <i class="spr_book2 ico_arr6_lt off"></i>
                                     </a>
@@ -95,7 +64,7 @@
                             </div>
                             <div class="nxt">
                                 <div class="nxt_inn">
-                                    <a href="#" class="btn_nxt" title="다음">
+                                    <a class="btn_nxt" title="다음">
                                         <i class="spr_book2 ico_arr6_rt"></i>
                                     </a>
                                 </div>
@@ -265,15 +234,79 @@
     </footer>
     <div id="photoviwer"></div>
     
+    <script type="rv-template" id="itemDetail">
+        <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src="${pageContext.request.contextPath}/img/{image}"> <span class="img_bg"></span>
+        	<div class="visual_txt">
+            	<div class="visual_txt_inn">
+                	<h2 class="visual_txt_tit"> <span></span> </h2>
+                    <p class="visual_txt_dsc"></p>
+                </div>
+            </div>
+        </li>
+    </script>
+    
     <script>
-    	var ul_img = document.querySelector(".visual_img.detail_swipe .img_thumb");
+    	var ul_img = document.querySelector(".visual_img.detail_swipe");
+    	var img_template = document.querySelector("#itemDetail").innerHTML;
     	var id = "${id}";
-    	<c:forEach items="${productImg}" var = "image">
-    		var com = id+"_th";
-    		if("${image.fileName}".startsWith(com)){
-    			ul_img.setAttribute('src','${pageContext.request.contextPath}/img/${image.fileName}')
-    		}
-    	</c:forEach>
+    	console.log(ul_img);
+    	var resultHTML='';
+    	var img_count=0;
+    	var doneLoop = false;
+	    <c:forEach items="${productImg}" var = "image" varStatus="status">
+	    	if(!doneLoop){
+	    		if("${image.fileName}".startsWith(id+"_th") || "${image.fileName}".startsWith(id+"_ma") || "${image.fileName}".startsWith(id+"_et")){
+		    		resultHTML = img_template.replace("{image}","${image.fileName}");
+		    		ul_img.innerHTML += resultHTML;
+		    		img_count++;
+		    	}
+	    		if(img_count===3){//해당 아이템의 이미지는 3개까지만 저장.
+	    			doneLoop = true;
+	    		}
+	    	}
+	    </c:forEach>
+	    console.log(img_count);
+	    
+	    var slideWrapper = document.querySelector('.container_visual');
+	    var slides = document.querySelectorAll('.container_visual .item');
+	    var totalSlides = slides.length;
+	    var sliderWidth = slideWrapper.clientWidth;
+	    var slideIndex = 0;
+	    var slider = document.querySelector('.visual_img');
+	    slider.style.width = sliderWidth * totalSlides + 'px';
+	    
+	    function showSlides(n) {
+	        slideIndex = n;
+	        if (slideIndex == -1) {
+	            slideIndex = totalSlides - 1;
+	        } else if (slideIndex === totalSlides) {
+	            slideIndex = 0;
+	        }
+	        slider.style.left = -(sliderWidth * slideIndex) + 'px';
+	    }
+
+	    function plusSlides(n){
+	        showSlides(slideIndex += n);
+	    }
+	      
+	    function currentSlide(n) {
+	        showSlides(slideIndex = n);
+	    }
+	    
+	    var prevBtn = document.querySelector('.btn_prev');
+	    var nextBtn = document.querySelector('.btn_nxt');
+	    
+	    nextBtn.addEventListener('click', function () {
+	        plusSlides(1);
+	        console.log(slideIndex);
+	    });
+	    prevBtn.addEventListener('click', function () {
+	        plusSlides(-1);
+	        console.log(slideIndex);
+	    });//이전, 다음 버튼 클릭시 이미지 슬라이드 이벤트 등록 완료.
+	    
+	    //추후 진행 : 아이템 description 이미지 위에 노출 시키고, 이미지 밑에 content 항목 넣고 펼치기 접기 기능 구현하기
+	    
     </script>
 </body>
 
