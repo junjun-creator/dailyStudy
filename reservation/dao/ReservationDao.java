@@ -26,7 +26,7 @@ public class ReservationDao {
     private RowMapper<Promotion> rowMapper_promotion = BeanPropertyRowMapper.newInstance(Promotion.class);
     private RowMapper<FileInfo> rowMapper_promotionImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     private RowMapper<WholeServiceInfo> rowMapper_wholeServiceInfo = BeanPropertyRowMapper.newInstance(WholeServiceInfo.class);
-    
+    private RowMapper<CommentLists> rowMapper_comment = BeanPropertyRowMapper.newInstance(CommentLists.class);
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
@@ -39,6 +39,7 @@ public class ReservationDao {
     public List<Category> selectAllCategory(){
 		return jdbc.query(SELECT_ALL_CATEGORY,Collections.emptyMap(), rowMapper_category);
 	}
+    
     public List<Promotion> selectAllPromotion(){
     	return jdbc.query(SELECT_ALL_PROMOTION, Collections.emptyMap(), rowMapper_promotion);
     }
@@ -52,6 +53,11 @@ public class ReservationDao {
 		params.put("limit", limit);
     	return jdbc.query(SELECT_ALL_ITEMS,params,rowMapper_wholeServiceInfo);
     }
+    public List<WholeServiceInfo> selectItemDetail(Integer id){
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("id", id);
+    	return jdbc.query(SELECT_ITEM_DETAIL,params,rowMapper_wholeServiceInfo);
+    }
     
     public List<WholeServiceInfo> selectItemsCategory(Integer categoryId, Integer start, Integer limit){
     	Map<String,Integer> params = new HashMap<>();
@@ -60,6 +66,7 @@ public class ReservationDao {
     	params.put("limit", limit);
     	return jdbc.query(SELECT_ITEMS_CATEGORY, params,rowMapper_wholeServiceInfo);
     }
+    
     public int selectCount() {
 		return jdbc.queryForObject(SELECT_COUNT, Collections.emptyMap(), Integer.class);
 	}
@@ -71,4 +78,16 @@ public class ReservationDao {
     public List<FileInfo> selectAllProductImage(){
     	return jdbc.query(SELECT_ALL_PRODUCTIMG, Collections.emptyMap(), rowMapper_productImage);
     }
+    
+    public List<CommentLists> selectAllComment(Integer commentLimit){
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("commentlimit", commentLimit);
+		return jdbc.query(SELECT_ALL_COMMENT,params, rowMapper_comment);
+	}
+    public double avgRate() {
+		return jdbc.queryForObject(AVG_RATE, Collections.emptyMap(), Double.class);
+	}
+    public int countComment() {
+		return jdbc.queryForObject(COUNT_COMMENT, Collections.emptyMap(), Integer.class);
+	}
 }

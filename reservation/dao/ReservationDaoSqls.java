@@ -6,6 +6,7 @@ public class ReservationDaoSqls {
 	public static final String SELECT_PROMOTION_IMAGE = "SELECT file_name FROM file_info WHERE id IN (SELECT file_id FROM product_image WHERE type = 'th' AND product_id IN (SELECT product_id FROM promotion))";
 	//전체리스트 정보 및 사진이름 쿼리
 	public static final String SELECT_ALL_ITEMS = "SELECT product.id, product.description, product.content, display_info.id AS whole_id, display_info.place_name FROM product JOIN display_info ON product.id=display_info.product_id limit :start, :limit";
+	public static final String SELECT_ITEM_DETAIL = "SELECT product.description, product.content FROM product JOIN display_info ON product.id=display_info.product_id WHERE product.id=:id";
 	public static final String SELECT_ALL_PRODUCTIMG = "SELECT file_name FROM file_info WHERE id IN (SELECT file_id FROM product_image)";
 
 	//카테고리 별 정보 및 사진이름 쿼리
@@ -17,4 +18,8 @@ public class ReservationDaoSqls {
 	//category별 count 쿼리 작성 완료. ajax로 각 탭 클릭할때 호출하도록 하면 됨.
 	
 	public static final String SELECT_COUNT = "SELECT count(*) FROM display_info";
+	
+	public static final String SELECT_ALL_COMMENT = "SELECT reservation_info.product_id, reservation_info.reservation_name, reservation_user_comment.score, reservation_user_comment.comment, reservation_user_comment.create_date FROM reservation_info JOIN reservation_user_comment ON reservation_info.id=reservation_user_comment.reservation_info_id limit 0, :commentlimit";
+	public static final String AVG_RATE ="SELECT ROUND(AVG(score),1) FROM reservation_user_comment";
+	public static final String COUNT_COMMENT ="SELECT count(*) FROM reservation_user_comment";
 }

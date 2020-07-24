@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.connect.reservation.dto.CommentLists;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
@@ -91,10 +92,18 @@ public class ReservationController {
 	@GetMapping("/detail")
 	public String details(HttpServletRequest request, Model model) {
 		int id = Integer.parseInt(request.getParameter("id"));
+		double avg = reservationService.avgRate();
+		int countComment = reservationService.getCountComment();
 		List<FileInfo> productImg = reservationService.getProductImage();
-		System.out.println(id);
+		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
+		List<CommentLists> commentLists = reservationService.getCommentLists();
+		
 		model.addAttribute("id",id);
 		model.addAttribute("productImg",productImg);
+		model.addAttribute("itemDetail",itemDetail);
+		model.addAttribute("commentLists",commentLists);
+		model.addAttribute("avgRate",avg);
+		model.addAttribute("countComment",countComment);
 		return "detail";
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.connect.reservation.dao.ReservationDao;
+import kr.or.connect.reservation.dto.CommentLists;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
@@ -32,6 +33,12 @@ public class ReservationServiceImpl implements ReservationService {
 		return list;
 	}
 	@Override
+	@Transactional
+	public List<WholeServiceInfo> getItemDetail(Integer id) {
+		List<WholeServiceInfo> list = reservationDao.selectItemDetail(id);
+		return list;
+	}
+	@Override
 	public int getCount() {
 		return reservationDao.selectCount();
 	}
@@ -53,5 +60,18 @@ public class ReservationServiceImpl implements ReservationService {
 		return list;
 	}
 	
-
+	@Override
+	@Transactional
+	public List<CommentLists> getCommentLists() {
+		List<CommentLists> list = reservationDao.selectAllComment(ReservationService.COMMENTLIMIT);
+		return list;
+	}
+	@Override
+	public double avgRate() {
+		return reservationDao.avgRate();
+	}
+	@Override
+	public int getCountComment() {
+		return reservationDao.countComment();
+	}
 }

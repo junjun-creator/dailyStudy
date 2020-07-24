@@ -86,8 +86,8 @@
                         </p>
                     </div>
                     <!-- [D] 토글 상황에 따라 bk_more에 display:none 추가 -->
-                    <a href="#" class="bk_more _open"> <span class="bk_more_txt">펼쳐보기</span> <i class="fn fn-down2"></i> </a>
-                    <a href="#" class="bk_more _close" style="display: none;"> <span class="bk_more_txt">접기</span> <i class="fn fn-up2"></i> </a>
+                    <a class="bk_more _open"> <span class="bk_more_txt">펼쳐보기</span> <i class="fn fn-down2"></i> </a>
+                    <a class="bk_more _close" style="display: none;"> <span class="bk_more_txt">접기</span> <i class="fn fn-up2"></i> </a>
                 </div>
                 <div class="section_event">
                     <div class="event_info_box">
@@ -107,45 +107,11 @@
                             <div class="grade_area">
                                 <!-- [D] 별점 graph_value는 퍼센트 환산하여 width 값을 넣어줌 -->
                                 <span class="graph_mask"> <em class="graph_value" style="width: 84%;"></em> </span>
-                                <strong class="text_value"> <span>4.2</span> <em class="total">5.0</em> </strong>
-                                <span class="join_count"><em class="green">52건</em> 등록</span>
+                                <strong class="text_value"> <span></span> <em class="total">5.0</em> </strong>
+                                <span class="join_count"><em class="green"></em> 등록</span>
                             </div>
                             <ul class="list_short_review">
-                                <li class="list_item">
-                                    <div>
-                                        <div class="review_area">
-                                            <div class="thumb_area">
-                                                <a href="#" class="thumb" title="이미지 크게 보기"> <img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지"> </a> <span class="img_count" style="display:none;">1</span>                                                </div>
-                                            <h4 class="resoc_name"></h4>
-                                            <p class="review">2층이어서 걱정했는데 꽤잘보여서 좋았습니다 고미오 너무 멋있었습니다 사진은 커튼콜때 찍었습니다 끝나고 퇴근길도 봐서 너무 좋았어요</p>
-                                        </div>
-                                        <div class="info_area">
-                                            <div class="review_info"> <span class="grade">4.0</span> <span class="name">dbfl****</span> <span class="date">2017.3.5. 방문</span> </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list_item">
-                                    <div>
-                                        <div class="review_area no_img">
-                                            <h4 class="resoc_name"></h4>
-                                            <p class="review">너무 재밌게봤구요~<br>마지막공연 후 뒷풀이도 잘봤습니다</p>
-                                        </div>
-                                        <div class="info_area">
-                                            <div class="review_info"> <span class="grade">5.0</span> <span class="name">yyck****</span> <span class="date">2017.3.5. 방문</span> </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list_item">
-                                    <div>
-                                        <div class="review_area no_img">
-                                            <h4 class="resoc_name"></h4>
-                                            <p class="review">좋은 공연이었습니다. <br>머큐쇼역활 하신분의 열창이 기억에 남는 반면에,,, 로미오는 별로 기억에 남지 않네요..</p>
-                                        </div>
-                                        <div class="info_area">
-                                            <div class="review_info"> <span class="grade">4.0</span> <span class="name">xero****</span> <span class="date">2017.3.4. 방문</span> </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <!-- 템플릿으로 추가완료 -->
                             </ul>
                         </div>
                         <p class="guide"> <i class="spr_book2 ico_bell"></i> <span>네이버 예약을 통해 실제 방문한 이용자가 남긴 평가입니다.</span> </p>
@@ -244,6 +210,34 @@
             </div>
         </li>
     </script>
+    <script type="rv-template" id="reviewLists">
+	    <li class="list_item">
+		    <div>
+		        <div class="review_area">
+		            <div class="thumb_area">
+		                <a href="#" class="thumb" title="이미지 크게 보기"> <img width="90" height="90" class="img_vertical_top" src="${pageContext.request.contextPath}/img/{image}" alt="리뷰이미지"> </a> <span class="img_count" style="display:none;">1</span>                                                </div>
+		            <h4 class="resoc_name"></h4>
+		            <p class="review">{comment}</p>
+		        </div>
+		        <div class="info_area">
+		            <div class="review_info"> <span class="grade">{score}</span> <span class="name">{name2}</span> <span class="date">{date} 방문</span> </div>
+		        </div>
+		    </div>
+		</li>
+    </script>
+    <script type="rv-template" id="reviewLists2">
+	    <li class="list_item">
+		    <div>
+		        <div class="review_area">
+		            <h4 class="resoc_name"></h4>
+		            <p class="review">{comment}</p>
+		        </div>
+		        <div class="info_area">
+		            <div class="review_info"> <span class="grade">{score}</span> <span class="name">{name2}</span> <span class="date">{date} 방문</span> </div>
+		        </div>
+		    </div>
+		</li>
+    </script>
     
     <script>
     	var ul_img = document.querySelector(".visual_img.detail_swipe");
@@ -265,7 +259,13 @@
 	    		}
 	    	}
 	    </c:forEach>
-	    console.log(img_count);
+
+	    var prevBtn = document.querySelector('.btn_prev');
+	    var nextBtn = document.querySelector('.btn_nxt');
+	    if(img_count ===1){
+	    	prevBtn.style.display = 'none';
+	    	nextBtn.style.display = 'none';
+	    }
 	    
 	    var slideWrapper = document.querySelector('.container_visual');
 	    var slides = document.querySelectorAll('.container_visual .item');
@@ -274,7 +274,9 @@
 	    var slideIndex = 0;
 	    var slider = document.querySelector('.visual_img');
 	    slider.style.width = sliderWidth * totalSlides + 'px';
-	    
+	    var img_num = document.querySelector('.num');
+	    var img_total = document.querySelector('.num.off span');
+	    img_total.innerHTML = img_count;
 	    function showSlides(n) {
 	        slideIndex = n;
 	        if (slideIndex == -1) {
@@ -283,6 +285,8 @@
 	            slideIndex = 0;
 	        }
 	        slider.style.left = -(sliderWidth * slideIndex) + 'px';
+	        
+	        img_num.innerHTML = slideIndex+1;
 	    }
 
 	    function plusSlides(n){
@@ -292,9 +296,6 @@
 	    function currentSlide(n) {
 	        showSlides(slideIndex = n);
 	    }
-	    
-	    var prevBtn = document.querySelector('.btn_prev');
-	    var nextBtn = document.querySelector('.btn_nxt');
 	    
 	    nextBtn.addEventListener('click', function () {
 	        plusSlides(1);
@@ -307,6 +308,70 @@
 	    
 	    //추후 진행 : 아이템 description 이미지 위에 노출 시키고, 이미지 밑에 content 항목 넣고 펼치기 접기 기능 구현하기
 	    
+	    //아이템 상세내용 작성
+	    var item_content = document.querySelector('.store_details .dsc');
+	    <c:forEach items="${itemDetail}" var = "item">
+	    	item_content.innerHTML = "${item.content}";
+	    </c:forEach>
+	    
+	    //펼쳐보기 접기 기능 store_details close3 
+	    var more_open = document.querySelector('.bk_more._open');
+	    var fold_more = document.querySelector('.bk_more._close');
+	    var store_details = document.querySelector('.store_details.close3');
+	    console.log(more_open);
+	    more_open.addEventListener('click', function(){
+	    	store_details.setAttribute('class','store_details');
+	    	more_open.style.display = 'none';
+	    	fold_more.style.display = 'block';
+	    });
+	    
+	    fold_more.addEventListener('click', function(){
+	    	store_details.setAttribute('class','store_details close3');
+	    	more_open.style.display = 'block';
+	    	fold_more.style.display = 'none';
+	    });
+    </script>
+    
+    <script>
+    //평균 별점,comment count갯수
+    var avg_rate = document.querySelector('.text_value span');
+    var star_rate = document.querySelector('.graph_value');
+    var total_comment = document.querySelector('.green');
+    var avg = "${avgRate}"*1.0;
+    var total = "${countComment}";
+    
+    avg_rate.innerHTML = avg;
+    var star = (avg/5.0)*100+'';
+    console.log(star);
+    star_rate.style.width=star+'%';
+    total_comment.innerHTML = total+"건";
+    //comment 한줄평 정보 출력
+    var commentCount=0;
+    var ul_comment = document.querySelector('.list_short_review');
+    var commentHTML ='';
+    var commentTemp = document.querySelector('#reviewLists').innerHTML;
+    var commentTemp2 = document.querySelector('#reviewLists2').innerHTML;
+    <c:forEach items="${commentLists}" var = "commentlist">
+    	<c:forEach items="${productImg}" var = "image" varStatus="status">
+    		if("${image.fileName}".startsWith(id+"_th")){
+    			if(commentCount ===0){
+    				commentHTML = commentTemp.replace("{comment}","${commentlist.comment}")
+    										.replace("{score}","${commentlist.score}"+)
+    										.replace("{name2}","${commentlist.reservationName}")
+    										.replace("{image}","${image.fileName}")
+    										.replace("{date}","${commentlist.createDate}");
+    				ul_comment.innerHTML += commentHTML;
+    			}
+    			else{
+    				commentHTML = commentTemp2.replace("{comment}","${commentlist.comment}")
+											.replace("{score}","${commentlist.score}")
+											.replace("{name2}","${commentlist.reservationName}")
+											.replace("{date}","${commentlist.createDate}");
+					ul_comment.innerHTML += commentHTML;
+    			}commentCount++;
+    		}
+    	</c:forEach>
+    </c:forEach>
     </script>
 </body>
 
