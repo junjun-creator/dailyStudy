@@ -122,10 +122,10 @@
                     <!-- [D] tab 선택 시 anchor에 active 추가 -->
                     <ul class="info_tab_lst">
                         <li class="item active _detail">
-                            <a href="#" class="anchor active"> <span>상세정보</span> </a>
+                            <a class="anchor active"> <span>상세정보</span> </a>
                         </li>
                         <li class="item _path">
-                            <a href="#" class="anchor"> <span>오시는길</span> </a>
+                            <a class="anchor"> <span>오시는길</span> </a>
                         </li>
                     </ul>
                     <!-- [D] 상세정보 외 다른 탭 선택 시 detail_area_wrap에 hide 추가 -->
@@ -242,22 +242,25 @@
     <script>
     	var ul_img = document.querySelector(".visual_img.detail_swipe");
     	var img_template = document.querySelector("#itemDetail").innerHTML;
-    	var id = "${id}";
+    	var id = 0;
     	console.log(ul_img);
     	var resultHTML='';
     	var img_count=0;
     	var doneLoop = false;
 	    <c:forEach items="${productImg}" var = "image" varStatus="status">
-	    	if(!doneLoop){
-	    		if("${image.fileName}".startsWith(id+"_th") || "${image.fileName}".startsWith(id+"_ma") || "${image.fileName}".startsWith(id+"_et")){
-		    		resultHTML = img_template.replace("{image}","${image.fileName}");
-		    		ul_img.innerHTML += resultHTML;
-		    		img_count++;
+	    	<c:forEach items="${toId}" var = "toid" varStatus="status">
+	    		id = "${toid.productId}";
+		    	if(!doneLoop){
+		    		if("${image.fileName}".startsWith(id+"_th") || "${image.fileName}".startsWith(id+"_ma") || "${image.fileName}".startsWith(id+"_et")){
+			    		resultHTML = img_template.replace("{image}","${image.fileName}");
+			    		ul_img.innerHTML += resultHTML;
+			    		img_count++;
+			    	}
+		    		if(img_count===3){//해당 아이템의 이미지는 3개까지만 저장.
+		    			doneLoop = true;
+		    		}
 		    	}
-	    		if(img_count===3){//해당 아이템의 이미지는 3개까지만 저장.
-	    			doneLoop = true;
-	    		}
-	    	}
+	    	</c:forEach>
 	    </c:forEach>
 
 	    var prevBtn = document.querySelector('.btn_prev');
@@ -310,8 +313,10 @@
 	    
 	    //아이템 상세내용 작성
 	    var item_content = document.querySelector('.store_details .dsc');
+	    var item_detail = document.querySelector('.detail_info_lst .in_dsc');
 	    <c:forEach items="${itemDetail}" var = "item">
 	    	item_content.innerHTML = "${item.content}";
+	    	item_detail.innerHTML = "${item.content}";
 	    </c:forEach>
 	    
 	    //펼쳐보기 접기 기능 store_details close3 
@@ -356,7 +361,7 @@
     		if("${image.fileName}".startsWith(id+"_th")){
     			if(commentCount ===0){
     				commentHTML = commentTemp.replace("{comment}","${commentlist.comment}")
-    										.replace("{score}","${commentlist.score}"+)
+    										.replace("{score}","${commentlist.score}")
     										.replace("{name2}","${commentlist.reservationName}")
     										.replace("{image}","${image.fileName}")
     										.replace("{date}","${commentlist.createDate}");
@@ -372,6 +377,40 @@
     		}
     	</c:forEach>
     </c:forEach>
+    
+    var tab_detail = document.querySelector('.item.active._detail');
+    var tab_path = document.querySelector('.item._path');
+    var tab_ul = document.querySelector('.info_tab_lst');
+    var detail_area = document.querySelector('.detail_area_wrap');
+    var path_area = document.querySelector('.detail_location.hide');
+    var addr_str = document.querySelector('.store_addr.store_addr_bold');
+    var addr_old = document.querySelector('.addr_old_detail');
+    var addr_detail = document.querySelector('.store_addr.addr_detail');
+    
+    tab_ul.addEventListener('click', function(e){
+    	console.log(e.target.innerText);
+    	if(e.target.innerText==='오시는길'){
+    		console.log(1);
+    		tab_detail.firstElementChild.setAttribute('class','anchor');
+    		tab_path.firstElementChild.setAttribute('class','anchor active');
+    		detail_area.setAttribute('class','detail_area_wrap hide');
+    		path_area.setAttribute('class','detail_location');
+    		<c:forEach items="${itemLocation}" var = "location">
+        		addr_str.innerHTML = "${location.placeStreet}";
+        		addr_old.innerHTML = "${location.placeLot}";
+        		addr_detail.innerHTML = "${location.placeName}";
+        	</c:forEach>
+    	}
+    	else if(e.target.innerText==='상세정보'){
+    		console.log(2);
+    		tab_detail.firstElementChild.setAttribute('class','anchor active');
+    		tab_path.firstElementChild.setAttribute('class','anchor');
+    		detail_area.setAttribute('class','detail_area_wrap');
+    		path_area.setAttribute('class','detail_location hide');
+    	}
+    });
+    
+    
     </script>
 </body>
 

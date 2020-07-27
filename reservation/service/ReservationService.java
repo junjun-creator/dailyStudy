@@ -9,6 +9,8 @@ public interface ReservationService {
 	public List<WholeServiceInfo> getAllItems(Integer start);
 	public List<WholeServiceInfo> getItemDetail(Integer id);
 	public List<CommentLists> getCommentLists();
+	public List<DisplayInfo> getLocation(Integer productId);
+	public List<DisplayInfo> getId(Integer id);
 	public int getCount();
 	public double avgRate();
 	public int getCountComment();

@@ -97,13 +97,17 @@ public class ReservationController {
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
 		List<CommentLists> commentLists = reservationService.getCommentLists();
+		List<DisplayInfo> location = reservationService.getLocation(id);
+		List<DisplayInfo> to_id = reservationService.getId(id);
 		
 		model.addAttribute("id",id);
+		model.addAttribute("toId",to_id);
 		model.addAttribute("productImg",productImg);
 		model.addAttribute("itemDetail",itemDetail);
 		model.addAttribute("commentLists",commentLists);
 		model.addAttribute("avgRate",avg);
 		model.addAttribute("countComment",countComment);
+		model.addAttribute("itemLocation",location);
 		return "detail";
 	}
 	

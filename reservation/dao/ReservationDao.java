@@ -28,6 +28,7 @@ public class ReservationDao {
     private RowMapper<WholeServiceInfo> rowMapper_wholeServiceInfo = BeanPropertyRowMapper.newInstance(WholeServiceInfo.class);
     private RowMapper<CommentLists> rowMapper_comment = BeanPropertyRowMapper.newInstance(CommentLists.class);
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
+    private RowMapper<DisplayInfo> rowMapper_displayInfo = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
@@ -90,4 +91,15 @@ public class ReservationDao {
     public int countComment() {
 		return jdbc.queryForObject(COUNT_COMMENT, Collections.emptyMap(), Integer.class);
 	}
+    public List<DisplayInfo> selectLocation(Integer productId){
+    	Map<String, Integer> params = new HashMap<>();
+    	params.put("productId",productId);
+    	return jdbc.query(SELECT_LOCATION,params, rowMapper_displayInfo);
+    }
+    
+    public List<DisplayInfo> getId(Integer id) {
+    	Map<String, Integer> params = new HashMap<>();
+    	params.put("id",id);
+    	return jdbc.query(GET_ID,params, rowMapper_displayInfo);
+    }
 }

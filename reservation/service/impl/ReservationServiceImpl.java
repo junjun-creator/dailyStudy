@@ -74,4 +74,18 @@ public class ReservationServiceImpl implements ReservationService {
 	public int getCountComment() {
 		return reservationDao.countComment();
 	}
+
+	@Override
+	@Transactional
+	public List<DisplayInfo> getLocation(Integer productId) {
+		List<DisplayInfo> list = reservationDao.selectLocation(productId);
+		return list;
+	}
+
+	@Override
+	public List<DisplayInfo> getId(Integer id) {
+		List<DisplayInfo> list = reservationDao.getId(id);
+		return list;
+	}
+	
 }
