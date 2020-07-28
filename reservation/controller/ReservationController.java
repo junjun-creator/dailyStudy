@@ -99,6 +99,7 @@ public class ReservationController {
 		List<CommentLists> commentLists = reservationService.getCommentLists();
 		List<DisplayInfo> location = reservationService.getLocation(id);
 		List<DisplayInfo> to_id = reservationService.getId(id);
+		List<FileInfo> mapImg = reservationService.getMapImg(id);
 		
 		model.addAttribute("id",id);
 		model.addAttribute("toId",to_id);
@@ -108,6 +109,7 @@ public class ReservationController {
 		model.addAttribute("avgRate",avg);
 		model.addAttribute("countComment",countComment);
 		model.addAttribute("itemLocation",location);
+		model.addAttribute("mapImg",mapImg);
 		return "detail";
 	}
 	

@@ -28,6 +28,7 @@ public class ReservationDao {
     private RowMapper<WholeServiceInfo> rowMapper_wholeServiceInfo = BeanPropertyRowMapper.newInstance(WholeServiceInfo.class);
     private RowMapper<CommentLists> rowMapper_comment = BeanPropertyRowMapper.newInstance(CommentLists.class);
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
+    private RowMapper<FileInfo> rowMapper_mapImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     private RowMapper<DisplayInfo> rowMapper_displayInfo = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
@@ -101,5 +102,10 @@ public class ReservationDao {
     	Map<String, Integer> params = new HashMap<>();
     	params.put("id",id);
     	return jdbc.query(GET_ID,params, rowMapper_displayInfo);
+    }
+    public List<FileInfo> getMapImg(Integer id){
+    	Map<String, Integer> params = new HashMap<>();
+    	params.put("id",id);
+    	return jdbc.query(MAP_IMG,params, rowMapper_mapImage);
     }
 }

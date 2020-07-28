@@ -11,6 +11,7 @@ public interface ReservationService {
 	public List<CommentLists> getCommentLists();
 	public List<DisplayInfo> getLocation(Integer productId);
 	public List<DisplayInfo> getId(Integer id);
+	public List<FileInfo> getMapImg(Integer id);
 	public int getCount();
 	public double avgRate();
 	public int getCountComment();

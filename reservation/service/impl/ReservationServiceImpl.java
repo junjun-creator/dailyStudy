@@ -87,5 +87,11 @@ public class ReservationServiceImpl implements ReservationService {
 		List<DisplayInfo> list = reservationDao.getId(id);
 		return list;
 	}
+
+	@Override
+	public List<FileInfo> getMapImg(Integer id) {
+		List<FileInfo> list = reservationDao.getMapImg(id);
+		return list;
+	}
 	
 }

@@ -388,9 +388,7 @@
     var addr_detail = document.querySelector('.store_addr.addr_detail');
     
     tab_ul.addEventListener('click', function(e){
-    	console.log(e.target.innerText);
     	if(e.target.innerText==='오시는길'){
-    		console.log(1);
     		tab_detail.firstElementChild.setAttribute('class','anchor');
     		tab_path.firstElementChild.setAttribute('class','anchor active');
     		detail_area.setAttribute('class','detail_area_wrap hide');
@@ -402,7 +400,6 @@
         	</c:forEach>
     	}
     	else if(e.target.innerText==='상세정보'){
-    		console.log(2);
     		tab_detail.firstElementChild.setAttribute('class','anchor active');
     		tab_path.firstElementChild.setAttribute('class','anchor');
     		detail_area.setAttribute('class','detail_area_wrap');
@@ -410,7 +407,10 @@
     	}
     });
     
-    
+    var path_map = document.querySelector('.store_map.img_thumb');
+    <c:forEach items="${mapImg}" var = "map">
+    	path_map.setAttribute("src","${pageContext.request.contextPath}/img_map/"+"${map.fileName}");
+    </c:forEach>
     </script>
 </body>
 
