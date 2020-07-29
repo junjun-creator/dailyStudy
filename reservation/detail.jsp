@@ -11,7 +11,7 @@
     <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <title>네이버 예약</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/style.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
     <style>
         .container_visual {
             height: 414px;
@@ -205,7 +205,7 @@
         	<div class="visual_txt">
             	<div class="visual_txt_inn">
                 	<h2 class="visual_txt_tit"> <span></span> </h2>
-                    <p class="visual_txt_dsc"></p>
+                    <p class="visual_txt_dsc">{description}</p>
                 </div>
             </div>
         </li>
@@ -215,12 +215,12 @@
 		    <div>
 		        <div class="review_area">
 		            <div class="thumb_area">
-		                <a href="#" class="thumb" title="이미지 크게 보기"> <img width="90" height="90" class="img_vertical_top" src="${pageContext.request.contextPath}/img/{image}" alt="리뷰이미지"> </a> <span class="img_count" style="display:none;">1</span>                                                </div>
-		            <h4 class="resoc_name"></h4>
-		            <p class="review">{comment}</p>
+		                <a href="#" class="thumb" title="이미지 크게 보기"> <img width="90" height="90" class="img_vertical_top" src="${pageContext.request.contextPath}/img/{{fileName}}" alt="리뷰이미지"> </a> <span class="img_count" style="display:none;">1</span>                                                </div>
+		            <h4 class="resoc_name">{{description}}</h4>
+		            <p class="review">{{comment}}</p>
 		        </div>
 		        <div class="info_area">
-		            <div class="review_info"> <span class="grade">{score}</span> <span class="name">{name2}</span> <span class="date">{date} 방문</span> </div>
+		            <div class="review_info"> <span class="grade">{{score}}.0</span> <span class="name">{{reservationName}}</span> <span class="date">{{createDate}} 방문</span> </div>
 		        </div>
 		    </div>
 		</li>
@@ -228,31 +228,40 @@
     <script type="rv-template" id="reviewLists2">
 	    <li class="list_item">
 		    <div>
-		        <div class="review_area">
-		            <h4 class="resoc_name"></h4>
-		            <p class="review">{comment}</p>
+		        <div class="review_area no_img">
+		            <h4 class="resoc_name">{{description}}</h4>
+		            <p class="review">{{comment}}</p>
 		        </div>
 		        <div class="info_area">
-		            <div class="review_info"> <span class="grade">{score}</span> <span class="name">{name2}</span> <span class="date">{date} 방문</span> </div>
+		            <div class="review_info"> <span class="grade">{{score}}.0</span> <span class="name">{{reservationName}}</span> <span class="date">{{createDate}} 방문</span> </div>
 		        </div>
 		    </div>
 		</li>
     </script>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw==" crossorigin="anonymous"></script>
+    
+    
     <script>
     	var ul_img = document.querySelector(".visual_img.detail_swipe");
     	var img_template = document.querySelector("#itemDetail").innerHTML;
-    	var id = 0;
+    	var id_product = 0;
     	console.log(ul_img);
     	var resultHTML='';
     	var img_count=0;
     	var doneLoop = false;
+    	var description='';
+    	<c:forEach items="${toId}" var = "toid" varStatus="status">
+    		id_product = "${toid.productId}";
+    	</c:forEach>
+    	<c:forEach items="${itemDetail}" var = "item">
+    		description = "${item.description}";
+    	</c:forEach>
 	    <c:forEach items="${productImg}" var = "image" varStatus="status">
-	    	<c:forEach items="${toId}" var = "toid" varStatus="status">
-	    		id = "${toid.productId}";
 		    	if(!doneLoop){
-		    		if("${image.fileName}".startsWith(id+"_th") || "${image.fileName}".startsWith(id+"_ma") || "${image.fileName}".startsWith(id+"_et")){
-			    		resultHTML = img_template.replace("{image}","${image.fileName}");
+		    		if("${image.fileName}".startsWith(id_product+"_th") || "${image.fileName}".startsWith(id_product+"_ma") || "${image.fileName}".startsWith(id_product+"_et")){
+			    		resultHTML = img_template.replace("{image}","${image.fileName}")
+			    								.replace("{description}",description);
 			    		ul_img.innerHTML += resultHTML;
 			    		img_count++;
 			    	}
@@ -260,7 +269,6 @@
 		    			doneLoop = true;
 		    		}
 		    	}
-	    	</c:forEach>
 	    </c:forEach>
 
 	    var prevBtn = document.querySelector('.btn_prev');
@@ -339,78 +347,88 @@
     
     <script>
     //평균 별점,comment count갯수
-    var avg_rate = document.querySelector('.text_value span');
-    var star_rate = document.querySelector('.graph_value');
-    var total_comment = document.querySelector('.green');
-    var avg = "${avgRate}"*1.0;
-    var total = "${countComment}";
-    
-    avg_rate.innerHTML = avg;
-    var star = (avg/5.0)*100+'';
-    console.log(star);
-    star_rate.style.width=star+'%';
-    total_comment.innerHTML = total+"건";
+	    var avg_rate = document.querySelector('.text_value span');
+	    var star_rate = document.querySelector('.graph_value');
+	    var total_comment = document.querySelector('.green');
+	    var avg = "${avgRate}"*1.0;
+	    var total = "${countComment}";
+	    
+	    avg_rate.innerHTML = avg;
+	    var star = (avg/5.0)*100+'';
+	    console.log(star);
+	    star_rate.style.width=star+'%';
+	    total_comment.innerHTML = total+"건";
     //comment 한줄평 정보 출력
-    var commentCount=0;
-    var ul_comment = document.querySelector('.list_short_review');
-    var commentHTML ='';
-    var commentTemp = document.querySelector('#reviewLists').innerHTML;
-    var commentTemp2 = document.querySelector('#reviewLists2').innerHTML;
-    <c:forEach items="${commentLists}" var = "commentlist">
-    	<c:forEach items="${productImg}" var = "image" varStatus="status">
-    		if("${image.fileName}".startsWith(id+"_th")){
-    			if(commentCount ===0){
-    				commentHTML = commentTemp.replace("{comment}","${commentlist.comment}")
-    										.replace("{score}","${commentlist.score}")
-    										.replace("{name2}","${commentlist.reservationName}")
-    										.replace("{image}","${image.fileName}")
-    										.replace("{date}","${commentlist.createDate}");
-    				ul_comment.innerHTML += commentHTML;
-    			}
-    			else{
-    				commentHTML = commentTemp2.replace("{comment}","${commentlist.comment}")
-											.replace("{score}","${commentlist.score}")
-											.replace("{name2}","${commentlist.reservationName}")
-											.replace("{date}","${commentlist.createDate}");
-					ul_comment.innerHTML += commentHTML;
-    			}commentCount++;
-    		}
-    	</c:forEach>
-    </c:forEach>
+    	var id = "${id}";
+   		var commentCount=0;
+	    var ul_comment = document.querySelector('.list_short_review');
+	    var commentHTML ='';
+	    var commentTemp = document.querySelector('#reviewLists').innerHTML;
+	    var commentTemp2 = document.querySelector('#reviewLists2').innerHTML;
+	    
+	    <c:forEach items="${commentLists}" var = "commentlist">
+	    	<c:forEach items="${productImg}" var = "image" varStatus="status">
+	    		if("${image.fileName}".startsWith(id+"_th")){
+	    			console.log("${commentlist.description}");
+	    			var commentJSON = new Object();
+		    		commentJSON.comment = "${commentlist.comment}";
+		    		commentJSON.reservationName = "${commentlist.reservationName}";
+		    		commentJSON.score = "${commentlist.score}";
+		    		commentJSON.createDate = "${commentlist.createDate}";
+		    		commentJSON.fileName = "${image.fileName}";
+		    		commentJSON.description = "${commentlist.description}";
+	    			if(commentCount ===0){
+	    				var bindTemplate = Handlebars.compile(commentTemp);
+	    				commentHTML = bindTemplate(commentJSON);
+	    				ul_comment.innerHTML += commentHTML;
+	    			}
+	    			else{
+	    				var bindTemplate = Handlebars.compile(commentTemp2);
+	    				commentHTML = bindTemplate(commentJSON);
+	    				ul_comment.innerHTML += commentHTML;
+	    			}commentCount++;
+	    		}
+	    	</c:forEach>
+	    </c:forEach>
+    //한줄평 더보기 버튼 링크설정
+	    var more_review_btn = document.querySelector('.btn_review_more');
+	    var item_id = "${id}"
+	    more_review_btn.setAttribute('href','./review?id='+item_id);
     
-    var tab_detail = document.querySelector('.item.active._detail');
-    var tab_path = document.querySelector('.item._path');
-    var tab_ul = document.querySelector('.info_tab_lst');
-    var detail_area = document.querySelector('.detail_area_wrap');
-    var path_area = document.querySelector('.detail_location.hide');
-    var addr_str = document.querySelector('.store_addr.store_addr_bold');
-    var addr_old = document.querySelector('.addr_old_detail');
-    var addr_detail = document.querySelector('.store_addr.addr_detail');
-    
-    tab_ul.addEventListener('click', function(e){
-    	if(e.target.innerText==='오시는길'){
-    		tab_detail.firstElementChild.setAttribute('class','anchor');
-    		tab_path.firstElementChild.setAttribute('class','anchor active');
-    		detail_area.setAttribute('class','detail_area_wrap hide');
-    		path_area.setAttribute('class','detail_location');
-    		<c:forEach items="${itemLocation}" var = "location">
-        		addr_str.innerHTML = "${location.placeStreet}";
-        		addr_old.innerHTML = "${location.placeLot}";
-        		addr_detail.innerHTML = "${location.placeName}";
-        	</c:forEach>
-    	}
-    	else if(e.target.innerText==='상세정보'){
-    		tab_detail.firstElementChild.setAttribute('class','anchor active');
-    		tab_path.firstElementChild.setAttribute('class','anchor');
-    		detail_area.setAttribute('class','detail_area_wrap');
-    		path_area.setAttribute('class','detail_location hide');
-    	}
-    });
-    
-    var path_map = document.querySelector('.store_map.img_thumb');
-    <c:forEach items="${mapImg}" var = "map">
-    	path_map.setAttribute("src","${pageContext.request.contextPath}/img_map/"+"${map.fileName}");
-    </c:forEach>
+    //상세정보 및 오시는길 탭
+	    var tab_detail = document.querySelector('.item.active._detail');
+	    var tab_path = document.querySelector('.item._path');
+	    var tab_ul = document.querySelector('.info_tab_lst');
+	    var detail_area = document.querySelector('.detail_area_wrap');
+	    var path_area = document.querySelector('.detail_location.hide');
+	    var addr_str = document.querySelector('.store_addr.store_addr_bold');
+	    var addr_old = document.querySelector('.addr_old_detail');
+	    var addr_detail = document.querySelector('.store_addr.addr_detail');
+	    
+	    tab_ul.addEventListener('click', function(e){
+	    	if(e.target.innerText==='오시는길'){
+	    		tab_detail.firstElementChild.setAttribute('class','anchor');
+	    		tab_path.firstElementChild.setAttribute('class','anchor active');
+	    		detail_area.setAttribute('class','detail_area_wrap hide');
+	    		path_area.setAttribute('class','detail_location');
+	    		<c:forEach items="${itemLocation}" var = "location">
+	        		addr_str.innerHTML = "${location.placeStreet}";
+	        		addr_old.innerHTML = "${location.placeLot}";
+	        		addr_detail.innerHTML = "${location.placeName}";
+	        	</c:forEach>
+	    	}
+	    	else if(e.target.innerText==='상세정보'){
+	    		tab_detail.firstElementChild.setAttribute('class','anchor active');
+	    		tab_path.firstElementChild.setAttribute('class','anchor');
+	    		detail_area.setAttribute('class','detail_area_wrap');
+	    		path_area.setAttribute('class','detail_location hide');
+	    	}
+	    });
+	    
+	    var path_map = document.querySelector('.store_map.img_thumb');
+	    <c:forEach items="${mapImg}" var = "map">
+	    	path_map.setAttribute("src","${pageContext.request.contextPath}/img_map/"+"${map.fileName}");
+	    </c:forEach>
     </script>
 </body>
 

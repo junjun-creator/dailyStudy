@@ -19,10 +19,12 @@ public class ReservationDaoSqls {
 	
 	public static final String SELECT_COUNT = "SELECT count(*) FROM display_info";
 	
-	public static final String SELECT_ALL_COMMENT = "SELECT reservation_info.product_id, reservation_info.reservation_name, reservation_user_comment.score, reservation_user_comment.comment, reservation_user_comment.create_date FROM reservation_info JOIN reservation_user_comment ON reservation_info.id=reservation_user_comment.reservation_info_id limit 0, :commentlimit";
-	public static final String AVG_RATE ="SELECT ROUND(AVG(score),1) FROM reservation_user_comment";
+	public static final String SELECT_COMMENT = "SELECT reservation_info.product_id, product.description, reservation_info.reservation_name, reservation_user_comment.score, reservation_user_comment.comment, reservation_user_comment.create_date FROM reservation_info JOIN reservation_user_comment ON reservation_info.id=reservation_user_comment.product_id JOIN product ON reservation_info.product_id = product.id WHERE product.id = :productId limit 0, :commentlimit";
+	public static final String SELECT_ALL_COMMENT = "SELECT reservation_info.product_id, product.description, reservation_info.reservation_name, reservation_user_comment.score, reservation_user_comment.comment, reservation_user_comment.create_date FROM reservation_info JOIN reservation_user_comment ON reservation_info.id=reservation_user_comment.product_id JOIN product ON reservation_info.product_id = product.id WHERE product.id = :productId";
+	public static final String AVG_RATE ="SELECT ROUND(AVG(score),1) FROM reservation_user_comment WHERE product_id = :productId";
 	public static final String COUNT_COMMENT ="SELECT count(*) FROM reservation_user_comment";
 	public static final String SELECT_LOCATION = "SELECT id, product_id, place_name, place_lot, place_street, tel FROM display_info WHERE id = :productId";
 	public static final String GET_ID = "SELECT product_id FROM display_info WHERE id = :id";
 	public static final String MAP_IMG = "SELECT file_name FROM file_info WHERE id = :id";
+	
 }

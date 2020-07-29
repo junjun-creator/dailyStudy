@@ -62,13 +62,20 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	@Transactional
-	public List<CommentLists> getCommentLists() {
-		List<CommentLists> list = reservationDao.selectAllComment(ReservationService.COMMENTLIMIT);
+	public List<CommentLists> getCommentLists(Integer productId) {
+		List<CommentLists> list = reservationDao.selectComment(productId, ReservationService.COMMENTLIMIT);
 		return list;
 	}
+	
 	@Override
-	public double avgRate() {
-		return reservationDao.avgRate();
+	public List<CommentLists> getAllComment(Integer productId) {
+		List<CommentLists> list = reservationDao.selectAllComment(productId);
+		return list;
+	}
+
+	@Override
+	public double avgRate(Integer productId) {
+		return reservationDao.avgRate(productId);
 	}
 	@Override
 	public int getCountComment() {

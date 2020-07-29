@@ -92,15 +92,20 @@ public class ReservationController {
 	@GetMapping("/detail")
 	public String details(HttpServletRequest request, Model model) {
 		int id = Integer.parseInt(request.getParameter("id"));
-		double avg = reservationService.avgRate();
 		int countComment = reservationService.getCountComment();
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
-		List<CommentLists> commentLists = reservationService.getCommentLists();
 		List<DisplayInfo> location = reservationService.getLocation(id);
 		List<DisplayInfo> to_id = reservationService.getId(id);
 		List<FileInfo> mapImg = reservationService.getMapImg(id);
-		
+		List<CommentLists> commentLists = reservationService.getCommentLists(to_id.get(0).getProductId());
+		double avg;
+		try {
+			avg = reservationService.avgRate(to_id.get(0).getProductId());
+		}catch(NullPointerException e) {
+			avg = 0.0;
+		}
+
 		model.addAttribute("id",id);
 		model.addAttribute("toId",to_id);
 		model.addAttribute("productImg",productImg);
@@ -113,4 +118,26 @@ public class ReservationController {
 		return "detail";
 	}
 	
+	@GetMapping("/review")
+	public String review(HttpServletRequest request, Model model) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		int countComment = reservationService.getCountComment();
+		List<DisplayInfo> to_id = reservationService.getId(id);
+		List<CommentLists> allComment = reservationService.getAllComment(to_id.get(0).getProductId());
+		List<FileInfo> productImg = reservationService.getProductImage();
+		double avg;
+		try {
+			avg = reservationService.avgRate(to_id.get(0).getProductId());
+		}catch(NullPointerException e) {
+			avg = 0.0;
+		}
+		
+		
+		model.addAttribute("id",id);
+		model.addAttribute("productImg",productImg);
+		model.addAttribute("avgRate",avg);
+		model.addAttribute("countComment",countComment);
+		model.addAttribute("allComment",allComment);
+		return "review";
+	}
 }

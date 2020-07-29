@@ -81,13 +81,21 @@ public class ReservationDao {
     	return jdbc.query(SELECT_ALL_PRODUCTIMG, Collections.emptyMap(), rowMapper_productImage);
     }
     
-    public List<CommentLists> selectAllComment(Integer commentLimit){
+    public List<CommentLists> selectComment(Integer productId, Integer commentLimit){
     	Map<String,Integer> params = new HashMap<>();
+    	params.put("productId",productId);
     	params.put("commentlimit", commentLimit);
-		return jdbc.query(SELECT_ALL_COMMENT,params, rowMapper_comment);
+		return jdbc.query(SELECT_COMMENT,params, rowMapper_comment);
 	}
-    public double avgRate() {
-		return jdbc.queryForObject(AVG_RATE, Collections.emptyMap(), Double.class);
+    public List<CommentLists> selectAllComment(Integer productId){
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("productId",productId);
+    	return jdbc.query(SELECT_ALL_COMMENT, params,rowMapper_comment);
+    }
+    public double avgRate(Integer productId) {
+    	Map<String,Integer> params = new HashMap<>();
+    	params.put("productId",productId);
+		return jdbc.queryForObject(AVG_RATE, params, Double.class);
 	}
     public int countComment() {
 		return jdbc.queryForObject(COUNT_COMMENT, Collections.emptyMap(), Integer.class);

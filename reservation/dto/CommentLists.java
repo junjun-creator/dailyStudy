@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class CommentLists {
 	private int productId;
+	private String description;
 	private String reservationName;
 	private String comment;
 	private int score;
@@ -16,6 +17,12 @@ public class CommentLists {
 		this.productId = productId;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getReservationName() {
 		return reservationName;
 	}
@@ -42,9 +49,8 @@ public class CommentLists {
 	}
 	@Override
 	public String toString() {
-		return "CommentLists [productId=" + productId + ", reservationName=" + reservationName + ", comment=" + comment + ", score=" + score
-				+ ", createDate=" + createDate + "]";
+		return "CommentLists [productId=" + productId + ", description=" + description + ", reservationName="
+				+ reservationName + ", comment=" + comment + ", score=" + score + ", createDate=" + createDate + "]";
 	}
-	
 	
 }
