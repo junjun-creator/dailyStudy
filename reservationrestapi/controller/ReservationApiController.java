@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,11 +80,12 @@ public class ReservationApiController {
 	
 	@GetMapping("/details")
 	public Map<String, Object> detail(int id) throws Exception{
-		int countComment = reservationService.getCountComment();
+		
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
 		List<DisplayInfo> location = reservationService.getLocation(id);
 		List<DisplayInfo> to_id = reservationService.getId(id);
+		int countComment = reservationService.getCountComment(to_id.get(0).getProductId());
 		List<FileInfo> mapImg = reservationService.getMapImg(id);
 		List<CommentLists> commentLists = reservationService.getCommentLists(to_id.get(0).getProductId());
 		double avg;
@@ -103,12 +105,42 @@ public class ReservationApiController {
 		map.put("mapImg",mapImg);
 		map.put("commentLists",commentLists);
 		map.put("avg",avg);
+		for(CommentLists a : commentLists) {
+			System.out.println(a.getCreateDate());
+		}
 		/*
 		ModelAndView mav = new ModelAndView();
         mav.setViewName("detail");
         mav.addObject("map", map);
         
         return mav;*/
+		return map;
+	}
+	
+	@GetMapping("/reviews")
+	public Map<String, Object> review(HttpServletRequest request, Model model) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		List<DisplayInfo> to_id = reservationService.getId(id);
+		int id_product = to_id.get(0).getProductId();
+		int countComment = reservationService.getCountComment(id_product);
+		List<CommentLists> allComment = reservationService.getAllComment(to_id.get(0).getProductId());
+		List<FileInfo> productImg = reservationService.getProductImage();
+		double avg;
+		try {
+			avg = reservationService.avgRate(to_id.get(0).getProductId());
+		}catch(NullPointerException e) {
+			avg = 0.0;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("id",id);
+		map.put("id_product", id_product);
+		map.put("productImg",productImg);
+		map.put("avgRate",avg);
+		map.put("countComment",countComment);
+		map.put("allComment",allComment);
+		
 		return map;
 	}
 }

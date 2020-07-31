@@ -14,7 +14,7 @@ public interface ReservationService {
 	public List<CommentLists> getAllComment(Integer productId);
 	public int getCount();
 	public double avgRate(Integer productId);
-	public int getCountComment();
+	public int getCountComment(Integer productId);
 	public List<WholeServiceInfo> getItemsCategory(Integer categoryId, Integer start);
 	public int getCountCategory(Integer categoryId);
 	public List<FileInfo> getProductImage();
