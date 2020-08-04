@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var data = [{title : "hello",content : "간지철철", price : 12000},
+            {title : "crong",content : "괜춘한 상품", price : 5500},
+            {title : "codesquad",content : "쩌는상품", price : 1200}];
+
+        // 금액을 3자리마다 콤마로 구분하는 배열로 변경해보자.
+
+        var newData = data.map(function(v){
+            var obj = {title : v.title, content : v.content, price : parseInt(v.price/1000)+","+parseInt(v.price%1000/100)+"00"};
+            return obj;
+        });
+
+        console.table(newData);
+
+        //map은 한바퀴 돌면서 각 index의 배열 value들을 꺼내보는것.
+        //filter는 조건문과 비슷. 배열을 한바퀴 돌면서 해당 조건에 만족되는 value들만 가져옴.
+        //reduce는 아래와 같음.
+        (function test(){
+            var array = [0,1,2,3,4];
+            var sum = array.reduce(function(previousValue, currentValue, currentIndex, array1){
+                return previousValue+currentValue;//return값이 다음 index를 돌때 previousValue로 들어감.
+                //previousValue는 reduce 메소드의 2번째 인자값이 없으면 배열의 첫번째 값이 들어가게 됨.
+            });
+            console.log("sum : "+sum);
+        })();
+    </script>
+    <script>
+        //우편번호가 3-3 형태 또는 5자리 형태이기 때문에 or 연산자로 둘중 하나면 뽑아오는 것
+        var result1 = "19323".match(/(\d{3}-\d{3}|\d{5})/)[0];
+        console.log (result1);
+        var result2 = "193-123".match(/(\d{3}-\d{3}|\d{5})/)[0];
+        console.log (result2);
+
+        //휴대폰 번호 : 첫 두자리는 01로 고정, 그다음 3번째 자리가 0또는1,7,8,9 라고 했을때 [01789] 이렇게 표현, 
+        //가운데 번호가 3또는 4자리 : \d{3,4} 라고 표현
+        var result3 = "010-9021-0011".match(/01[01789]-\d{3,4}-\d{4}/);
+        console.log(result3);
+        //함수 찾기 : \(? 괄호가 올수도 있고 않올수도 있다. 
+        //          \s+ 공백이 1개 이상일 수 있다.
+        //          [a-zA-Z_$]+ 괄호안의 문자로 시작해서 여러개의 문자가 올 수 있다.
+        var result4 = "(function test()".match(/\(?function\s+[a-zA-Z_$]+/);
+        console.log(result4);
+        //치환 : (\d{2})앞 2자리 01이 $1 이고, 그 다음 0으로 바꿀꺼다~ 라는 내용
+        var result5 = "011-021-0011".replace(/(\d{2})\d/, "$10");;
+        console.log(result5);
+    </script>
+</body>
+</html>
