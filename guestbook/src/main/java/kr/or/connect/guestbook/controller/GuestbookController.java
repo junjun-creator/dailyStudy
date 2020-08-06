@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.or.connect.guestbook.argumentresolver.HeaderInfo;
 import kr.or.connect.guestbook.dto.Guestbook;
 import kr.or.connect.guestbook.service.GuestbookService;
 
@@ -28,7 +31,13 @@ public class GuestbookController {
 	@GetMapping(path="/list")
 	public String list(@RequestParam(name="start", required=false, defaultValue="0") int start,
 					   ModelMap model, @CookieValue(value="count", defaultValue="0", required=true) String value,
-					   HttpServletResponse response) {
+					   HttpServletResponse response, HeaderInfo headerInfo) {
+		
+		//컨트롤러 메소드에서 자주 사용되는 값이 있을 경우 아규먼트 리졸버를 만들어서 넘겨주도록 하면 편리하게 사용할 수 있다.
+		
+		System.out.println("---------------------------------");
+		System.out.println(headerInfo.get("user-agent"));
+		System.out.println("---------------------------------");
 		/* spring mvc 사용해서 @CookieValue 사용해서 쿠키가 있는지 없는지 검사할 필요가 없어짐.
 		String value = null;
 		boolean find = false;
@@ -99,5 +108,19 @@ public class GuestbookController {
 		System.out.println("clientIp : " + clientIp);
 		guestbookService.addGuestbook(guestbook, clientIp);
 		return "redirect:list";
+	}
+	
+	@GetMapping(path="/delete")
+	public String delete(@RequestParam(name="id", required=true) Long id, 
+			             @SessionAttribute("isAdmin") String isAdmin,
+			             HttpServletRequest request,
+			             RedirectAttributes redirectAttr) {
+		if(isAdmin == null || !"true".equals(isAdmin)) { // 세션값이 true가 아닐 경우
+			redirectAttr.addFlashAttribute("errorMessage", "로그인을 하지 않았습니다.");
+			return "redirect:loginform";
+		}
+		String clientIp = request.getRemoteAddr();
+		guestbookService.deleteGuestbook(id, clientIp);
+		return "redirect:list";		
 	}
 }
