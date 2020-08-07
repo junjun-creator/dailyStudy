@@ -97,8 +97,10 @@ public class ReservationDao {
     	params.put("productId",productId);
 		return jdbc.queryForObject(AVG_RATE, params, Double.class);
 	}
-    public int countComment() {
-		return jdbc.queryForObject(COUNT_COMMENT, Collections.emptyMap(), Integer.class);
+    public int countComment(Integer productId) {
+    	Map<String, Integer> params = new HashMap<>();
+    	params.put("productId",productId);
+		return jdbc.queryForObject(COUNT_COMMENT, params, Integer.class);
 	}
     public List<DisplayInfo> selectLocation(Integer productId){
     	Map<String, Integer> params = new HashMap<>();

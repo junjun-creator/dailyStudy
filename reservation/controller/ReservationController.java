@@ -55,8 +55,6 @@ public class ReservationController {
 		}
 		
 		model.addAttribute("list",list);
-		//model.addAttribute("productInfo",productInfo);
-		//model.addAttribute("placeName",placeName);
 		model.addAttribute("productImg",productImg);
 		model.addAttribute("allItem",wholeServiceInfo);
 		model.addAttribute("pageStartList",pageStartList);
@@ -92,11 +90,13 @@ public class ReservationController {
 	@GetMapping("/detail")
 	public String details(HttpServletRequest request, Model model) {
 		int id = Integer.parseInt(request.getParameter("id"));
-		int countComment = reservationService.getCountComment();
+		
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
 		List<DisplayInfo> location = reservationService.getLocation(id);
 		List<DisplayInfo> to_id = reservationService.getId(id);
+		int id_product = to_id.get(0).getProductId();
+		int countComment = reservationService.getCountComment(id_product);
 		List<FileInfo> mapImg = reservationService.getMapImg(id);
 		List<CommentLists> commentLists = reservationService.getCommentLists(to_id.get(0).getProductId());
 		double avg;
@@ -108,6 +108,7 @@ public class ReservationController {
 
 		model.addAttribute("id",id);
 		model.addAttribute("toId",to_id);
+		model.addAttribute("id_product",id_product);
 		model.addAttribute("productImg",productImg);
 		model.addAttribute("itemDetail",itemDetail);
 		model.addAttribute("commentLists",commentLists);
@@ -121,8 +122,10 @@ public class ReservationController {
 	@GetMapping("/review")
 	public String review(HttpServletRequest request, Model model) {
 		int id = Integer.parseInt(request.getParameter("id"));
-		int countComment = reservationService.getCountComment();
+		
 		List<DisplayInfo> to_id = reservationService.getId(id);
+		int id_product = to_id.get(0).getProductId();
+		int countComment = reservationService.getCountComment(id_product);
 		List<CommentLists> allComment = reservationService.getAllComment(to_id.get(0).getProductId());
 		List<FileInfo> productImg = reservationService.getProductImage();
 		double avg;
@@ -134,10 +137,25 @@ public class ReservationController {
 		
 		
 		model.addAttribute("id",id);
+		model.addAttribute("id_product",id_product);
 		model.addAttribute("productImg",productImg);
 		model.addAttribute("avgRate",avg);
 		model.addAttribute("countComment",countComment);
 		model.addAttribute("allComment",allComment);
 		return "review";
+	}
+	
+	@GetMapping("/reserve")
+	public String reserve(HttpServletRequest request, Model model) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		List<DisplayInfo> to_id = reservationService.getId(id);
+		int id_product = to_id.get(0).getProductId();
+		List<FileInfo> productImg = reservationService.getProductImage();
+		
+		model.addAttribute("id",id);
+		model.addAttribute("productImg",productImg);
+		model.addAttribute("id_product",id_product);
+		return "reserve";
 	}
 }

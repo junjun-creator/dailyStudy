@@ -359,7 +359,7 @@
 	    star_rate.style.width=star+'%';
 	    total_comment.innerHTML = total+"건";
     //comment 한줄평 정보 출력
-    	var id = "${id}";
+    	var id_product = "${id_product}";
    		var commentCount=0;
 	    var ul_comment = document.querySelector('.list_short_review');
 	    var commentHTML ='';
@@ -368,7 +368,7 @@
 	    
 	    <c:forEach items="${commentLists}" var = "commentlist">
 	    	<c:forEach items="${productImg}" var = "image" varStatus="status">
-	    		if("${image.fileName}".startsWith(id+"_th")){
+	    		if("${image.fileName}".startsWith(id_product+"_th")){
 	    			console.log("${commentlist.description}");
 	    			var commentJSON = new Object();
 		    		commentJSON.comment = "${commentlist.comment}";
@@ -429,6 +429,11 @@
 	    <c:forEach items="${mapImg}" var = "map">
 	    	path_map.setAttribute("src","${pageContext.request.contextPath}/img_map/"+"${map.fileName}");
 	    </c:forEach>
+    </script>
+    
+    <script>
+    	var to_reserve = document.querySelector('.bk_btn');
+    	to_reserve.setAttribute("onclick","location.href='reserve?id=${id}'");
     </script>
 </body>
 

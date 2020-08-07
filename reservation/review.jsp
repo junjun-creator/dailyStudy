@@ -110,6 +110,7 @@
 	    total_comment.innerHTML = total+"건";
 	    
 	    //한줄평 리스트 전체 출력
+	    var id_product = "${id_product}";
 	    var commentCount=0;
 	    var ul_comment = document.querySelector('.list_short_review');
 	    var commentHTML ='';
@@ -118,7 +119,7 @@
 	    console.log(commentTemp);
 	    <c:forEach items="${allComment}" var = "commentlist">
 	    	<c:forEach items="${productImg}" var = "image" varStatus="status">
-	    		if("${image.fileName}".startsWith(id+"_th")){
+	    		if("${image.fileName}".startsWith(id_product+"_th")){
 	    			var commentJSON = new Object();
 		    		commentJSON.comment = "${commentlist.comment}";
 		    		commentJSON.reservationName = "${commentlist.reservationName}";

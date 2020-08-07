@@ -10,7 +10,7 @@
 <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이버 예약</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/style.css"/>
 </head>
 <body>
     <div id="container">
@@ -18,7 +18,7 @@
             <header class="header_tit">
                 <h1 class="logo">
                     <a href="https://m.naver.com/" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-                    <a href="./myreservation.html" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+                    <a href="./main" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                 </h1>
                 <a href="./bookinglogin.html" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span> </a>
             </header>
@@ -168,7 +168,7 @@
 
     <script type="rv-template" id="itemList">
         <li class="item">
-            <a href="detail.html?id={id}" class="item_book">
+            <a href="./detail?id={id}" class="item_book">
                 <div class="item_preview">
                     <img alt="{description}" class="img_thumb" src="${pageContext.request.contextPath}/img/{fileName}">
                     <span class="img_border"></span>
@@ -229,6 +229,7 @@
 									.replace("{placeName}", "${allItem.placeName}")
 									.replace("{content}", "${allItem.content}")
 									.replace("{fileName}","${image.fileName}")
+									.replace("{id}","${allItem.wholeId}")
 									.replace("{description2}", "${allItem.description}");
 					ul[(count%2)].innerHTML += resultHTML;
 				}
@@ -237,6 +238,7 @@
 									.replace("{placeName}", "${allItem.placeName}")
 									.replace("{content}", "${allItem.content}")
 									.replace("{fileName}","${image.fileName}")
+									.replace("{id}","${allItem.wholeId}")
 									.replace("{description2}", "${allItem.description}");
 					ul[(count%2)].innerHTML += resultHTML;
 				}
@@ -306,6 +308,7 @@
 								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
 												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
 												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{id}", JSON.parse(addItems)[i].wholeId)
 												.replace("{fileName}","${image.fileName}")
 												.replace("{description2}", JSON.parse(addItems)[i].description);
 								ul[(count2%2)].innerHTML += resultHTML;
@@ -315,6 +318,7 @@
 								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
 												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
 												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{id}", JSON.parse(addItems)[i].wholeId)
 												.replace("{fileName}","${image.fileName}")
 												.replace("{description2}", JSON.parse(addItems)[i].description);
 								ul[(count2%2)].innerHTML += resultHTML;
@@ -353,6 +357,7 @@
 								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
 												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
 												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{id}", JSON.parse(addItems)[i].wholeId)
 												.replace("{fileName}","${image.fileName}")
 												.replace("{description2}", JSON.parse(addItems)[i].description);
 								ul[(count2%2)].innerHTML += resultHTML;
@@ -362,6 +367,7 @@
 								resultHTML = html.replace("{description}", JSON.parse(addItems)[i].description)
 												.replace("{placeName}", JSON.parse(addItems)[i].placeName)
 												.replace("{content}", JSON.parse(addItems)[i].content)
+												.replace("{id}", JSON.parse(addItems)[i].wholeId)
 												.replace("{fileName}","${image.fileName}")
 												.replace("{description2}", JSON.parse(addItems)[i].description);
 								ul[(count2%2)].innerHTML += resultHTML;
@@ -429,6 +435,7 @@
 			//alert(startList);
 			cnt++;
 			xhr.send(data);
+			//3번 프로젝트 완료
 		});
     </script>
 </body>

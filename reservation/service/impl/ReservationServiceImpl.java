@@ -78,8 +78,8 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationDao.avgRate(productId);
 	}
 	@Override
-	public int getCountComment() {
-		return reservationDao.countComment();
+	public int getCountComment(Integer productId) {
+		return reservationDao.countComment(productId);
 	}
 
 	@Override
