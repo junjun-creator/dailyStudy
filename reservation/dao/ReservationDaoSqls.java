@@ -26,5 +26,6 @@ public class ReservationDaoSqls {
 	public static final String SELECT_LOCATION = "SELECT id, product_id, place_name, place_lot, place_street, tel FROM display_info WHERE id = :productId";
 	public static final String GET_ID = "SELECT product_id FROM display_info WHERE id = :id";
 	public static final String MAP_IMG = "SELECT file_name FROM file_info WHERE id = :id";
+	public static final String PLACE_OPENINGHOURS = "SELECT place_name, opening_hours FROM display_info WHERE id = :id";
 	
 }

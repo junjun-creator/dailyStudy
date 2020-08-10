@@ -152,10 +152,12 @@ public class ReservationController {
 		List<DisplayInfo> to_id = reservationService.getId(id);
 		int id_product = to_id.get(0).getProductId();
 		List<FileInfo> productImg = reservationService.getProductImage();
+		List<DisplayInfo> placeAndOpeninghours = reservationService.getPlaceAndOpeninghours(id);
 		
 		model.addAttribute("id",id);
 		model.addAttribute("productImg",productImg);
 		model.addAttribute("id_product",id_product);
+		model.addAttribute("placeAndOpeninghours",placeAndOpeninghours);
 		return "reserve";
 	}
 }

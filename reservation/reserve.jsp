@@ -35,7 +35,7 @@
                 <div class="group_visual">
                     <div class="container_visual" style="width: 414px;">
                         <ul class="visual_img">
-                            <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170217_264/1487312141947lTddT_JPEG/%B3%D7%C0%CC%B9%F6.jpg?type=ff1242_816"> <span class="img_bg"></span>
+                            <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
                                 <div class="preview_txt">
                                     <h2 class="preview_txt_tit"></h2> <em class="preview_txt_dsc">₩12,000 ~ </em><em class="preview_txt_dsc">2017.2.17.(금)~2017.4.18.(화), 잔여티켓 2769매</em> </div>
                             </li>
@@ -45,11 +45,11 @@
                 <div class="section_store_details">
                     <div class="store_details">
                         <h3 class="in_tit"></h3>
-                        <p class="dsc">
+                        <p class="dsc place_hours">
                             장소 : <br> 기간 : 2017.2.17.(금)~2017.4.18.(화)
                         </p>
                         <h3 class="in_tit">관람시간</h3>
-                        <p class="dsc">
+                        <p class="dsc open">
                             화, 목, 금 일요일 10:00am~06:00pm(입장마감 05:30pm)<br> ‘문화가 있는 날’ 매월 마지막 주 수요일은 오후 8시까지 연장
                         </p>
                         <h3 class="in_tit">요금</h3>
@@ -64,8 +64,8 @@
                             <div class="count_control">
                                 <!-- [D] 수량이 최소 값이 일때 ico_minus3, count_control_input에 disabled 각각 추가, 수량이 최대 값일 때는 ico_plus3에 disabled 추가 -->
                                 <div class="clearfix">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a> <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
+                                    <a class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a> <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
+                                    <a class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
                                     </a>
                                 </div>
                                 <!-- [D] 금액이 0 이상이면 individual_price에 on_color 추가 -->
@@ -76,33 +76,33 @@
                         <div class="qty">
                             <div class="count_control">
                                 <div class="clearfix">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_minus3" title="빼기"> </a> <input type="tel" class="count_control_input" value="10" readonly title="수량">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
+                                    <a class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a> <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
+                                    <a class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
                                     </a>
                                 </div>
-                                <div class="individual_price on_color"><span class="total_price">68,000</span><span class="price_type">원</span></div>
+                                <div class="individual_price"><span class="total_price">0</span><span class="price_type">원</span></div>
                             </div>
                             <div class="qty_info_icon"> <strong class="product_amount"> <span>유아</span> </strong> <strong class="product_price"> <span class="price">6,800</span> <span class="price_type">원</span> </strong> <em class="product_dsc">6,800원 (15% 할인가)</em> </div>
                         </div>
                         <div class="qty">
                             <div class="count_control">
                                 <div class="clearfix">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_minus3" title="빼기"> </a> <input type="tel" class="count_control_input" value="3" readonly title="수량">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
+                                    <a class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a> <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
+                                    <a class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
                                     </a>
                                 </div>
-                                <div class="individual_price on_color"><span class="total_price">60,000</span><span class="price_type">원</span></div>
+                                <div class="individual_price"><span class="total_price">0</span><span class="price_type">원</span></div>
                             </div>
                             <div class="qty_info_icon"> <strong class="product_amount"> <span>세트1</span> </strong> <strong class="product_price"> <span class="price">20,000</span> <span class="price_type">원</span> </strong> <em class="product_dsc">2인 관람권 (17% 할인가)</em> </div>
                         </div>
                         <div class="qty">
                             <div class="count_control">
                                 <div class="clearfix">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_minus3" title="빼기"> </a> <input type="tel" class="count_control_input" value="3" readonly title="수량">
-                                    <a href="#" class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
+                                    <a class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a> <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
+                                    <a class="btn_plus_minus spr_book2 ico_plus3" title="더하기">
                                     </a>
                                 </div>
-                                <div class="individual_price on_color"><span class="total_price">25,500</span><span class="price_type">원</span></div>
+                                <div class="individual_price"><span class="total_price">0</span><span class="price_type">원</span></div>
                             </div>
                             <div class="qty_info_icon"> <strong class="product_amount"> <span>청소년</span> </strong> <strong class="product_price"> <span class="price">8,500</span> <span class="price_type">원</span> </strong> <em class="product_dsc">8,500원 (15% 할인가)</em> </div>
                         </div>
@@ -186,7 +186,60 @@
 			}
 		</c:forEach>
 		
+		var openingHours = document.querySelector('.dsc.open');
+		var placeAndHours = document.querySelector('.dsc.place_hours');
+		<c:forEach items="${placeAndOpeninghours}" var = "placeAndOpeninghours" varStatus="status">
+			openingHours.innerText = "${placeAndOpeninghours.openingHours}";
+			placeAndHours.innerText = "장소 : " + "${placeAndOpeninghours.placeName}" +"\n기간 : " + "${placeAndOpeninghours.openingHours}";
+		</c:forEach>
 		
+		var plus_minus_btn = document.querySelectorAll('.btn_plus_minus.spr_book2');
+		
+		for(var i=0;i<plus_minus_btn.length;i++){
+			plus_minus_btn[i].addEventListener('click',function(e){
+				var click = e.target;
+				var price = click.parentNode.parentNode.nextSibling.nextSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
+				var count='';
+				var total_price = click.parentNode.nextElementSibling.firstElementChild;
+				console.log(count.value)
+				
+				if(e.target.title === "빼기"){
+					count = click.nextElementSibling;
+					console.log(total_price);
+					if((count.value*1)-1 < 0){
+						this.removeEventListener("click",arguments.callee);
+					}
+					else{
+						count.value = (count.value*1)-1;
+						if((count.value)*1 <= 0){
+							click.setAttribute('class','btn_plus_minus spr_book2 ico_minus3 disabled');
+							count.setAttribute('class','count_control_input disabled');
+							total_price.parentNode.setAttribute('class','individual_price');
+							this.removeEventListener("click",arguments.callee);
+						}
+						
+						total_price.innerText = ((price.replace(/,/,"")*1)*(count.value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					}
+				}
+				else{
+					count = click.previousElementSibling;
+					console.log(count.value);
+					count.value = (count.value*1)+1;
+					total_price.innerText = ((price.replace(/,/,"")*1)*(count.value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					if((count.value)*1 > 0){
+						click.parentNode.firstElementChild.setAttribute('class','btn_plus_minus spr_book2 ico_minus3');
+						count.setAttribute('class','count_control_input');
+						total_price.parentNode.setAttribute('class','individual_price on_color');
+						this.parentNode.firstElementChild.addEventListener("click",arguments.callee);
+					}
+				}
+				
+			});
+		}
+		
+		// 예약 표 갯수 플러스 ,마이너스 (금액 표시까지) 기능 완료. count 가 0 일때는 마이너스 버튼과 count, total 금액 disable 되게 설정. 1 이상일때는 반대로.
+		// 추후 금액관련 리소스를 가져와서 적용 해볼까 하는데... DB 자료가 이해가 잘 안되서 그건 보류...
+		// 예매자 정보 form tag에 입력하고 유효성 검증하는 기능, 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
 	</script>
 </body>
 

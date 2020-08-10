@@ -21,4 +21,5 @@ public interface ReservationService {
 	public List<FileInfo> getProductImage();
 	public static final Integer LIMIT = 4;
 	public static final Integer COMMENTLIMIT = 3;
+	public List<DisplayInfo> getPlaceAndOpeninghours(Integer id);
 }

@@ -118,4 +118,10 @@ public class ReservationDao {
     	params.put("id",id);
     	return jdbc.query(MAP_IMG,params, rowMapper_mapImage);
     }
+    
+    public List<DisplayInfo> getPlaceAndOpeninghours(Integer id){
+    	Map<String, Integer> params = new HashMap<>();
+    	params.put("id",id);
+    	return jdbc.query(PLACE_OPENINGHOURS,params, rowMapper_displayInfo);
+    }
 }
