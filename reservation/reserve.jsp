@@ -124,7 +124,10 @@
                                     </div>
                                 </div>
                                 <div class="inline_form"> <label class="label" for="email">  <span class="spr_book ico_nessasary">필수</span>  <span>이메일</span> </label>
-                                    <div class="inline_control"> <input type="email" name="email" id="email" class="email" value="" placeholder="crong@codesquad.kr" maxlength="50"> </div>
+                                    <div class="inline_control tel_wrap"> 
+                                    	<input type="email" name="email" id="email" class="email" value="" placeholder="crong@codesquad.kr" maxlength="50">
+                                    	<div class="warning_msg">형식이 잘못 되었습니다.</div>
+                                    </div>
                                 </div>
                                 <div class="inline_form last"> <label class="label" for="message">예매내용</label>
                                     <div class="inline_control">
@@ -193,53 +196,156 @@
 			placeAndHours.innerText = "장소 : " + "${placeAndOpeninghours.placeName}" +"\n기간 : " + "${placeAndOpeninghours.openingHours}";
 		</c:forEach>
 		
-		var plus_minus_btn = document.querySelectorAll('.btn_plus_minus.spr_book2');
-		
+		//처음에는 plus에만 이벤트를 등록 시키고, count가 1 이상이 되면 minus도 해당 이벤트를 등록 시키는 방식으로 설정
+		var plus_minus_btn = document.querySelectorAll('.btn_plus_minus.spr_book2.ico_plus3');
+		/*
 		for(var i=0;i<plus_minus_btn.length;i++){
 			plus_minus_btn[i].addEventListener('click',function(e){
 				var click = e.target;
 				var price = click.parentNode.parentNode.nextSibling.nextSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
-				var count='';
+				var count;
 				var total_price = click.parentNode.nextElementSibling.firstElementChild;
-				console.log(count.value)
 				
 				if(e.target.title === "빼기"){
 					count = click.nextElementSibling;
-					console.log(total_price);
 					if((count.value*1)-1 < 0){
 						this.removeEventListener("click",arguments.callee);
+						console.log(count.value);
 					}
 					else{
-						count.value = (count.value*1)-1;
-						if((count.value)*1 <= 0){
+						count.value = (count.value*1)-1;;
+						var value = count.value;
+						if(value*1 <= 0){
 							click.setAttribute('class','btn_plus_minus spr_book2 ico_minus3 disabled');
 							count.setAttribute('class','count_control_input disabled');
 							total_price.parentNode.setAttribute('class','individual_price');
 							this.removeEventListener("click",arguments.callee);
 						}
 						
-						total_price.innerText = ((price.replace(/,/,"")*1)*(count.value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+						total_price.innerText = ((price.replace(/,/,"")*1)*(value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 					}
 				}
 				else{
 					count = click.previousElementSibling;
-					console.log(count.value);
 					count.value = (count.value*1)+1;
-					total_price.innerText = ((price.replace(/,/,"")*1)*(count.value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					var value = count.value;
+					console.log(value);
+					total_price.innerText = ((price.replace(/,/,"")*1)*(value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 					if((count.value)*1 > 0){
 						click.parentNode.firstElementChild.setAttribute('class','btn_plus_minus spr_book2 ico_minus3');
 						count.setAttribute('class','count_control_input');
 						total_price.parentNode.setAttribute('class','individual_price on_color');
 						this.parentNode.firstElementChild.addEventListener("click",arguments.callee);
 					}
+										
 				}
 				
 			});
+		}*/
+		
+		function Tab(tabElement) {
+            this.tabmenu = tabElement;//여기서 this는 Tab을 가리킴.
+            this.registerEvents();
+        }
+		
+		Tab.prototype = {
+			registerEvents : function(){
+				this.tabmenu.addEventListener('click', function(e){
+					var click = e.target;
+					var price = click.parentNode.parentNode.nextSibling.nextSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
+					var count;
+					var total_price = click.parentNode.nextElementSibling.firstElementChild;
+					
+					if(e.target.title === "빼기"){
+						console.log(this);
+						count = click.nextElementSibling;
+						if((count.value*1)-1 < 0){
+							this.removeEventListener("click",arguments.callee);
+							console.log(count.value);
+						}
+						else{
+							count.value = (count.value*1)-1;;
+							var value = count.value;
+							if(value*1 <= 0){
+								click.setAttribute('class','btn_plus_minus spr_book2 ico_minus3 disabled');
+								count.setAttribute('class','count_control_input disabled');
+								total_price.parentNode.setAttribute('class','individual_price');
+								this.removeEventListener("click",arguments.callee);
+							}
+							
+							total_price.innerText = ((price.replace(/,/,"")*1)*(value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+						}
+					}
+					else{
+						count = click.previousElementSibling;
+						count.value = (count.value*1)+1;
+						var value = count.value;
+						console.log(this);
+						total_price.innerText = ((price.replace(/,/,"")*1)*(value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+						if((count.value)*1 > 0){
+							click.parentNode.firstElementChild.setAttribute('class','btn_plus_minus spr_book2 ico_minus3');
+							count.setAttribute('class','count_control_input');
+							total_price.parentNode.setAttribute('class','individual_price on_color');
+							this.tabmenu.parentNode.firstElementChild.addEventListener("click",arguments.callee);
+						}
+											
+					}
+				}.bind(this));
+			}
+		}//여기서 plus 버튼 클릭시에는 this가 Tab을 가리키고, minus를 클릭할때는 해당 태그를 가리킨다.
+		//이유는, plus 버튼은 Tab 함수를 통해 이벤트를 등록해 두었기에 이벤트 자체의 this가 tab을 가리키게 되어 있다.(bind 했으므로)
+		//하지만 , minus 버튼은 plus 함수를 실행시키면서 새롭게 태그에 직접적으로 이벤트를 걸어 주었기 때문에 this가 해당 태그를 직접 가리킨다.
+		
+		for(var i=0;i<plus_minus_btn.length;i++){
+			var o = new Tab(plus_minus_btn[i]);
 		}
 		
 		// 예약 표 갯수 플러스 ,마이너스 (금액 표시까지) 기능 완료. count 가 0 일때는 마이너스 버튼과 count, total 금액 disable 되게 설정. 1 이상일때는 반대로.
 		// 추후 금액관련 리소스를 가져와서 적용 해볼까 하는데... DB 자료가 이해가 잘 안되서 그건 보류...
 		// 예매자 정보 form tag에 입력하고 유효성 검증하는 기능, 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
+		
+		var email_tag = document.querySelector('#email');
+		var error_msg = email_tag.nextElementSibling;
+		email_tag.addEventListener('blur', function(event){
+			var emailValue = email_tag.value;
+			console.log(emailValue);
+		    var bValid = (/^[\w_]\w+@\w+\.\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
+                                            // @ 이가 있어야하고 그다음 또 word가 계속 나오고, .(dot)이 나와야하고, 또 word가 나오다가 word로 끝남
+		    if(!bValid)  { 
+	  		    error_msg.style.visibility = 'visible';
+	  		    
+		  		function delete_error() {
+		  			error_msg.style.visibility = 'hidden';
+		  		}
+
+	  		    setTimeout(delete_error,2000);
+	  		    //clearTimeout(delete_error);
+		    } else {
+		    	error_msg.setAttribute('visibility','hidden');
+ 		   }
+		});
+		
+		var tel_tag = document.querySelector('#tel');
+		var error_msg2 = tel_tag.nextElementSibling;
+		
+		tel_tag.addEventListener('blur', function(event){
+			var telValue = tel_tag.value;
+			var bValid = (/01[016789]-\d{3,4}-\d{4}$/g).test(telValue);
+			
+			if(!bValid){
+				error_msg2.style.visibility = 'visible';
+				function delete_error() {
+		  			error_msg2.style.visibility = 'hidden';
+		  		}
+
+	  		    setTimeout(delete_error,2000);
+			}
+			else {
+		    	error_msg.setAttribute('visibility','hidden');
+ 		   	}
+		});
+		//유효성 검증 정규식 구현 완료...
+		//향후 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
 	</script>
 </body>
 
