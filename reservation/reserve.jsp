@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="inline_form last"> <label class="label" for="message">예매내용</label>
                                     <div class="inline_control">
-                                        <p class="inline_txt selected">2017.2.17, 총 <span id="totalCount">16</span>매</p>
+                                        <p class="inline_txt selected">2017.2.17, 총 <span id="totalCount">0</span>매</p>
                                     </div>
                                 </div>
                             </form>
@@ -144,13 +144,13 @@
                         </div>
                         <!-- [D] 약관 보기 클릭 시 agreement에 open 클래스 추가 -->
                         <div class="agreement"> <span class="chk_txt_span"> <i class="spr_book ico_arr_ipc2"></i> <span>개인정보 수집 및 이용 동의</span> </span>
-                            <a href="#" class="btn_agreement"> <span class="btn_text">보기</span> <i class="fn fn-down2"></i> </a>
+                            <a class="btn_agreement"> <span class="btn_text">보기</span> <i class="fn fn-down2"></i> </a>
                             <div class="useragreement_details">&lt;개인정보 수집 및 이용 동의&gt;<br><br> 1. 수집항목 : [필수] 이름, 연락처, [선택] 이메일주소<br><br> 2. 수집 및 이용목적 : 사업자회원과 예약이용자의 원활한 거래 진행, 고객상담, 불만처리 등 민원 처리, 분쟁조정 해결을 위한 기록보존, 네이버 예약 이용 후 리뷰작성에 따른 네이버페이 포인트 지급 및 관련 안내<br><br> 3. 보관기간<br> - 회원탈퇴 등
                                 개인정보 이용목적 달성 시까지 보관<br> - 단, 상법 및 ‘전자상거래 등에서의 소비자 보호에 관한 법률’ 등 관련 법령에 의하여 일정 기간 보관이 필요한 경우에는 해당 기간 동안 보관함<br><br> 4. 동의 거부권 등에 대한 고지: 정보주체는 개인정보의 수집 및 이용 동의를 거부할 권리가 있으나, 이 경우 상품 및 서비스 예약이 제한될 수 있습니다.<br></div>
                         </div>
                         <!-- [D] 약관 보기 클릭 시 agreement에 open 클래스 추가 -->
                         <div class="agreement"> <span class="chk_txt_span"> <i class="spr_book ico_arr_ipc2"></i> <span>개인정보 제3자 제공 동의</span> </span>
-                            <a href="#" class="btn_agreement"> <span class="btn_text">보기</span> <i class="fn fn-down2"></i> </a>
+                            <a class="btn_agreement"> <span class="btn_text">보기</span> <i class="fn fn-down2"></i> </a>
                             <div class="useragreement_details custom_details_wrap">
                                 <div class="custom_details">&lt;개인정보 제3자 제공 동의&gt;<br><br> 1. 개인정보를 제공받는 자 : 미디어앤아트<br><br> 2. 제공하는 개인정보 항목 : [필수] 네이버 아이디, 이름, 연락처 [선택] 이메일 주소<br><br> 3. 개인정보를 제공받는 자의 이용목적 : 사업자회원과 예약이용자의 원활한 거래 진행, 고객상담, 불만처리 등 민원 처리, 서비스 이용에 따른 설문조사 및 혜택 제공, 분쟁조정
                                     해결을 위한 기록보존<br><br> 4. 개인정보를 제공받는 자의 개인정보 보유 및 이용기간 : 개인정보 이용목적 달성 시 까지 보관합니다.<br><br> 5. 동의 거부권 등에 대한 고지 : 정보주체는 개인정보 제공 동의를 거부할 권리가 있으나, 이 경우 상품 및 서비스 예약이 제한될 수 있습니다.<br></div>
@@ -243,6 +243,7 @@
 			});
 		}*/
 		
+		var total_count = 0;
 		function Tab(tabElement) {
             this.tabmenu = tabElement;//여기서 this는 Tab을 가리킴.
             this.registerEvents();
@@ -257,22 +258,22 @@
 					var total_price = click.parentNode.nextElementSibling.firstElementChild;
 					
 					if(e.target.title === "빼기"){
-						console.log(this);
+						
 						count = click.nextElementSibling;
 						if((count.value*1)-1 < 0){
 							this.removeEventListener("click",arguments.callee);
-							console.log(count.value);
 						}
 						else{
 							count.value = (count.value*1)-1;;
 							var value = count.value;
+							console.log(value);
 							if(value*1 <= 0){
 								click.setAttribute('class','btn_plus_minus spr_book2 ico_minus3 disabled');
 								count.setAttribute('class','count_control_input disabled');
 								total_price.parentNode.setAttribute('class','individual_price');
 								this.removeEventListener("click",arguments.callee);
 							}
-							
+							total_count--;
 							total_price.innerText = ((price.replace(/,/,"")*1)*(value*1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 						}
 					}
@@ -288,8 +289,10 @@
 							total_price.parentNode.setAttribute('class','individual_price on_color');
 							this.tabmenu.parentNode.firstElementChild.addEventListener("click",arguments.callee);
 						}
-											
+						total_count++;
 					}
+					var total = document.querySelector('#totalCount');
+					total.innerText = total_count;//토탈 예매 장 수
 				}.bind(this));
 			}
 		}//여기서 plus 버튼 클릭시에는 this가 Tab을 가리키고, minus를 클릭할때는 해당 태그를 가리킨다.
@@ -300,20 +303,24 @@
 			var o = new Tab(plus_minus_btn[i]);
 		}
 		
+		
 		// 예약 표 갯수 플러스 ,마이너스 (금액 표시까지) 기능 완료. count 가 0 일때는 마이너스 버튼과 count, total 금액 disable 되게 설정. 1 이상일때는 반대로.
 		// 추후 금액관련 리소스를 가져와서 적용 해볼까 하는데... DB 자료가 이해가 잘 안되서 그건 보류...
 		// 예매자 정보 form tag에 입력하고 유효성 검증하는 기능, 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
-		
+		var is_correct1 = 0;
+		var is_correct2 = 0;
+		var checkBox = document.querySelector('#chk3');//약관 동의 체크 했는지?
+		var submit_reserve = document.querySelector('.bk_btn_wrap');
 		var email_tag = document.querySelector('#email');
 		var error_msg = email_tag.nextElementSibling;
-		email_tag.addEventListener('blur', function(event){
+		email_tag.addEventListener('change', function(event){
 			var emailValue = email_tag.value;
 			console.log(emailValue);
 		    var bValid = (/^[\w_]\w+@\w+\.\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
                                             // @ 이가 있어야하고 그다음 또 word가 계속 나오고, .(dot)이 나와야하고, 또 word가 나오다가 word로 끝남
 		    if(!bValid)  { 
 	  		    error_msg.style.visibility = 'visible';
-	  		    
+	  		  	is_correct1 = 0;
 		  		function delete_error() {
 		  			error_msg.style.visibility = 'hidden';
 		  		}
@@ -322,18 +329,28 @@
 	  		    //clearTimeout(delete_error);
 		    } else {
 		    	error_msg.setAttribute('visibility','hidden');
- 		   }
+		    	is_correct1++;
+ 		   	}
+		   
+		    if(is_correct1 !== 0 && is_correct2 !== 0 && checkBox.checked == true){
+				submit_reserve.setAttribute('class','bk_btn_wrap');
+			}
+			else{
+				submit_reserve.setAttribute('class','bk_btn_wrap disable');
+			}
 		});
 		
 		var tel_tag = document.querySelector('#tel');
 		var error_msg2 = tel_tag.nextElementSibling;
 		
-		tel_tag.addEventListener('blur', function(event){
+		
+		tel_tag.addEventListener('change', function(event){
 			var telValue = tel_tag.value;
 			var bValid = (/01[016789]-\d{3,4}-\d{4}$/g).test(telValue);
 			
 			if(!bValid){
 				error_msg2.style.visibility = 'visible';
+				is_correct2 = 0;
 				function delete_error() {
 		  			error_msg2.style.visibility = 'hidden';
 		  		}
@@ -342,10 +359,45 @@
 			}
 			else {
 		    	error_msg.setAttribute('visibility','hidden');
+		    	is_correct2++;
  		   	}
+			
+			if(is_correct1 !== 0 && is_correct2 !== 0 && checkBox.checked == true){
+				submit_reserve.setAttribute('class','bk_btn_wrap');
+			}
+			else{
+				submit_reserve.setAttribute('class','bk_btn_wrap disable');
+			}
 		});
 		//유효성 검증 정규식 구현 완료...
 		//향후 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
+		
+		checkBox.addEventListener('click',function(){
+			if(is_correct1 !== 0 && is_correct2 !== 0 && checkBox.checked == true){
+				submit_reserve.setAttribute('class','bk_btn_wrap');
+			}
+			else{
+				submit_reserve.setAttribute('class','bk_btn_wrap disable');
+			}
+		});
+		//약관 내용 펼쳐보기, 접기
+		var agreement_btn = document.querySelectorAll('.btn_agreement');
+		var agree_count = 0;
+		for(var i=0;i<agreement_btn.length;i++){
+			agreement_btn[i].addEventListener('click', function(e){
+				if(agree_count === 0){
+					e.currentTarget.parentNode.setAttribute('class', 'agreement open');
+					e.currentTarget.firstElementChild.innerText = '접기';
+					agree_count++;
+				}
+				else{
+					e.currentTarget.parentNode.setAttribute('class', 'agreement');
+					e.currentTarget.firstElementChild.innerText = '보기';
+					agree_count=0;
+				}
+				
+			});
+		}
 	</script>
 </body>
 
