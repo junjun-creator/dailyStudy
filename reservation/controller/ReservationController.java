@@ -160,4 +160,9 @@ public class ReservationController {
 		model.addAttribute("placeAndOpeninghours",placeAndOpeninghours);
 		return "reserve";
 	}
+	
+	@GetMapping("/bookinglogin")
+	public String bookinglogin() {
+		return "bookinglogin";
+	}
 }

@@ -13,6 +13,10 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/style.css"/>
 </head>
 <body>
+	<!-- 페이지 전송 폼 -->
+    <form name="paging">
+    	<input type="hidden" name="resrv_email"/>
+    </form>
     <div id="container">
         <div class="header">
             <header class="header_tit">
@@ -20,7 +24,8 @@
                     <a href="https://m.naver.com/" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
                     <a href="./main" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                 </h1>
-                <a href="./bookinglogin.html" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span> </a>
+                <a href="./bookinglogin" class="btn_my check" style='display:block;'> <span class="viewReservation" title="예약확인">예약확인</span> </a>
+                <a class="btn_my login" style="display:none;"> <span class="viewReservation" title="로그인이메일">111</span> </a>
             </header>
         </div>
         <hr>
@@ -437,6 +442,31 @@
 			xhr.send(data);
 			//3번 프로젝트 완료
 		});
+		
+		var btn_resrv_check = document.querySelector('.btn_my.check');
+		var btn_resrv_logined = document.querySelector('.btn_my.login');
+		if("${sessionScope.resrv_email}" == "true"){
+			btn_resrv_logined.firstElementChild.innerText = "${sessionScope.email}";
+			btn_resrv_check.style.display = 'none';
+			btn_resrv_logined.style.display = 'block';
+			btn_resrv_logined.setAttribute('href',"javascript:goPage('${sessionScope.email}');");
+		}
+		
+		// email을 인수로 받아 form 태그로 전송하는 함수
+	    function goPage(email) {
+	      // name이 paging인 태그
+	      var f = document.paging;
+
+	      // form 태그의 하위 태그 값 매개 변수로 대입
+	      f.resrv_email.value = email;
+
+	      // input태그의 값들을 전송하는 주소
+	      f.action = "./myreservation"
+
+	      // 전송 방식 : post
+	      f.method = "post"
+	      f.submit();
+	    };
     </script>
 </body>
 </html>
