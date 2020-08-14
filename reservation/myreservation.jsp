@@ -17,6 +17,9 @@
 </head>
 
 <body>
+	<form name="paging">
+    	<input type="hidden" name="resrv_email"/>
+    </form>
 	<div id="container">
 		<div class="header">
 			<header class="header_tit">
@@ -35,16 +38,16 @@
 					<ul class="summary_board">
 						<li class="item">
 							<!--[D] 선택 후 .on 추가 link_summary_board -->
-							<a href="#" class="link_summary_board on"> <i class="spr_book2 ico_book2"></i> <em class="tit">전체</em> <span class="figure">6</span> </a>
+							<a class="link_summary_board on"> <i class="spr_book2 ico_book2"></i> <em class="tit">전체</em> <span class="figure">6</span> </a>
 						</li>
 						<li class="item">
-							<a href="#" class="link_summary_board"> <i class="spr_book2 ico_book_ss"></i> <em class="tit">이용예정</em> <span class="figure">3</span> </a>
+							<a class="link_summary_board"> <i class="spr_book2 ico_book_ss"></i> <em class="tit">이용예정</em> <span class="figure">3</span> </a>
 						</li>
 						<li class="item">
-							<a href="#" class="link_summary_board"> <i class="spr_book2 ico_check"></i> <em class="tit">이용완료</em> <span class="figure">2</span> </a>
+							<a class="link_summary_board"> <i class="spr_book2 ico_check"></i> <em class="tit">이용완료</em> <span class="figure">2</span> </a>
 						</li>
 						<li class="item">
-							<a href="#" class="link_summary_board"> <i class="spr_book2 ico_back"></i> <em class="tit">취소·환불</em> <span class="figure">2</span> </a>
+							<a class="link_summary_board"> <i class="spr_book2 ico_back"></i> <em class="tit">취소·환불</em> <span class="figure">2</span> </a>
 						</li>
 					</ul>
 				</div>
@@ -236,7 +239,7 @@
 													</div>
 													<!-- [D] 예약 신청중, 예약 확정 만 취소가능, 취소 버튼 클릭 시 취소 팝업 활성화 -->
 													<div class="booking_cancel">
-														<button class="btn"><span>취소</span></button>
+														<button class="btn cancel"><span>취소</span></button>
 													</div>
 
 												</div>
@@ -294,7 +297,7 @@
 													</div>
 													<!-- [D] 예약 신청중, 예약 확정 만 취소가능, 취소 버튼 클릭 시 취소 팝업 활성화 -->
 													<div class="booking_cancel">
-														<button class="btn"><span>취소</span></button>
+														<button class="btn cancel"><span>취소</span></button>
 													</div>
 
 												</div>
@@ -587,14 +590,14 @@
 				</div>
 				<div class="pop_bottom_btnarea">
 					<div class="btn_gray">
-						<a href="#" class="btn_bottom"><span>아니오</span></a>
+						<a class="btn_bottom"><span>아니오</span></a>
 					</div>
 					<div class="btn_green">
-						<a href="#" class="btn_bottom"><span>예</span></a>
+						<a class="btn_bottom"><span>예</span></a>
 					</div>
 				</div>
 				<!-- 닫기 -->
-				<a href="#" class="popup_btn_close" title="close">
+				<a class="popup_btn_close" title="close">
 					<i class="spr_book2 ico_cls"></i>
 				</a>
 				<!--// 닫기 -->
@@ -619,6 +622,159 @@
 		total_count.innerText = resrv_confirm_list.length+resrv_used_list.length+resrv_canceled_list.length;
 		
 		//향후 취소기능 구현(취소시 취소태그로 아이템 이동), 각 탭 클릭할때 해당 항목들만 나타나게 하기(전체,예정,완료,취소 탭), DB에서 예약 정보 가져와서 정보 등록하기.
+		
+		var summary_board = document.querySelector('.summary_board');
+		var link_summary_board = document.querySelectorAll('.link_summary_board');
+		var all_card = document.querySelectorAll('.card');
+		summary_board.addEventListener('click',function(e){
+			if(e.target.nodeName == 'A'){
+				if(e.target.innerText.indexOf('전체')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						all_card[i].style.display='block';
+					}
+				}
+				else if(e.target.innerText.indexOf('이용예정')==1){
+					console.log(1);
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 1){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else if(e.target.innerText.indexOf('이용완료')==1){
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 2){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else{
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 3){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+			}
+			else{
+				console.log(e.target.parentNode.innerText);
+				if(e.target.parentNode.innerText.indexOf('전체')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						all_card[i].style.display='block';
+					}
+				}
+				else if(e.target.parentNode.innerText.indexOf('이용예정')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 1){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else if(e.target.parentNode.innerText.indexOf('이용완료')==1){
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 2){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else{
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 3){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+			}
+		});
+		
+		
+		var btn_cancel = document.querySelectorAll('.booking_cancel > .btn.cancel');
+		var cancel_alert = document.querySelector('.popup_booking_wrapper');
+		for(var i=0;i<btn_cancel.length;i++){
+			btn_cancel[i].addEventListener('click',function(e){
+				var item = e.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+				var cancel_tag = document.querySelector('#canceled');
+				//cancel_alert.style.display='block';
+				e.currentTarget.parentNode.removeChild(e.currentTarget);
+				item.removeChild(item.lastElementChild);
+				cancel_tag.appendChild(item);
+			});
+		}
+		/*
+		var cancel_yes = document.querySelector('.btn_green');
+		cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('${sessionScope.email}');");
+		
+		// email을 인수로 받아 form 태그로 전송하는 함수
+	    function goPage(email) {
+	      // name이 paging인 태그
+	      var f = document.paging;
+
+	      // form 태그의 하위 태그 값 매개 변수로 대입
+	      f.resrv_email.value = email;
+
+	      // input태그의 값들을 전송하는 주소
+	      f.action = "./myreservation"
+
+	      // 전송 방식 : post
+	      f.method = "post"
+	      f.submit();
+	    };
+		
+		cancel_yes.addEventListener('click', function(){
+			console.log('취소 되었습니다.');
+			cancel_alert.style.display='none';
+			
+		});
+		var cancel_no = document.querySelector('.btn_gray');
+		cancel_no.addEventListener('click',function(){
+			console.log('not canceled');
+			cancel_alert.style.display='none';
+		});
+		*/
+		
+		//향후 취소 버튼 클릭시 팝업 기능, DB에서 예약 정보 가져와서 정보 등록하기 기능.
 	</script>
 </body>
 
