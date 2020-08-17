@@ -239,7 +239,7 @@
 													</div>
 													<!-- [D] 예약 신청중, 예약 확정 만 취소가능, 취소 버튼 클릭 시 취소 팝업 활성화 -->
 													<div class="booking_cancel">
-														<button class="btn cancel"><span>취소</span></button>
+														<button class="btn cancel" onclick="cancel_btn(this);"><span>취소</span></button>
 													</div>
 
 												</div>
@@ -297,7 +297,7 @@
 													</div>
 													<!-- [D] 예약 신청중, 예약 확정 만 취소가능, 취소 버튼 클릭 시 취소 팝업 활성화 -->
 													<div class="booking_cancel">
-														<button class="btn cancel"><span>취소</span></button>
+														<button class="btn cancel" onclick="cancel_btn(this);"><span>취소</span></button>
 													</div>
 
 												</div>
@@ -590,14 +590,14 @@
 				</div>
 				<div class="pop_bottom_btnarea">
 					<div class="btn_gray">
-						<a class="btn_bottom"><span>아니오</span></a>
+						<a class="btn_bottom" href="javascript:history.back();"><span>아니오</span></a>
 					</div>
 					<div class="btn_green">
 						<a class="btn_bottom"><span>예</span></a>
 					</div>
 				</div>
 				<!-- 닫기 -->
-				<a class="popup_btn_close" title="close">
+				<a class="popup_btn_close" title="close" href="javascript:history.back();">
 					<i class="spr_book2 ico_cls"></i>
 				</a>
 				<!--// 닫기 -->
@@ -729,37 +729,60 @@
 			}
 		});
 		
-		
+		var btn_cancel;
+		var cancel_alert = document.querySelector('.popup_booking_wrapper');
+		function cancel_btn(tag){
+			console.log(tag);
+			cancel_alert.style.display='block';
+			btn_cancel = tag;
+		}
+		/*
 		var btn_cancel = document.querySelectorAll('.booking_cancel > .btn.cancel');
 		var cancel_alert = document.querySelector('.popup_booking_wrapper');
 		for(var i=0;i<btn_cancel.length;i++){
 			btn_cancel[i].addEventListener('click',function(e){
-				var item = e.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
-				var cancel_tag = document.querySelector('#canceled');
-				//cancel_alert.style.display='block';
-				e.currentTarget.parentNode.removeChild(e.currentTarget);
-				item.removeChild(item.lastElementChild);
-				cancel_tag.appendChild(item);
+				//var item = e.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+				//var cancel_tag = document.querySelector('#canceled');
+				cancel_alert.style.display='block';
+				//e.currentTarget.parentNode.removeChild(e.currentTarget);
+				//item.removeChild(item.lastElementChild);
+				//cancel_tag.appendChild(item);
 			});
 		}
-		/*
+		*/
 		var cancel_yes = document.querySelector('.btn_green');
-		cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('${sessionScope.email}');");
+		cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('${sessionScope.email}');");//goPage 대신에 cancel_item 넣고 태그 이통 테스트 완료
+		
+		/*
+		//시험삼아 링크 이동 없이(DB적용 없이 태그 이동 되는지) 테스트
+		function cancel_item(){
+			var item = btn_cancel.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+			var cancel_tag = document.querySelector('#canceled');
+			btn_cancel.parentNode.removeChild(btn_cancel);
+			item.removeChild(item.lastElementChild);
+			cancel_tag.appendChild(item);
+		}*/
 		
 		// email을 인수로 받아 form 태그로 전송하는 함수
 	    function goPage(email) {
-	      // name이 paging인 태그
-	      var f = document.paging;
-
-	      // form 태그의 하위 태그 값 매개 변수로 대입
-	      f.resrv_email.value = email;
-
-	      // input태그의 값들을 전송하는 주소
-	      f.action = "./myreservation"
-
-	      // 전송 방식 : post
-	      f.method = "post"
-	      f.submit();
+		    // name이 paging인 태그
+		    var f = document.paging;
+	
+		    // form 태그의 하위 태그 값 매개 변수로 대입
+		    f.resrv_email.value = email;
+			
+		    //나중에 DB 내용 적용할 때, 여기에다가 cancel_flag 값 올려서 페이지 열렸을때 아이템 이동 적용되도록 하면 될것 같다.
+		    var item = btn_cancel.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+			var cancel_tag = document.querySelector('#canceled');
+			btn_cancel.parentNode.removeChild(btn_cancel);
+			item.removeChild(item.lastElementChild);
+			cancel_tag.appendChild(item);
+		    // input태그의 값들을 전송하는 주소
+		    f.action = "./myreservation"
+	
+		    // 전송 방식 : post
+		    f.method = "post"
+		    f.submit();
 	    };
 		
 		cancel_yes.addEventListener('click', function(){
@@ -772,9 +795,14 @@
 			console.log('not canceled');
 			cancel_alert.style.display='none';
 		});
-		*/
 		
-		//향후 취소 버튼 클릭시 팝업 기능, DB에서 예약 정보 가져와서 정보 등록하기 기능.
+		var x_btn = document.querySelector('.popup_btn_close');
+		x_btn.addEventListener('click',function(){
+			cancel_alert.style.display='none';
+		})
+		
+		
+		//DB에서 예약 정보 가져와서 정보 등록하기 기능.
 	</script>
 </body>
 
