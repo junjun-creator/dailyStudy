@@ -113,7 +113,7 @@
                         <div class="form_wrap">
                             <h3 class="out_tit">예매자 정보</h3>
                             <div class="agreement_nessasary help_txt"> <span class="spr_book ico_nessasary"></span> <span>필수입력</span> </div>
-                            <form class="form_horizontal">
+                            <form class="form_horizontal" action="./enroll" method="post" name="reserve_info">
                                 <div class="inline_form"> <label class="label" for="name"> <span class="spr_book ico_nessasary">필수</span> <span>예매자</span> </label>
                                     <div class="inline_control"> <input type="text" name="name" id="name" class="text" placeholder="네이버" maxlength="17"> </div>
                                 </div>
@@ -131,7 +131,9 @@
                                 </div>
                                 <div class="inline_form last"> <label class="label" for="message">예매내용</label>
                                     <div class="inline_control">
-                                        <p class="inline_txt selected">2017.2.17, 총 <span id="totalCount">0</span>매</p>
+                                        <p class="inline_txt selected">{date}, 총 <span id="totalCount">0</span>매</p>
+                                        <input name="item_id" value="${id}" style="display:none;">
+                                        <input name="reserve_date" value="${reservationDateTime}" style="display:none;">
                                     </div>
                                 </div>
                             </form>
@@ -299,6 +301,10 @@
 		//이유는, plus 버튼은 Tab 함수를 통해 이벤트를 등록해 두었기에 이벤트 자체의 this가 tab을 가리키게 되어 있다.(bind 했으므로)
 		//하지만 , minus 버튼은 plus 함수를 실행시키면서 새롭게 태그에 직접적으로 이벤트를 걸어 주었기 때문에 this가 해당 태그를 직접 가리킨다.
 		
+		//예약 날짜 설정
+		var date_tag = document.querySelector('.inline_txt.selected');
+		date_tag.innerHTML = date_tag.innerHTML.replace("{date}", "${reservationDate}");
+		
 		for(var i=0;i<plus_minus_btn.length;i++){
 			var o = new Tab(plus_minus_btn[i]);
 		}
@@ -372,12 +378,18 @@
 		//유효성 검증 정규식 구현 완료...
 		//향후 모든 폼과 약관에 동의했을때 예약하기 버튼 활성화 기능, 개인정보 수집동의 내용 접기 펼쳐보기 기능 구현, 예약하기 버튼 클릭시 세션에 이메일 등록 및 예약정보 저장
 		
+		var btn_reserve = document.querySelector('.bk_btn');
 		checkBox.addEventListener('click',function(){
 			if(is_correct1 !== 0 && is_correct2 !== 0 && checkBox.checked == true){
 				submit_reserve.setAttribute('class','bk_btn_wrap');
+				btn_reserve.addEventListener('click', function(){
+					var form = document.reserve_info;
+					form.submit();
+				});
 			}
 			else{
 				submit_reserve.setAttribute('class','bk_btn_wrap disable');
+				btn_reserve.removeEventListener("click",arguments.callee);
 			}
 		});
 		//약관 내용 펼쳐보기, 접기
@@ -398,6 +410,8 @@
 				
 			});
 		}
+		
+		
 	</script>
 </body>
 
