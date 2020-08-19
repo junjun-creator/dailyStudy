@@ -22,4 +22,7 @@ public interface ReservationService {
 	public static final Integer LIMIT = 4;
 	public static final Integer COMMENTLIMIT = 3;
 	public List<DisplayInfo> getPlaceAndOpeninghours(Integer id);
+	public List<ReservationInfo> getMyReservation(String email);
+	public ReservationInfo addReservation(ReservationInfo reservationInfo);
+	
 }

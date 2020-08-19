@@ -11,6 +11,7 @@ import kr.or.connect.reservation.dto.CommentLists;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
+import kr.or.connect.reservation.dto.ReservationInfo;
 import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
 
@@ -106,7 +107,19 @@ public class ReservationServiceImpl implements ReservationService {
 		List<DisplayInfo> list = reservationDao.getPlaceAndOpeninghours(id);
 		return list;
 	}
+
+	@Override
+	public List<ReservationInfo> getMyReservation(String email) {
+		List<ReservationInfo> list = reservationDao.getMyReservation(email);
+		return list;
+	}
 	
-	
-	
+	@Override
+	@Transactional(readOnly=false)
+	public ReservationInfo addReservation(ReservationInfo reservationInfo) {
+		Long id = reservationDao.insert(reservationInfo);
+		System.out.println(id);
+		
+		return reservationInfo;
+	}
 }

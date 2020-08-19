@@ -9,7 +9,7 @@ public class ReservationInfo {
 	private String reservationName;
 	private String reservationTel;
 	private String reservationEmail;
-	private Date reservationDate;
+	private String reservationDate;
 	private int cancelFlag;
 	private Date createDate;
 	private Date modifyDate;
@@ -49,10 +49,10 @@ public class ReservationInfo {
 	public void setReservationEmail(String reservationEmail) {
 		this.reservationEmail = reservationEmail;
 	}
-	public Date getReservationDate() {
+	public String getReservationDate() {
 		return reservationDate;
 	}
-	public void setReservationDate(Date reservationDate) {
+	public void setReservationDate(String reservationDate) {
 		this.reservationDate = reservationDate;
 	}
 	public int getCancelFlag() {

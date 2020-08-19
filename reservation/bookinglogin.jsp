@@ -115,7 +115,7 @@
     		btn.addEventListener("click", function(evt) {
     		    evt.preventDefault();
     		    var emailValue = input_email.value;
-    		    var bValid = (/^[\w_]\w+@\w+\.\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
+    		    var bValid = (/^[\w_]\w+@\w+\.\w+\.?\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
                                                 // @ 이가 있어야하고 그다음 또 word가 계속 나오고, .(dot)이 나와야하고, 또 word가 나오다가 word로 끝남
     		    if(!bValid)  { 
       		      alert('이메일을 다시 확인해주세요.');

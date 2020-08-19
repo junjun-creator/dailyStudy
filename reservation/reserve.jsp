@@ -322,7 +322,7 @@
 		email_tag.addEventListener('change', function(event){
 			var emailValue = email_tag.value;
 			console.log(emailValue);
-		    var bValid = (/^[\w_]\w+@\w+\.\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
+		    var bValid = (/^[\w_]\w+@\w+\.\w+\.?\w+$/).test(emailValue);//첫번째 문자가 word이거나, _(언더바) 로 시작하면서 word가 계속 나오고
                                             // @ 이가 있어야하고 그다음 또 word가 계속 나오고, .(dot)이 나와야하고, 또 word가 나오다가 word로 끝남
 		    if(!bValid)  { 
 	  		    error_msg.style.visibility = 'visible';
@@ -410,8 +410,7 @@
 				
 			});
 		}
-		
-		
+
 	</script>
 </body>
 

@@ -26,6 +26,7 @@ import kr.or.connect.reservation.dto.CommentLists;
 import kr.or.connect.reservation.dto.DisplayInfo;
 import kr.or.connect.reservation.dto.FileInfo;
 import kr.or.connect.reservation.dto.Product;
+import kr.or.connect.reservation.dto.ReservationInfo;
 import kr.or.connect.reservation.dto.WholeServiceInfo;
 import kr.or.connect.reservation.service.ReservationService;
 
@@ -189,14 +190,25 @@ public class ReservationController {
 			@RequestParam(name="reserve_date", required=true) String reserve_date) {
 		
 		List<DisplayInfo> to_id = reservationService.getId(Integer.parseInt(id));
-		int id_product = to_id.get(0).getProductId();
 		
+		int id_product = to_id.get(0).getProductId();
+		ReservationInfo reservationInfo = new ReservationInfo();
+		
+		reservationInfo.setProductId(id_product);
+		reservationInfo.setDisplayInfoId(Integer.parseInt(id));
+		reservationInfo.setReservationName(name);
+		reservationInfo.setReservationTel(tel);
+		reservationInfo.setReservationEmail(email);
+		reservationInfo.setReservationDate(reserve_date);
+		System.out.println(reservationInfo);
 		System.out.println(id);
 		System.out.println(id_product);
 		System.out.println(name);
 		System.out.println(tel);
 		System.out.println(email);
 		System.out.println(reserve_date);
+		
+		reservationService.addReservation(reservationInfo);
 		return "redirect:main";
 	}
 }

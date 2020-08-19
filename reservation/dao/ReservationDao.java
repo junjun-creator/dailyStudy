@@ -9,7 +9,9 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +32,7 @@ public class ReservationDao {
     private RowMapper<FileInfo> rowMapper_productImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     private RowMapper<FileInfo> rowMapper_mapImage = BeanPropertyRowMapper.newInstance(FileInfo.class);
     private RowMapper<DisplayInfo> rowMapper_displayInfo = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
+    private RowMapper<ReservationInfo> rowMapper_reservationInfo = BeanPropertyRowMapper.newInstance(ReservationInfo.class);
     
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
@@ -124,4 +127,15 @@ public class ReservationDao {
     	params.put("id",id);
     	return jdbc.query(PLACE_OPENINGHOURS,params, rowMapper_displayInfo);
     }
+    
+    public List<ReservationInfo> getMyReservation(String email){
+    	Map<String, String> params = new HashMap<>();
+    	params.put("email", email);
+    	return jdbc.query(MY_RESERVATION,params, rowMapper_reservationInfo);
+    }
+
+    public Long insert(ReservationInfo reservationInfo) {
+		SqlParameterSource params = new BeanPropertySqlParameterSource(reservationInfo);
+		return insertAction.executeAndReturnKey(params).longValue();
+	}
 }
