@@ -190,6 +190,9 @@ public class ReservationController {
 			@RequestParam(name="reserve_date", required=true) String reserve_date) {
 		
 		List<DisplayInfo> to_id = reservationService.getId(Integer.parseInt(id));
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+		String currentDate = dateFormat2.format(new Date());
+		System.out.println(currentDate);
 		
 		int id_product = to_id.get(0).getProductId();
 		ReservationInfo reservationInfo = new ReservationInfo();
@@ -200,6 +203,9 @@ public class ReservationController {
 		reservationInfo.setReservationTel(tel);
 		reservationInfo.setReservationEmail(email);
 		reservationInfo.setReservationDate(reserve_date);
+		reservationInfo.setCreateDate(new Date());
+		reservationInfo.setModifyDate(new Date());
+		
 		System.out.println(reservationInfo);
 		System.out.println(id);
 		System.out.println(id_product);

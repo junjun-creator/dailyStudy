@@ -24,5 +24,5 @@ public interface ReservationService {
 	public List<DisplayInfo> getPlaceAndOpeninghours(Integer id);
 	public List<ReservationInfo> getMyReservation(String email);
 	public ReservationInfo addReservation(ReservationInfo reservationInfo);
-	
+	public int cancelItem(ReservationInfo reservationInfo);
 }

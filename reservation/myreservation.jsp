@@ -19,6 +19,7 @@
 <body>
 	<form name="paging">
     	<input type="hidden" name="resrv_email"/>
+    	<input type="hidden" name="item_display_id"/>
     </form>
 	<div id="container">
 		<div class="header">
@@ -289,10 +290,11 @@
 								<li class="item">
 									<span class="item_tit">일정</span>
 									<em class="item_dsc">
-										2000.0.00.(월)2000.0.00.(일)
+										{reserve_date}
 									</em>
 								</li>
 								<li class="item">
+									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -349,10 +351,11 @@
 								<li class="item">
 									<span class="item_tit">일정</span>
 									<em class="item_dsc">
-										2000.0.00.(월)2000.0.00.(일)
+										{reserve_date}
 									</em>
 								</li>
 								<li class="item">
+									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -407,10 +410,11 @@
 								<li class="item">
 									<span class="item_tit">일정</span>
 									<em class="item_dsc">
-										2000.0.00.(월)2000.0.00.(일)
+										{reserve_date}
 									</em>
 								</li>
 								<li class="item">
+									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -489,21 +493,25 @@
 			if("${myresrv.reservationDate}" > getTimeStamp()){//예약 일자가 지금보다 이후인경우(아직 이용하지 않은경우)
 				if("${myresrv.cancelFlag}" == "0"){
 					console.log("${myresrv.cancelFlag}");
-					resultHTML = template_confirmed;
+					resultHTML = template_confirmed.replace("{reserve_date}","${myresrv.reservationDate}")
+												.replace("{displayInfoId}","${myresrv.displayInfoId}");
 					ul_confirmed.innerHTML += resultHTML;
 				}
 				else{
-					resultHTML = template_canceled;
+					resultHTML = template_canceled.replace("{reserve_date}","${myresrv.reservationDate}")
+												.replace("{displayInfoId}","${myresrv.displayInfoId}");
 					ul_canceled.innerHTML += resultHTML;
 				}
 			}
 			else{//예약 일자가 지금보다 이전인 경우(이미 날짜가 지나서 이용 완료 됬거나, 취소한 경우)
 				if("${myresrv.cancelFlag}" == "0"){
-					resultHTML = template_used;
+					resultHTML = template_used.replace("{reserve_date}","${myresrv.reservationDate}")
+											.replace("{displayInfoId}","${myresrv.displayInfoId}");
 					ul_used.innerHTML += resultHTML;
 				}
 				else{
-					resultHTML = template_canceled;
+					resultHTML = template_canceled.replace("{reserve_date}","${myresrv.reservationDate}")
+												.replace("{displayInfoId}","${myresrv.displayInfoId}");
 					ul_canceled.innerHTML += resultHTML;
 				}
 			}
@@ -637,11 +645,13 @@
 		});
 		
 		var btn_cancel;
+		var item_display_id='';
 		var cancel_alert = document.querySelector('.popup_booking_wrapper');
 		function cancel_btn(tag){
 			console.log(tag);
 			cancel_alert.style.display='block';
 			btn_cancel = tag;
+			item_display_id = tag.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
 		}
 		/*
 		var btn_cancel = document.querySelectorAll('.booking_cancel > .btn.cancel');
@@ -658,7 +668,7 @@
 		}
 		*/
 		var cancel_yes = document.querySelector('.btn_green');
-		cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('${sessionScope.email}');");//goPage 대신에 cancel_item 넣고 태그 이통 테스트 완료
+		cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('${sessionScope.email}', item_display_id);");//goPage 대신에 cancel_item 넣고 태그 이통 테스트 완료
 		
 		/*
 		//시험삼아 링크 이동 없이(DB적용 없이 태그 이동 되는지) 테스트
@@ -671,12 +681,13 @@
 		}*/
 		
 		// email을 인수로 받아 form 태그로 전송하는 함수
-	    function goPage(email) {
+	    function goPage(email, item_display_id) {
 		    // name이 paging인 태그
 		    var f = document.paging;
 	
 		    // form 태그의 하위 태그 값 매개 변수로 대입
 		    f.resrv_email.value = email;
+		    f.item_display_id.value = item_display_id;
 			
 		    //나중에 DB 내용 적용할 때, 여기에다가 cancel_flag 값 올려서 페이지 열렸을때 아이템 이동 적용되도록 하면 될것 같다.
 		    var item = btn_cancel.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
@@ -685,7 +696,7 @@
 			item.removeChild(item.lastElementChild);
 			cancel_tag.appendChild(item);
 		    // input태그의 값들을 전송하는 주소
-		    f.action = "./myreservation"
+		    f.action = "./cancel"
 	
 		    // 전송 방식 : post
 		    f.method = "post"

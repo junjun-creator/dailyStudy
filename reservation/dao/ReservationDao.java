@@ -37,7 +37,7 @@ public class ReservationDao {
     public ReservationDao(DataSource dataSource) { //db연결을 위해 datasource 접근
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
         this.insertAction = new SimpleJdbcInsert(dataSource)
-                .withTableName("reservation")
+                .withTableName("reservation_info")
                 .usingGeneratedKeyColumns("id");
     }
     
@@ -137,5 +137,10 @@ public class ReservationDao {
     public Long insert(ReservationInfo reservationInfo) {
 		SqlParameterSource params = new BeanPropertySqlParameterSource(reservationInfo);
 		return insertAction.executeAndReturnKey(params).longValue();
+	}
+  
+    public int cancelItem(ReservationInfo reservationInfo) {
+		SqlParameterSource params = new BeanPropertySqlParameterSource(reservationInfo);//:parameter 정보가 담긴 해당 객체를 인자로 넣어줌
+		return jdbc.update(CANCEL_ITEM, params);//update 쿼리 실행
 	}
 }

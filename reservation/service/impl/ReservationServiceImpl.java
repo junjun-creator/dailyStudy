@@ -122,4 +122,11 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		return reservationInfo;
 	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public int cancelItem(ReservationInfo reservationInfo) {
+		int update = reservationDao.cancelItem(reservationInfo);
+		return update;
+	}
 }
