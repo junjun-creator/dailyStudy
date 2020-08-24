@@ -1,6 +1,7 @@
 package kr.or.connect.reservationrestapi.service;
 
 import java.util.List;
+
 import kr.or.connect.reservationrestapi.dto.*;
 
 public interface ReservationService {
@@ -20,4 +21,8 @@ public interface ReservationService {
 	public List<FileInfo> getProductImage();
 	public static final Integer LIMIT = 4;
 	public static final Integer COMMENTLIMIT = 3;
+	public List<DisplayInfo> getPlaceAndOpeninghours(Integer id);
+	public List<ReservationInfo> getMyReservation(String email);
+	public ReservationInfo addReservation(ReservationInfo reservationInfo);
+	public int cancelItem(ReservationInfo reservationInfo);
 }

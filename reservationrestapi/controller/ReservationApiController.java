@@ -1,6 +1,9 @@
 package kr.or.connect.reservationrestapi.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,6 +143,35 @@ public class ReservationApiController {
 		map.put("avgRate",avg);
 		map.put("countComment",countComment);
 		map.put("allComment",allComment);
+		
+		return map;
+	}
+	
+	@GetMapping("/reserves")
+	public Map<String, Object> reserve(int id){
+		List<DisplayInfo> to_id = reservationService.getId(id);
+		int id_product = to_id.get(0).getProductId();
+		List<FileInfo> productImg = reservationService.getProductImage();
+		List<DisplayInfo> placeAndOpeninghours = reservationService.getPlaceAndOpeninghours(id);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd.");//날짜 포맷 형식 지정
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+		String currentDate = dateFormat.format(new Date());
+		System.out.println(currentDate);
+		
+		Calendar cal = Calendar.getInstance();//캘린더 클래스를 통해 날짜 인스턴스 생성
+		cal.set(2020, Calendar.AUGUST, 18);//날짜 정보 입력
+		cal.add(Calendar.DATE, (int)(Math.random()*5+1));//date를 1~5일 뒤의 날로 랜덤 수정
+		System.out.println(dateFormat.format(cal.getTime()));//캘린더 클래스로 생성한 날짜를 날짜 포맷 형식으로 적용해서 출력
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("id",id);
+		map.put("productImg",productImg);
+		map.put("id_product",id_product);
+		map.put("placeAndOpeninghours",placeAndOpeninghours);
+		map.put("reservationDate",dateFormat.format(cal.getTime()));//예약 페이지에서 사용할 예약일자
+		map.put("reservationDateTime",dateFormat2.format(cal.getTime()));//DB에 적용할 예약일자 포맷
 		
 		return map;
 	}

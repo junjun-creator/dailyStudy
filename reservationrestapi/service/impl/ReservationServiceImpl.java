@@ -96,4 +96,31 @@ public class ReservationServiceImpl implements ReservationService {
 		List<FileInfo> list = reservationDao.getMapImg(id);
 		return list;
 	}
+	@Override
+	public List<DisplayInfo> getPlaceAndOpeninghours(Integer id) {
+		List<DisplayInfo> list = reservationDao.getPlaceAndOpeninghours(id);
+		return list;
+	}
+
+	@Override
+	public List<ReservationInfo> getMyReservation(String email) {
+		List<ReservationInfo> list = reservationDao.getMyReservation(email);
+		return list;
+	}
+	
+	@Override
+	@Transactional(readOnly=false)
+	public ReservationInfo addReservation(ReservationInfo reservationInfo) {
+		Long id = reservationDao.insert(reservationInfo);
+		System.out.println(id);
+		
+		return reservationInfo;
+	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public int cancelItem(ReservationInfo reservationInfo) {
+		int update = reservationDao.cancelItem(reservationInfo);
+		return update;
+	}
 }
