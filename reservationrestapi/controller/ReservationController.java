@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.connect.reservationrestapi.dto.*;
 import kr.or.connect.reservationrestapi.service.ReservationService;
@@ -44,12 +46,17 @@ public class ReservationController {
 		return "reserve";
 	}
 	
+	@GetMapping("/reservationlists")
+	public String main() {
+		return "reservationlists";
+	}
+	
 	@PostMapping("/enroll")
-	public String enroll(@RequestParam(name="name", required=true) String name,
+	public ModelAndView enroll(@RequestParam(name="name", required=true) String name,
 			@RequestParam(name="tel", required=true) String tel,
 			@RequestParam(name="email", required=true) String email,
 			@RequestParam(name="item_id", required=true) String id,
-			@RequestParam(name="reserve_date", required=true) String reserve_date) {
+			@RequestParam(name="reserve_date", required=true) String reserve_date, HttpServletRequest req) {
 		
 		List<DisplayInfo> to_id = reservationService.getId(Integer.parseInt(id));
 		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
@@ -68,6 +75,10 @@ public class ReservationController {
 		reservationInfo.setCreateDate(new Date());
 		reservationInfo.setModifyDate(new Date());
 		
+		ModelAndView mv = new ModelAndView();
+		//Map<String, Object> map = new HashMap<>();
+		//map.put("reservationInfo",reservationInfo);
+		
 		System.out.println(reservationInfo);
 		System.out.println(id);
 		System.out.println(id_product);
@@ -77,6 +88,15 @@ public class ReservationController {
 		System.out.println(reserve_date);
 		
 		reservationService.addReservation(reservationInfo);
-		return "redirect:reservationlists";
+		//return "redirect:reservationlists";
+		
+		mv.setViewName("redirect:reservationlists");
+		mv.addObject("reservationInfo", reservationInfo);
+		return mv;
+	}
+	
+	@GetMapping("/bookinglogin")
+	public String bookinglogin() {
+		return "bookinglogin";
 	}
 }

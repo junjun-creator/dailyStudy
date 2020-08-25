@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -30,13 +31,15 @@ public class ReservationApiController {
 	@Autowired
 	ReservationService reservationService;
 	
-	@GetMapping("/reservationlists")
-	public Map<String, Object> list(@RequestParam(name="start", required=false, defaultValue="0") int start) {
+	@GetMapping("/reservationlist")
+	public Map<String, Object> list(@RequestParam(name="start", required=false, defaultValue="0") int start, HttpSession session) {
 		List<FileInfo> list = reservationService.getPromotionImage();
 		//List<Product> productInfo = reservationService.getProductInfo();
 		//List<DisplayInfo> placeName = reservationService.getPlaceName();
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> wholeServiceInfo = reservationService.getAllItems(start);
+		int sessionCount=0;
+		String sessionEmail =null;
 		
 		int count = reservationService.getCount();
 		List<Integer> countCategory = new ArrayList<>();
@@ -52,6 +55,14 @@ public class ReservationApiController {
 			pageStartList.add(i * ReservationService.LIMIT);
 		}
 		
+		if(session.getAttribute("email")  != null) {
+			sessionCount = 1;
+			sessionEmail = (String)session.getAttribute("email");
+		}
+		else {
+			sessionCount = 0;
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("list",list);
 		map.put("productImg",productImg);
@@ -59,10 +70,12 @@ public class ReservationApiController {
 		map.put("pageStartList",pageStartList);
 		map.put("count",count);
 		map.put("countCategory",countCategory);
+		map.put("sessionCount",sessionCount);
+		map.put("sessionEmail",sessionEmail);
 		return map;
 	}
 	
-	@PostMapping("/reservationlists")//ajax 통신 할것임
+	@PostMapping("/reservationlist")//ajax 통신 할것임
 	public List<WholeServiceInfo> moreItems(@RequestBody CategoryIdStartNum categoryItem) throws Exception {
 		int category = categoryItem.getCategoryId();
 		int startNum = categoryItem.getStart();
@@ -82,7 +95,7 @@ public class ReservationApiController {
 	}
 	
 	@GetMapping("/details")
-	public Map<String, Object> detail(int id) throws Exception{
+	public Map<String, Object> detail(int id, HttpSession session) throws Exception{
 		
 		List<FileInfo> productImg = reservationService.getProductImage();
 		List<WholeServiceInfo> itemDetail = reservationService.getItemDetail(id);
@@ -91,11 +104,21 @@ public class ReservationApiController {
 		int countComment = reservationService.getCountComment(to_id.get(0).getProductId());
 		List<FileInfo> mapImg = reservationService.getMapImg(id);
 		List<CommentLists> commentLists = reservationService.getCommentLists(to_id.get(0).getProductId());
+		int sessionCount =0;
+		String sessionEmail = null;
 		double avg;
 		try {
 			avg = reservationService.avgRate(to_id.get(0).getProductId());
 		}catch(NullPointerException e) {
 			avg = 0.0;
+		}
+		
+		if(session.getAttribute("email") != null) {
+			sessionCount =1;
+			sessionEmail = (String)session.getAttribute("email");
+		}
+		else {
+			sessionCount = 0;
 		}
 		
 		Map<String, Object> map = new HashMap<>();
@@ -108,6 +131,8 @@ public class ReservationApiController {
 		map.put("mapImg",mapImg);
 		map.put("commentLists",commentLists);
 		map.put("avg",avg);
+		map.put("sessionCount",sessionCount);
+		map.put("sessionEmail",sessionEmail);
 		for(CommentLists a : commentLists) {
 			System.out.println(a.getCreateDate());
 		}
@@ -173,6 +198,22 @@ public class ReservationApiController {
 		map.put("reservationDate",dateFormat.format(cal.getTime()));//예약 페이지에서 사용할 예약일자
 		map.put("reservationDateTime",dateFormat2.format(cal.getTime()));//DB에 적용할 예약일자 포맷
 		
+		return map;
+	}
+	
+	@RequestMapping(path="/myreservations")
+	public Map<String, Object> myreservations(@RequestBody ReservationInfo reservationInfo, HttpSession session){
+		String email = reservationInfo.getReservationEmail();
+		System.out.println(email+"111");
+		
+		//session.setAttribute("resrv_email", "true");
+		//session.setAttribute("email", email);
+		
+		List<ReservationInfo> myReservation = reservationService.getMyReservation(email);
+		
+		Map<String,Object> map = new HashMap<>();
+		
+		map.put("myreservation",myReservation);
 		return map;
 	}
 }
