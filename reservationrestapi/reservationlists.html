@@ -400,7 +400,7 @@
 			var btn = document.querySelector("#btn_whole");
 			btn.addEventListener('click',function(){
 				var xhr = new XMLHttpRequest();
-				xhr.open("POST","./reservationlists");
+				xhr.open("POST","./reservationlist");
 				xhr.onreadystatechange=function(){
 					if(xhr.readyState === 4 && xhr.status === 200){
 						var addItems = JSON.parse(xhr.response);
@@ -490,6 +490,7 @@
 					data.categoryId = categoryNum;
 				}
 				console.log(data);
+				console.log(1);
 				cnt++;
 				xhr.send(JSON.stringify(data));
 				//3번 프로젝트 완료

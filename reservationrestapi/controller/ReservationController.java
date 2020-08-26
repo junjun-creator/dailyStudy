@@ -99,4 +99,20 @@ public class ReservationController {
 	public String bookinglogin() {
 		return "bookinglogin";
 	}
+	
+	@PostMapping("/cancel")
+	public String cancel(@RequestParam(name="item_display_id", required=true) String display_id,
+			@RequestParam(name="resrv_email", required=true) String resrv_email) {
+		
+		int item_display_id = Integer.parseInt(display_id);
+		System.out.println(item_display_id);
+		
+		ReservationInfo reservationInfo = new ReservationInfo();
+		reservationInfo.setDisplayInfoId(item_display_id);
+		reservationInfo.setReservationEmail(resrv_email);
+		
+		int update = reservationService.cancelItem(reservationInfo);
+		
+		return "cancel";
+	}
 }

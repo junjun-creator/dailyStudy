@@ -20,7 +20,7 @@
 			<header class="header_tit">
 				<h1 class="logo">
 					<a href="www.naver.com" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-					<a href="./main" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+					<a href="./reservationlists" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
 				</h1>
 				<a href="#" class="btn_my"> <span title="내예약" class="viewReservation"></span> </a>
 			</header>
@@ -289,6 +289,7 @@
 								</li>
 								<li class="item">
 									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
+									<span class="reservation_email" style="display:none;">{reservationEmail}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -316,7 +317,7 @@
 							</div>
 							<!-- [D] 예약 신청중, 예약 확정 만 취소가능, 취소 버튼 클릭 시 취소 팝업 활성화 -->
 							<div class="booking_cancel">
-								<button class="btn cancel" onclick="cancel_btn(this);"><span>취소</span></button>
+								<button class="btn cancel"><span>취소</span></button>
 							</div>
 						</div>
 					</div>
@@ -350,6 +351,7 @@
 								</li>
 								<li class="item">
 									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
+									<span class="reservation_email" style="display:none;">{reservationEmail}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -409,6 +411,7 @@
 								</li>
 								<li class="item">
 									<span class="item_display_id" style="display:none;">{displayInfoId}</span>
+									<span class="reservation_email" style="display:none;">{reservationEmail}</span>
 									<span class="item_tit">내역</span>
 									<em class="item_dsc">
 										내역이 없습니다.
@@ -502,6 +505,12 @@
 					var data = xhr.response;
 					jsondata = JSON.parse(data);
 					console.log(jsondata);
+					myreservationlists(jsondata.myreservation);
+					
+					btn_cancel = document.querySelectorAll('.btn.cancel');
+					for(var i=0;i<btn_cancel.length;i++){
+						btn_cancel[i].addEventListener('click',cancel_clicked);
+					}
 				}
 			};
 			xhr.open("POST","./myreservations");
@@ -512,8 +521,243 @@
 			xhr.send(JSON.stringify(data));
 		}
 		
-		//이메일 가져오는것 까지 구현함. 이메일을 통해 DB에서 예약 정보 가져와서 출력하는 기능부터 구현하기
+		function myreservationlists(myreservation){
+			//이메일 가져오는것 까지 구현함. 이메일을 통해 DB에서 예약 정보 가져와서 출력하는 기능부터 구현하기
+			var ul_confirmed = document.querySelector('#confirmed');
+			var ul_canceled = document.querySelector('#canceled');
+			var ul_used = document.querySelector('#used');
+			var template_confirmed = document.querySelector('#resrv_done').innerHTML;
+			var template_canceled = document.querySelector('#canceled_item').innerHTML;
+			var template_used = document.querySelector('#used_item').innerHTML;
+			var resultHTML ='';
+			
+			for(var i=0;i<myreservation.length;i++){
+				if(myreservation[i].reservationDate > getTimeStamp()){
+					if(myreservation[i].cancelFlag == 0){
+						resultHTML = template_confirmed.replace("{reserve_date}",myreservation[i].reservationDate)
+													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{reservationEmail}",myreservation[i].reservationEmail);
+						ul_confirmed.innerHTML += resultHTML;
+					}
+					else{
+						resultHTML = template_canceled.replace("{reserve_date}",myreservation[i].reservationDate)
+													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{reservationEmail}",myreservation[i].reservationEmail);
+						ul_canceled.innerHTML += resultHTML;
+					}
+				}
+				else{
+					if(myreservation[i].cancelFlag == 0){
+						resultHTML = template_used.replace("{reserve_date}",myreservation[i].reservationDate)
+													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{reservationEmail}",myreservation[i].reservationEmail);
+						ul_used.innerHTML += resultHTML;
+					}
+					else{
+						resultHTML = template_canceled.replace("{reserve_date}",myreservation[i].reservationDate)
+													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{reservationEmail}",myreservation[i].reservationEmail);
+						ul_canceled.innerHTML += resultHTML;
+					}
+				}
+			}
+			count_category();
+		}
+		
+		//전체, 이용예정, 이용완료, 취소 목록 count 출력하기
+		var total_count = document.querySelector('.spr_book2.ico_book2').nextElementSibling.nextElementSibling;
+		var count_confirmed = document.querySelector('.spr_book2.ico_book_ss').nextElementSibling.nextElementSibling;
+		var count_used = document.querySelector('.spr_book2.ico_check').nextElementSibling.nextElementSibling;
+		var count_canceled = document.querySelector('.spr_book2.ico_back').nextElementSibling.nextElementSibling;
+		
+		var resrv_confirm_list;
+		var resrv_used_list;
+		var resrv_canceled_list;
+		
+		function count_category(){
+			resrv_confirm_list = document.querySelectorAll('#confirmed > .card_item');
+			resrv_used_list = document.querySelectorAll('#used > .card_item');
+			resrv_canceled_list = document.querySelectorAll('#canceled > .card_item');
+			count_confirmed.innerText = resrv_confirm_list.length;
+			count_used.innerText = resrv_used_list.length;
+			count_canceled.innerText = resrv_canceled_list.length;
+			total_count.innerText = resrv_confirm_list.length+resrv_used_list.length+resrv_canceled_list.length;
+		}
+		
+		
+		//향후 취소기능 구현(취소시 취소태그로 아이템 이동), 각 탭 클릭할때 해당 항목들만 나타나게 하기(전체,예정,완료,취소 탭), DB에서 예약 정보 가져와서 정보 등록하기.
+		
+		var summary_board = document.querySelector('.summary_board');
+		var link_summary_board = document.querySelectorAll('.link_summary_board');
+		var all_card = document.querySelectorAll('.card');
+		summary_board.addEventListener('click',function(e){
+			if(e.target.nodeName == 'A'){
+				if(e.target.innerText.indexOf('전체')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						all_card[i].style.display='block';
+					}
+				}
+				else if(e.target.innerText.indexOf('이용예정')==1){
+					console.log(1);
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 1){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else if(e.target.innerText.indexOf('이용완료')==1){
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 2){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else{
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 3){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+			}
+			else{
+				console.log(e.target.parentNode.innerText);
+				if(e.target.parentNode.innerText.indexOf('전체')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						all_card[i].style.display='block';
+					}
+				}
+				else if(e.target.parentNode.innerText.indexOf('이용예정')==1){
+					all_card[1].setAttribute('class','card confirmed');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 1){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else if(e.target.parentNode.innerText.indexOf('이용완료')==1){
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card used');
+					all_card[3].setAttribute('class','card');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 2){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+				else{
+					all_card[1].setAttribute('class','card');
+					all_card[2].setAttribute('class','card');
+					all_card[3].setAttribute('class','card used cancel');
+					for(var i=1;i<all_card.length;i++){
+						if(i != 3){
+							all_card[i].style.display='none';
+						}
+						else{
+							all_card[i].style.display='block';
+						}
+					}
+				}
+			}
+		});
+		
+		var btn_cancel;
+		var item_display_id='';
+		var item_email='';
+		var cancel_alert = document.querySelector('.popup_booking_wrapper');
+		var cancel_yes = document.querySelector('.btn_green');
+		
+		function cancel_clicked(e){
+			item_display_id = e.currentTarget.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
+			item_email = e.currentTarget.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText;
+			console.log(item_display_id);
+			console.log(item_email);
+			cancel_alert.style.display='block';
+			cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('" + email+ "'," +item_display_id+ ");");
+			
+			btn_cancel = e.currentTarget;
+		}
+		
+		/*
+		function cancel_btn(tag){
+			console.log(tag);
+			cancel_alert.style.display='block';
+			btn_cancel = tag;
+			item_display_id = tag.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
+		}*/
+		
+		// email을 인수로 받아 form 태그로 전송하는 함수
+	    function goPage(email, item_display_id) {
+		    // name이 paging인 태그
+		    var f = document.paging;
+	
+		    // form 태그의 하위 태그 값 매개 변수로 대입
+		    f.resrv_email.value = email;
+		    f.item_display_id.value = item_display_id;
+			
+		    //나중에 DB 내용 적용할 때, 여기에다가 cancel_flag 값 올려서 페이지 열렸을때 아이템 이동 적용되도록 하면 될것 같다.
+		    var item = btn_cancel.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+			var cancel_tag = document.querySelector('#canceled');
+			btn_cancel.parentNode.removeChild(btn_cancel);
+			item.removeChild(item.lastElementChild);
+			cancel_tag.appendChild(item);
+		    // input태그의 값들을 전송하는 주소
+		    f.action = "./cancel"
+	
+		    // 전송 방식 : post
+		    f.method = "post"
+		    f.submit();
+	    };
+		
+		cancel_yes.addEventListener('click', function(){
+			console.log('취소 되었습니다.');
+			cancel_alert.style.display='none';
+			
+		});
+		var cancel_no = document.querySelector('.btn_gray');
+		cancel_no.addEventListener('click',function(){
+			console.log('not canceled');
+			cancel_alert.style.display='none';
+		});
+		
+		var x_btn = document.querySelector('.popup_btn_close');
+		x_btn.addEventListener('click',function(){
+			cancel_alert.style.display='none';
+		})
 	</script>
+	
 </body>
 
 </html>
