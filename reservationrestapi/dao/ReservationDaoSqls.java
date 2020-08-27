@@ -29,5 +29,5 @@ public class ReservationDaoSqls {
 	public static final String PLACE_OPENINGHOURS = "SELECT place_name, opening_hours FROM display_info WHERE id = :id";
 	
 	public static final String MY_RESERVATION = "SELECT * FROM reservation_info WHERE reservation_email= :email";
-	public static final String CANCEL_ITEM = "UPDATE reservation_info SET cancel_flag = 1 WHERE display_info_id = :displayInfoId AND reservation_email = :reservationEmail";
+	public static final String CANCEL_ITEM = "UPDATE reservation_info SET cancel_flag = 1 WHERE id = :id";
 }

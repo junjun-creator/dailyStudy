@@ -201,6 +201,50 @@ public class ReservationApiController {
 		return map;
 	}
 	
+	@PostMapping("/enroll")
+	public Map<String,Object> enroll(@RequestParam(name="name", required=true) String name,
+			@RequestParam(name="tel", required=true) String tel,
+			@RequestParam(name="email", required=true) String email,
+			@RequestParam(name="item_id", required=true) String id,
+			@RequestParam(name="reserve_date", required=true) String reserve_date, HttpServletRequest req) {
+		
+		List<DisplayInfo> to_id = reservationService.getId(Integer.parseInt(id));
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+		String currentDate = dateFormat2.format(new Date());
+		System.out.println(currentDate);
+		
+		int id_product = to_id.get(0).getProductId();
+		ReservationInfo reservationInfo = new ReservationInfo();
+		
+		reservationInfo.setProductId(id_product);
+		reservationInfo.setDisplayInfoId(Integer.parseInt(id));
+		reservationInfo.setReservationName(name);
+		reservationInfo.setReservationTel(tel);
+		reservationInfo.setReservationEmail(email);
+		reservationInfo.setReservationDate(reserve_date);
+		reservationInfo.setCreateDate(new Date());
+		reservationInfo.setModifyDate(new Date());
+		
+		//ModelAndView mv = new ModelAndView();
+		Map<String, Object> map = new HashMap<>();
+		map.put("reservationInfo",reservationInfo);
+		
+		System.out.println(reservationInfo);
+		System.out.println(id);
+		System.out.println(id_product);
+		System.out.println(name);
+		System.out.println(tel);
+		System.out.println(email);
+		System.out.println(reserve_date);
+		
+		reservationService.addReservation(reservationInfo);
+		//return "redirect:reservationlists";
+		
+		//mv.setViewName("redirect:reservationlists");
+		//mv.addObject("reservationInfo", reservationInfo);
+		return map;
+	}
+	
 	@RequestMapping(path="/myreservations")
 	public Map<String, Object> myreservations(@RequestBody ReservationInfo reservationInfo, HttpSession session){
 		String email = reservationInfo.getReservationEmail();
@@ -214,6 +258,25 @@ public class ReservationApiController {
 		Map<String,Object> map = new HashMap<>();
 		
 		map.put("myreservation",myReservation);
+		return map;
+	}
+	
+	@PostMapping("/cancel")
+	public Map<String,Object> cancel(@RequestParam(name="reservation_info_id", required=true) String display_id,
+			@RequestParam(name="resrv_email", required=true) String resrv_email) {
+		
+		int item_display_id = Integer.parseInt(display_id);
+		System.out.println(item_display_id);
+		
+		ReservationInfo reservationInfo = new ReservationInfo();
+		reservationInfo.setId(item_display_id);
+		//reservationInfo.setReservationEmail(resrv_email);
+		
+		int update = reservationService.cancelItem(reservationInfo);
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("update",update);
+		
 		return map;
 	}
 }

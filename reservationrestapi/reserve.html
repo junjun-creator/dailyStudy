@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <title>네이버 예약</title>
     <link rel="stylesheet" type="text/css" href="./resources/style.css">
+    <script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body>
@@ -108,7 +109,7 @@
                         <div class="form_wrap">
                             <h3 class="out_tit">예매자 정보</h3>
                             <div class="agreement_nessasary help_txt"> <span class="spr_book ico_nessasary"></span> <span>필수입력</span> </div>
-                            <form class="form_horizontal" action="./enroll" method="post" name="reserve_info">
+                            <form class="form_horizontal" id="form_reservation_info" action="./enroll" method="post" name="reserve_info">
                                 <div class="inline_form"> <label class="label" for="name"> <span class="spr_book ico_nessasary">필수</span> <span>예매자</span> </label>
                                     <div class="inline_control"> <input type="text" name="name" id="name" class="text" placeholder="네이버" maxlength="17"> </div>
                                 </div>
@@ -357,8 +358,21 @@
 			if(is_correct1 !== 0 && is_correct2 !== 0 && checkBox.checked == true){
 				submit_reserve.setAttribute('class','bk_btn_wrap');
 				btn_reserve.addEventListener('click', function(){
-					var form = document.reserve_info;
-					form.submit();
+					console.log(1);
+					//var form = document.querySelector('#form_reservation_info');
+					var formData = $('#form_reservation_info').serialize();
+					$.ajax({
+						cache:false,
+						url:"./enroll",
+						type:"POST",
+						data:formData,
+						success: function(data){
+							window.location.href = './reservationlists';
+						},
+						error: function(xhr,status){
+							alert(xhr + ":"+status);
+						}
+					});
 				});
 			}
 			else{
@@ -366,6 +380,7 @@
 				btn_reserve.removeEventListener("click",arguments.callee);
 			}
 		});
+		
 		//약관 내용 펼쳐보기, 접기
 		var agreement_btn = document.querySelectorAll('.btn_agreement');
 		var agree_count = 0;

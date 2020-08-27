@@ -7,13 +7,13 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 	<title>네이버 예약</title>
 	<link rel="stylesheet" type="text/css" href="./resources/style.css">
-
+	<script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body>
-	<form name="paging">
+	<form name="paging" id="form_cancel_info">
     	<input type="hidden" name="resrv_email"/>
-    	<input type="hidden" name="item_display_id"/>
+    	<input type="hidden" name="reservation_info_id"/>
     </form>
 	<div id="container">
 		<div class="header">
@@ -535,13 +535,13 @@
 				if(myreservation[i].reservationDate > getTimeStamp()){
 					if(myreservation[i].cancelFlag == 0){
 						resultHTML = template_confirmed.replace("{reserve_date}",myreservation[i].reservationDate)
-													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{displayInfoId}",myreservation[i].id)
 													.replace("{reservationEmail}",myreservation[i].reservationEmail);
 						ul_confirmed.innerHTML += resultHTML;
 					}
 					else{
 						resultHTML = template_canceled.replace("{reserve_date}",myreservation[i].reservationDate)
-													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{displayInfoId}",myreservation[i].id)
 													.replace("{reservationEmail}",myreservation[i].reservationEmail);
 						ul_canceled.innerHTML += resultHTML;
 					}
@@ -549,13 +549,13 @@
 				else{
 					if(myreservation[i].cancelFlag == 0){
 						resultHTML = template_used.replace("{reserve_date}",myreservation[i].reservationDate)
-													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{displayInfoId}",myreservation[i].id)
 													.replace("{reservationEmail}",myreservation[i].reservationEmail);
 						ul_used.innerHTML += resultHTML;
 					}
 					else{
 						resultHTML = template_canceled.replace("{reserve_date}",myreservation[i].reservationDate)
-													.replace("{displayInfoId}",myreservation[i].displayInfoId)
+													.replace("{displayInfoId}",myreservation[i].id)
 													.replace("{reservationEmail}",myreservation[i].reservationEmail);
 						ul_canceled.innerHTML += resultHTML;
 					}
@@ -693,21 +693,21 @@
 			}
 		});
 		
-		var btn_cancel;
+		var btn_cancel2;
 		var item_display_id='';
 		var item_email='';
 		var cancel_alert = document.querySelector('.popup_booking_wrapper');
 		var cancel_yes = document.querySelector('.btn_green');
 		
 		function cancel_clicked(e){
-			item_display_id = e.currentTarget.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
+			reservation_info_id = e.currentTarget.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText;
 			item_email = e.currentTarget.parentNode.parentNode.firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText;
 			console.log(item_display_id);
 			console.log(item_email);
 			cancel_alert.style.display='block';
-			cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('" + email+ "'," +item_display_id+ ");");
+			cancel_yes.firstElementChild.setAttribute('href',"javascript:goPage('" + item_email+ "'," +reservation_info_id+ ");");
 			
-			btn_cancel = e.currentTarget;
+			btn_cancel2 = e.currentTarget;
 		}
 		
 		/*
@@ -719,26 +719,41 @@
 		}*/
 		
 		// email을 인수로 받아 form 태그로 전송하는 함수
-	    function goPage(email, item_display_id) {
+	    function goPage(email,id) {
 		    // name이 paging인 태그
 		    var f = document.paging;
 	
 		    // form 태그의 하위 태그 값 매개 변수로 대입
 		    f.resrv_email.value = email;
-		    f.item_display_id.value = item_display_id;
+		    f.reservation_info_id.value = id;
 			
 		    //나중에 DB 내용 적용할 때, 여기에다가 cancel_flag 값 올려서 페이지 열렸을때 아이템 이동 적용되도록 하면 될것 같다.
-		    var item = btn_cancel.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+		    var item = btn_cancel2.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
 			var cancel_tag = document.querySelector('#canceled');
-			btn_cancel.parentNode.removeChild(btn_cancel);
+			btn_cancel2.parentNode.removeChild(btn_cancel2);
 			item.removeChild(item.lastElementChild);
 			cancel_tag.appendChild(item);
 		    // input태그의 값들을 전송하는 주소
+		    /*
 		    f.action = "./cancel"
 	
 		    // 전송 방식 : post
 		    f.method = "post"
-		    f.submit();
+		    f.submit();*/
+		    
+			var formData = $('#form_cancel_info').serialize();
+			$.ajax({
+				cache:false,
+				url:"./cancel",
+				type:"POST",
+				data:formData,
+				success: function(data){
+					window.location.href = './cancel';
+				},
+				error: function(xhr,status){
+					alert(xhr + ":"+status);
+				}
+			});
 	    };
 		
 		cancel_yes.addEventListener('click', function(){
