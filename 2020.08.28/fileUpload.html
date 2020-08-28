@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="formWrap">
+        <form action="/join" method="post" id="myform" enctype="multipart/form-data">
+            <!--인코딩 타입 = multipart/form-data form data를 boundary형식으로 전송(파일을 전송할 때)-->
+            <div class="inputWrap">
+                <div class="email">
+                    <span> Email </span> <input type="text" name="email"><br/>
+                </div>
+                <div class="password">
+                    <span> Password </span> <input type="password" name="password"><br/>
+                </div>
+            <input type="file" name="reviewImg" accept="image/*" id="reviewImageFileOpenInput">
+            <!-- accept 속성은 파일 확장자를 어떤것으로 할 것인지 결정하는 것. 
+                하지만, accept의 브라우저 지원상황이 깔끔하지 않아서 이벤트 등록을 통해 유효성을 검사 한다.
+            -->
+            </div>
+            <input class="sendbtn" type="submit">
+        </form>
+        <div class="imgWrap">
+            <img class="thumb_img">
+        </div>
+    </div>
+
+    <script>
+        //file의 type의 유효성 검사
+        function validImageType(image) {
+            const result = ([ 'image/jpeg',
+                            'image/png',
+                            'image/jpg' ].indexOf(image.type) > -1);
+            return result;
+        }
+
+        const elImage = document.querySelector("#reviewImageFileOpenInput");
+        elImage.addEventListener("change", (evt) => {
+            const image = evt.target.files[0];
+            if(!validImageType(image)) { 
+                console.warn("invalide image file type");
+                return;
+            }
+
+             //썸네일 노출시키기
+            const elImage = document.querySelector(".thumb_img");
+            elImage.style.display="inline-block";
+            elImage.src = window.URL.createObjectURL(image);
+        })
+
+        
+    </script>
+</body>
+</html>
