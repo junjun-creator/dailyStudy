@@ -106,6 +106,7 @@ public class GuestbookController {
 						HttpServletRequest request) {
 		String clientIp = request.getRemoteAddr();
 		System.out.println("clientIp : " + clientIp);
+		System.out.println(guestbook);
 		guestbookService.addGuestbook(guestbook, clientIp);
 		return "redirect:list";
 	}
